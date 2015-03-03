@@ -6,25 +6,27 @@ How complete is Fairmont with respect to Underscore?
 * `map` - implemented for arrays
 * `reduce` - implemented for arrays (as `fold`)
 * `reduceRight` - implemented for arrays (as `foldr`)
-* `find` - **missing**
+* `find` - **missing**, see ticket #4
 * `where` - **missing**
 * `findWhere` - **missing**
-* `reject` - **missing**
+* `reject` - **missing**, see ticket #4
 * `every` - implemented for arrays (as `all`)
 * `some` - implemented for arrays (as `any`)
 * `contains` - implemented for arrays (as `includes`)
 * `invoke` - **missing**
 * `max` - can be done by composing `fold` with `max`
 * `min` - can be done by composing `fold` with `min`
-* `sortBy` - **missing**
-* `groupBy` - **missing**
+* `sortBy` - **missing**, see ticket #5
+* `groupBy` - **missing**, see ticket #6
 * `indexBy` - **missing**
-* `countBy` - **missing**
+* `countBy` - **missing**, see ticket #6
 * `shuffle` - implemented for arrays
-* `sample` - **missing**
+* `sample` - **missing**, see ticket #7
 * `toArray` - **missing**
 * `size` - **missing**
-* `partition` - **missing**
+* `partition` - **missing**, see ticket #8
+
+See also: ticket #9.
 
 ## Array Functions
 
