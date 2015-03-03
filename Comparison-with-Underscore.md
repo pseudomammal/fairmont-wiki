@@ -63,60 +63,60 @@ How complete is Fairmont with respect to Underscore?
 
 ## Objects
 
+* `key` - **not implemented**
+* `allKeys` - **not implemented**
+* `values` - **not implemented**
+* `mapObject` - **not implemented**
+* `pairs` - **not implemented**
+* `invert` - **not implemented**
+* `functions` - **not implemented**
+* `findKey` - **not implemented**
+* `extend` - implemented
+* `extendOwn` - **not implemented**
+* `create` - **not implemented**
+* `pick` - **not implemented**
+* `omit` - **not implemented**
+* `defaults` - **not implemented**, although similar to `merge`, except `merge` returns a new object
+* `clone` - implemented
+* `tap` - **not implemented**
+* `has` - **not implemented**
+* `matcher` - **not implemented**
+* `property` - implemented as `pluck`
+* `propertyOf` - **not implemented**
+* `isEqual` - implemented as `deep_equal`
+* `isMatch` - **not implemented**
+* `isEmpty` - **not implemented**
+* `isArray` - **not implemented**
+* `isObject` - **not implemented**
+* `isArguments` - **not implemented**
+* `isFunction` - **not implemented**
+* `isString` - **not implemented**
+* `isNumber` - **not implemented**
+* `isFinite` - **not implemented**
+* `isBoolean` - **not implemented**
+* `isDate` - **not implemented**
+* `isRegExp` - **not implemented**
+* `isNaN` - **not implemented**
+* `isNull` - **not implemented**
+* `isUndefined` - **not implemented**
 
-      # Objects
-      # - keys
-      # - allKeys
-      # - values
-      # - mapObject
-      # - pairs
-      # - invert
-      # - functions
-      # - findKey
-      # - extend
-      # - extendOwn
-      # - create
-      # - pick
-      # - omit
-      # - defaults
-      # - clone
-      # - tap
-      # - has
-      # - matcher
-      # - property
-      # - propertyOf
-      # - isEqual
-      # - isMatch
-      # - isEmpty
-      # - isElement
-      # - isArray
-      # - isObject
-      # - isArguments
-      # - isFunction
-      # - isString
-      # - isNumber
-      # - isFinite
-      # - isBoolean
-      # - isDate
-      # - isRegExp
-      # - isNaN
-      # - isNull
-      # - isUndefined
-      # Utility
-      # - noConflict
-      # - identity
-      # - constant
-      # - noop
-      # - times
-      # - random
-      # - mixin
-      # - iteratee
-      # - uniqueId
-      # - escape
-      # - unescape
-      # - result
-      # - now
-      # - template
-      # Chaining
-      # - chain
-      # - value
+## Utility Functions
+
+* `noConflict` - not applicable
+* `identity` - implemented
+* `constant` - **not implemented**
+* `noop` - implemented as `no_op`
+* `times` - **not implemented**
+* `random` - **not implemented**
+* `mixin` - not applicable
+* `iteratee` - not applicable
+* `uniqueId` - **not implemented**
+* `escape` - implemented as `html_escape`
+* `unescape` - **not implemented**
+* `result` - **not implemented**
+* `now` - **not implemented**
+* `template` - **not implemented**
+
+## Chaining Functions
+
+Not applicable.
