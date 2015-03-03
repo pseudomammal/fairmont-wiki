@@ -34,23 +34,23 @@ See also: ticket #9.
 * `initial` - implemented as `leave`
 * `last` - implemented
 * `rest` - implemented
-* `compact` - **not implemented**
+* `compact` - **not implemented**, see ticket #10
 * `flatten` - implemented
 * `without` - this can be done via `intersection`
 * `union` - implemented
 * `intersection` - implemented
 * `difference` - implemented
 * `uniq` - implemented
-* `zip` - **not implemented**
-* `unzip` - **not implemented**
+* `zip` - **not implemented**, see ticket #11
+* `unzip` - **not implemented**, see ticket #11
 * `object` - **not implemented**
 * `indexOf` - **not implemented**
 * `lastIndexOf` - **not implemented**
-* `range` - **not implemented**
+* `range` - **not implemented**, see ticket #12
 
 ## Functions
 
-* `bind` - **not implemented**
+* `bind` - **not implemented**, see ticket #12
 * `bindAll` - **not implemented**
 * `partial` - implemented
 * `memoize` - implemented
@@ -60,16 +60,16 @@ See also: ticket #9.
 * `debounce` - **not implemented**
 * `once`, `before`, `after` - **not implemented**
 * `wrap` - **not implemented**
-* `negate` - implemented as `not_f`, but I like `negate` much better
+* `negate` - implemented as `not_f`, but I like `negate` much better. See ticket #14.
 * `compose` - implemented
 
 ## Objects
 
-* `key` - **not implemented**
+* `keys` - **not implemented**. See ticket #15.
 * `allKeys` - **not implemented**
-* `values` - **not implemented**
+* `values` - **not implemented**. See ticket #15.
 * `mapObject` - **not implemented**
-* `pairs` - **not implemented**
+* `pairs` - **not implemented**. See ticket #16.
 * `invert` - **not implemented**
 * `functions` - **not implemented**
 * `findKey` - **not implemented**
@@ -81,23 +81,23 @@ See also: ticket #9.
 * `defaults` - **not implemented**, although similar to `merge`, except `merge` returns a new object
 * `clone` - implemented
 * `tap` - **not implemented**
-* `has` - **not implemented**
+* `has` - **not implemented**. See ticket #17.
 * `matcher` - **not implemented**
 * `property` - implemented as `pluck`
 * `propertyOf` - **not implemented**
 * `isEqual` - implemented as `deep_equal`
-* `isMatch` - **not implemented**
-* `isEmpty` - **not implemented**
-* `isArray` - **not implemented**
-* `isObject` - **not implemented**
+* `isMatch` - **not implemented**. See ticket #20.
+* `isEmpty` - **not implemented**. See ticket #19.
+* `isArray` - **not implemented**. See ticket #18.
+* `isObject` - **not implemented**. See ticket #18.
 * `isArguments` - **not implemented**
-* `isFunction` - **not implemented**
-* `isString` - **not implemented**
-* `isNumber` - **not implemented**
+* `isFunction` - **not implemented**. See ticket #18.
+* `isString` - **not implemented**. See ticket #18.
+* `isNumber` - **not implemented**. See ticket #18.
 * `isFinite` - **not implemented**
-* `isBoolean` - **not implemented**
-* `isDate` - **not implemented**
-* `isRegExp` - **not implemented**
+* `isBoolean` - **not implemented**. See ticket #18.
+* `isDate` - **not implemented**. See ticket #18.
+* `isRegExp` - **not implemented**. See ticket #18.
 * `isNaN` - **not implemented**
 * `isNull` - **not implemented**
 * `isUndefined` - **not implemented**
