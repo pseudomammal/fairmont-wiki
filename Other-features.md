@@ -6,7 +6,7 @@ Possible additions, primarily from EssentialJS:
 
 * a `range` function to allow range creation to be done functionally:
 
-      range = curry (m, n) -> [m..n]
+        range = curry (m, n) -> [m..n]
 
 * Array sorting functions (`sort` and `sort_by`)
 
