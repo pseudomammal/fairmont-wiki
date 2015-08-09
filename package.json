@@ -1,19 +1,19 @@
 {
   "name": "fairmont.wiki",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "toc": "coffee --nodejs --harmony script/toc.coffee"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/pandastrike/fairmont.wiki.git"
   },
-  "author": "",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/pandastrike/fairmont.wiki/issues"
   },
-  "homepage": "https://github.com/pandastrike/fairmont.wiki#readme"
+  "homepage": "https://github.com/pandastrike/fairmont.wiki#readme",
+  "dependencies": {
+    "fairmont": "^1.0.0-beta-24",
+    "marked": "^0.3.5"
+  }
 }
