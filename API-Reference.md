@@ -1,8 +1,8 @@
 ## Table of Contents
 
-- [Core Functions](#Core-Functions)
-- [Helper Functions](#Helper-Functions)
-- [Reactive Programming](#Reactive-Programming)
+- [Core Functions](#core-functions)
+- [Helper Functions](#helper-functions)
+- [Reactive Programming](#reactive-programming)
 
 ## Core Functions
 
