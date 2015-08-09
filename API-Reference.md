@@ -1,6 +1,7 @@
 ## Table of Contents
 
 - [Core Functions](#Core-Functions)
+- [Helper Function](#Helper-Functions)
 - [Reactive Programming](#Reactive-Programming)
 
 ## Core Functions
@@ -78,6 +79,81 @@ Take a given function taking a variable number of arguments and return one takin
 #### negate
 
 Take a given function and return a new function that passes its arguments to the given function and negates the return value.
+
+## Helper Functions
+
+Module: `fairmont-helpers`
+
+### Array Functions
+
+#### push
+
+#### cat
+
+Concatenates (joins) arrays.
+
+#### slice
+
+Curried version of `Array::slice`.
+
+#### first, second, third, …, nth
+
+Returns the first, second…nth element of an array.
+
+#### last
+
+Returns the last element of an array.
+
+#### rest
+
+Returns all array elements but the first.
+
+#### includes
+
+Check if an element is a member of an array.
+
+#### uniqueBy
+
+Returns a new array containing only unique members of an array,
+after transforming them with `f`. This is a generalized version of
+[`unique`](#unique) below.
+
+#### unique
+
+Returns a new array containing only unique member of an array.
+
+#### dupes
+
+Returns only the elements that exist more than once.
+
+#### union
+
+Set union (combination of two array with duplicates removed).
+
+#### intersection
+
+#### difference
+
+Returns the elements that are not shared between two arrays.
+
+#### complement
+
+Returns the complement of the second array relative to the first array.
+
+#### remove
+
+Destructively remove an element from an array. Returns the element removed.
+
+#### shuffle
+
+Takes an array and returns a new array with all values shuffled randomly. Use the [Fisher-Yates algorithm][shuffle-1]. Adapted from the [CoffeeScript Cookbook][shuffle-2].
+
+[shuffle-1]:http://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
+[shuffle-2]:http://coffeescriptcookbook.com/chapters/arrays/shuffling-array-elements
+
+#### range
+
+Generates an array of integers based on the given range.
 
 ## Reactive Programming
 
