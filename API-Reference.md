@@ -1,4 +1,46 @@
-## Table of Contents
+<!-- TOC depth:4 withLinks:1 updateOnSave:1 orderedList:0 -->
+
+	- [Core Functions](#core-functions)
+			- [noOp](#noop)
+			- [identity](#identity)
+			- [wrap](#wrap)
+			- [curry](#curry)
+			- [_](#)
+			- [partial](#partial)
+			- [flip](#flip)
+			- [compose](#compose)
+			- [pipe](#pipe)
+			- [spread](#spread)
+			- [unary, binary, and ternary](#unary-binary-and-ternary)
+			- [negate](#negate)
+	- [Helper Functions](#helper-functions)
+		- [Array Functions](#array-functions)
+			- [push](#push)
+			- [cat](#cat)
+			- [slice](#slice)
+			- [first, second, third, …, nth](#first-second-third-nth)
+			- [last](#last)
+			- [rest](#rest)
+			- [includes](#includes)
+			- [uniqueBy](#uniqueby)
+			- [unique](#unique)
+			- [dupes](#dupes)
+			- [union](#union)
+			- [intersection](#intersection)
+			- [difference](#difference)
+			- [complement](#complement)
+			- [remove](#remove)
+			- [shuffle](#shuffle)
+			- [range](#range)
+	- [Reactive Programming](#reactive-programming)
+		- [Adapter Functions](#adapter-functions)
+			- [producer](#producer)
+			- [pull](#pull)
+			- [repeat](#repeat)
+			- [events](#events)
+			- [stream](#stream)
+			- [flow](#flow)
+<!-- /TOC -->
 
 - [Core Functions](#core-functions)
 - [Helper Functions](#helper-functions)
@@ -191,4 +233,3 @@ Analogous to `wrap`for an iterator. Always produces the same value `x`.
 Turns a stream into reactor.
 
 #### flow
-
