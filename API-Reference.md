@@ -45,6 +45,14 @@ Special value to allow for late-binding of an argument. See `partial`.
 
 Take a function an an argument list and return another function that takes its arguments and concatenates them with the first argument list, first performing argument substitution (see `substitute`).
 
+##### Example
+
+```coffee
+{pow} = Math
+square = partial pow, _, 2
+assert (square 3) == 9
+```
+
 #### flip
 
 Flip the arguments of the given function.
