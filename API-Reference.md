@@ -5,6 +5,8 @@
 
 ## Core Functions
 
+Module: `fairmont-core`
+
 The core functions are functions that provide the FP glue for JavaScript. Includes support for currying, partial application, and composition of functions.
 
 #### noOp
