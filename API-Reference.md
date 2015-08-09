@@ -99,3 +99,20 @@ Takes an iterable, reagent, or producer, or a Promise that resolves into an iter
 i = producer [1..5]
 assert i.next().value == 1
 ```
+
+#### pull
+
+Transform a synchronous iterator into an asynchronous iterator by extracting a Promise from the value produced by the iterator. The extracted Promise yields the value the original promise resolves to.
+
+#### repeat
+
+Analogous to `wrap`for an iterator. Always produces the same value `x`.
+
+#### events
+
+#### stream
+
+Turns a stream into reactor.
+
+#### flow
+
