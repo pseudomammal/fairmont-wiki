@@ -1,5 +1,5 @@
-[Core Functions](#Core-Functions)
-[Reactive Functions](#Reactive-Functions)
+- [Core Functions](#Core-Functions)
+- [Reactive Programming](#Reactive-Programming)
 
 ## Core Functions
 
