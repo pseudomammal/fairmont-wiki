@@ -1,56 +1,194 @@
-<!-- TOC depth:4 withLinks:1 updateOnSave:1 orderedList:0 -->
+[core]:https://github.com/pandastrike/fairmont-core
+[helpers]:https://github.com/pandastrike/fairmont-helpers
+[reactive]:https://github.com/pandastrike/fairmont-reactive
 
+<!-- TOC depth:4 withLinks:1 updateOnSave:0 orderedList:0 -->
+
+- [Core](#core)
 	- [Core Functions](#core-functions)
-			- [noOp](#noop)
-			- [identity](#identity)
-			- [wrap](#wrap)
-			- [curry](#curry)
-			- [_](#)
-			- [partial](#partial)
-			- [flip](#flip)
-			- [compose](#compose)
-			- [pipe](#pipe)
-			- [spread](#spread)
-			- [unary, binary, and ternary](#unary-binary-and-ternary)
-			- [negate](#negate)
-	- [Helper Functions](#helper-functions)
-		- [Array Functions](#array-functions)
-			- [push](#push)
-			- [cat](#cat)
-			- [slice](#slice)
-			- [first, second, third, …, nth](#first-second-third-nth)
-			- [last](#last)
-			- [rest](#rest)
-			- [includes](#includes)
-			- [uniqueBy](#uniqueby)
-			- [unique](#unique)
-			- [dupes](#dupes)
-			- [union](#union)
-			- [intersection](#intersection)
-			- [difference](#difference)
-			- [complement](#complement)
-			- [remove](#remove)
-			- [shuffle](#shuffle)
-			- [range](#range)
-	- [Reactive Programming](#reactive-programming)
-		- [Adapter Functions](#adapter-functions)
-			- [producer](#producer)
-			- [pull](#pull)
-			- [repeat](#repeat)
-			- [events](#events)
-			- [stream](#stream)
-			- [flow](#flow)
+		- [noOp](#noop)
+		- [identity](#identity)
+		- [wrap](#wrap)
+		- [curry](#curry)
+		- [_](#)
+		- [partial](#partial)
+		- [flip](#flip)
+		- [compose](#compose)
+		- [pipe](#pipe)
+		- [spread](#spread)
+		- [unary, binary, and ternary](#unary-binary-and-ternary)
+		- [negate](#negate)
+- [Reactive](#reactive)
+	- [Iterators](#iterators)
+		- [isIterable](#isiterable)
+		- [isIterator](#isiterator)
+		- [iterator](#iterator)
+	- [Reactors](#reactors)
+		- [isReagent, isAsyncIterable](#isreagent-isasynciterable)
+		- [isReactor, isAsyncIterator](#isreactor-isasynciterator)
+		- [reactor, asyncIterator](#reactor-asynciterator)
+	- [Observers](#observers)
+		- [observe](#observe)
+	- [Adapters](#adapters)
+		- [producer](#producer)
+		- [pull](#pull)
+		- [repeat](#repeat)
+		- [events](#events)
+		- [stream](#stream)
+		- [flow](#flow)
+	- [Filters](#filters)
+		- [map](#map)
+		- [select/filter](#selectfilter)
+		- [reject](#reject)
+		- [project](#project)
+		- [compact](#compact)
+		- [partition](#partition)
+		- [take](#take)
+		- [takeN](#taken)
+		- [where](#where)
+		- [split](#split)
+		- [lines](#lines)
+		- [tee](#tee)
+		- [throttle](#throttle)
+		- [pump](#pump)
+	- [Reducers](#reducers)
+		- [fold/reduce](#foldreduce)
+		- [foldr/reduceRight](#foldrreduceright)
+		- [collect](#collect)
+		- [each](#each)
+		- [start](#start)
+		- [any](#any)
+		- [all](#all)
+		- [zip](#zip)
+		- [unzip](#unzip)
+		- [assoc](#assoc)
+		- [flatten](#flatten)
+		- [sum](#sum)
+		- [average](#average)
+		- [join](#join)
+		- [delimit](#delimit)
+- [Helpers](#helpers)
+	- [Array Functions](#array-functions)
+		- [push](#push)
+		- [cat](#cat)
+		- [slice](#slice)
+		- [first, second, third, …, nth](#first-second-third-nth)
+		- [last](#last)
+		- [rest](#rest)
+		- [includes](#includes)
+		- [uniqueBy](#uniqueby)
+		- [unique](#unique)
+		- [dupes](#dupes)
+		- [union](#union)
+		- [intersection](#intersection)
+		- [difference](#difference)
+		- [complement](#complement)
+		- [remove](#remove)
+		- [shuffle](#shuffle)
+		- [range](#range)
+	- [Hashing/Encoding Functions](#hashingencoding-functions)
+		- [md5](#md5)
+		- [base64](#base64)
+		- [base64url](#base64url)
+	- [Generators](#generators)
+		- [async](#async)
+		- [call](#call)
+	- [Numeric Functions](#numeric-functions)
+		- [gt, lt, gte, lte](#gt-lt-gte-lte)
+		- [odd, even](#odd-even)
+		- [Functions exported from Math](#functions-exported-from-math)
+	- [Object Functions](#object-functions)
+		- [include, extend](#include-extend)
+		- [merge](#merge)
+		- [clone](#clone)
+		- [property](#property)
+		- [delegate](#delegate)
+		- [bind](#bind)
+		- [detach](#detach)
+		- [properties](#properties)
+		- [has](#has)
+		- [keys](#keys)
+		- [values](#values)
+		- [pairs](#pairs)
+		- [pick](#pick)
+		- [omit](#omit)
+		- [query](#query)
+		- [toJSON, fromJSON](#tojson-fromjson)
+	- [String Functions](#string-functions)
+		- [toString](#tostring)
+		- [toUpper](#toupper)
+		- [toLower](#tolower)
+		- [plainText](#plaintext)
+		- [capitalize](#capitalize)
+		- [titleCase](#titlecase)
+		- [camelCase](#camelcase)
+		- [underscored](#underscored)
+		- [dashed](#dashed)
+		- [htmlEscape](#htmlescape)
+		- [w](#w)
+		- [blank](#blank)
+	- [Type Functions](#type-functions)
+		- [type](#type)
+		- [isType](#istype)
+		- [instanceOf](#instanceof)
+		- [isNumber](#isnumber)
+		- [isNaN](#isnan)
+		- [isFinite](#isfinite)
+		- [isInteger](#isinteger)
+		- [isFloat](#isfloat)
+		- [isBoolean](#isboolean)
+		- [isDate](#isdate)
+		- [isRegExp](#isregexp)
+		- [isString](#isstring)
+		- [isFunction](#isfunction)
+		- [isObject](#isobject)
+		- [isArray](#isarray)
+		- [isDefined](#isdefined)
+		- [isGenerator](#isgenerator)
+		- [isPromise](#ispromise)
+	- [Utility Functions](#utility-functions)
+		- [memoize](#memoize)
+		- [timer](#timer)
+		- [sleep](#sleep)
+		- [times](#times)
+		- [benchmark](#benchmark)
+		- [empty](#empty)
+		- [length](#length)
+		- [deepEqual](#deepequal)
+- [Process](#process)
+	- [Process Functions](#process-functions)
+		- [abort](#abort)
+		- [shell](#shell)
+- [File System](#file-system)
+	- [File System Functions](#file-system-functions)
+		- [stat](#stat)
+		- [exists](#exists)
+		- [read](#read)
+		- [readDir / readdir](#readdir-readdir)
+		- [ls](#ls)
+		- [lsR / lsr](#lsr-lsr)
+		- [glob](#glob)
+		- [write](#write)
+		- [chDir / chdir](#chdir-chdir)
+		- [rm](#rm)
+		- [rmDir / rmdir](#rmdir-rmdir)
+		- [isDirectory](#isdirectory)
+		- [isFile](#isfile)
+		- [mkDir / mkdir](#mkdir-mkdir)
+		- [mkDirP / mkdirp](#mkdirp-mkdirp)
+- [Multimethods](#multimethods)
+	- [Method](#method)
+		- [Method.create](#methodcreate)
+		- [Method.define](#methoddefine)
 <!-- /TOC -->
 
-- [Core Functions](#core-functions)
-- [Helper Functions](#helper-functions)
-- [Reactive Programming](#reactive-programming)
+## Core
 
-## Core Functions
-
-Module: `fairmont-core`
+Module: [`fairmont-core`][core]
 
 The core functions are functions that provide the FP glue for JavaScript. Includes support for currying, partial application, and composition of functions.
+
+### Core Functions
 
 #### noOp
 
@@ -122,9 +260,194 @@ Take a given function taking a variable number of arguments and return one takin
 
 Take a given function and return a new function that passes its arguments to the given function and negates the return value.
 
-## Helper Functions
+## Reactive
 
-Module: `fairmont-helpers`
+Module: [`fairmont-reactive`][reactive]
+
+Reactive programming functions provide support for reactive programming based on JavaScript iterators.
+
+### Iterators
+
+#### isIterable
+
+We want a simple predicate to tell us if something is an iterator. This is simple enough: it should have a `Symbol.iterator` property. However, generators in Node don't look like iterables (yet?). So we add that case.
+
+#### isIterator
+
+#### iterator
+
+The `iterator` function takes a given value and attempts to return an iterator based upon it. We're using predicates here throughout because they have a higher precedence than `constructor` matches.
+
+If we don't have an iterable, we might have a function. In that case, we assume we're dealing with an iterator function (a function that keeps returning the `next` value), so we turn it into a proper iterator. This allows us to easily define iterators from simple functions.
+
+The simplest case is to just call the iterator method on the value. We can do this when we have something iterable. We have sync and async variants. These are defined last to avoid infinite recursion.
+
+For the moment, generator functions in Node aren't iterables for some reason. So we'll add this case here for the moment.
+
+(If what you want is an async iterator from a generator function (that is, a co-routine) use `async` to adapt it into a function that returns promises first and then call `reactor` on it.)
+
+### Reactors
+
+Reactors are async iterators. That is, they are iterators that return promises that resolve to value-wrappers.
+
+#### isReagent, isAsyncIterable
+
+#### isReactor, isAsyncIterator
+
+#### reactor, asyncIterator
+
+The `reactor` function is analogous to the `iterator` function—it's job is to ensure that the object given as an argument is a proper asynchronous iterator.
+
+For the moment, generator functions in Node aren't iterables for some reason. So we'll add this case here for the moment.
+
+### Observers
+
+#### observe
+
+### Adapters
+
+Adapters are functions that create iterators or reactors (aka, producers) from an existing value, like an Array or an event emitter.
+
+#### producer
+
+Takes an iterable, reagent, or producer, or a Promise that resolves into an iterable, reagent, or producer, and returns an appropriate producer. The `producer` function is idempotent, so it can be called safely on values that might already be producers and will simply return them back to the caller.
+
+##### Example
+
+```coffee
+i = producer [1..5]
+assert i.next().value == 1
+```
+
+#### pull
+
+Transform a synchronous iterator into an asynchronous iterator by extracting a Promise from the value produced by the iterator. The extracted Promise yields the value the original promise resolves to.
+
+#### repeat
+
+Analogous to `wrap`for an iterator. Always produces the same value `x`.
+
+#### events
+
+#### stream
+
+Turns a stream into reactor.
+
+#### flow
+
+### Filters
+
+Filters transform an iterator or reactor into another iterator/reactor.
+
+#### map
+
+Return a new iterator that will apply the given function to each value produced by the iterator.
+
+#### select/filter
+
+Given a function and an iterator, return an iterator that produces values from the given iterator for which the function returns true.
+
+#### reject
+
+Given a function and an iterator, return an iterator that produces values from the given iterator for which the function returns false.
+
+#### project
+
+#### compact
+
+#### partition
+
+#### take
+
+Given a function and an iterator, return an iterator that produces values from the given iterator until the given function returns false when applied to the given iterator's values.
+
+#### takeN
+
+Given an iterator, produces the first N values from the given iterator.
+
+#### where
+
+Performs a `select` using a given object object. See `query`.
+
+#### split
+
+Given a function and an iterator, produce a new iterator whose values are delimited based on the given function.
+
+#### lines
+
+#### tee
+
+#### throttle
+
+#### pump
+
+Write the values produced by the iterator to a stream.
+
+### Reducers
+
+Some functions _reduce_ an iterator into another value. Once a reduce function is introduced, the associated iterator functions will run.
+
+#### fold/reduce
+
+Given an initial value, a function, and an iterator, reduce the iterator to a single value, ex: sum a list of integers.
+
+#### foldr/reduceRight
+
+Given function and an initial value, reduce an iterator to a single value, ex: sum a list of integers, starting from the right, or last, value.
+
+#### collect
+
+Collect an iterator's values into an array.
+
+#### each
+
+Apply a function to each element but discard the results. This is a reducer because there isn't any point in having an iterator that simply discards the value from another iterator. Basically, use `each` when you want to reduce an iterator without taking up any additional memory.
+
+#### start
+
+Works like `each` but doesn't apply a function to each element. This is useful with producers that encapsulate operations, like request processing in a server or handling browser events.
+
+#### any
+
+Given a function and an iterator, return true if the given function returns true for any value produced by the iterator.
+
+#### all
+
+Given a function and an iterator, return true if the function returns true for all the values produced by the iterator.
+
+#### zip
+
+Given a function and two iterators, return an iterator that produces values by applying a function to the values produced by the given iterators.
+
+#### unzip
+
+#### assoc
+
+Given an iterator that produces associative pairs, return an object whose keys are the first element of the pair and whose values are the second element of the pair.
+
+#### flatten
+
+#### sum
+
+Sum the numbers produced by a given iterator.
+
+#### average
+
+Average the numbers producced by a given iterator.
+
+#### join
+
+Concatenate the strings produced by a given iterator. Unlike `Array::join`, this function does not delimit the strings. See also: `delimit`.
+
+This is here instead of in [String Functions](./string.litcoffee) to avoid forward declaring `fold`.
+
+#### delimit
+
+Like `join`, except that it takes a delimeter, separating each string with the delimiter. Similar to `Array::join`, except there's no default delimiter. The function is curried, though, so calling `delimit ' '` is analogous to `Array::join` with no delimiter argument.
+
+## Helpers
+
+Module: [`fairmont-helpers`][helpers]
 
 ### Array Functions
 
@@ -197,39 +520,329 @@ Takes an array and returns a new array with all values shuffled randomly. Use th
 
 Generates an array of integers based on the given range.
 
-## Reactive Programming
+### Hashing/Encoding Functions
 
-Module: `fairmont-reactive`
+#### md5
 
-Reactive programming functions provide support for reactive programming based on JavaScript iterators.
+Return the MD5 hash of a string.
 
-### Adapter Functions
+#### base64
 
-Adapters are functions that create iterators or reactors (aka, producers) from an existing value, like an Array or an event emitter.
+Base64 encode a string. (Not URL safe.)
 
-#### producer
+#### base64url
 
-Takes an iterable, reagent, or producer, or a Promise that resolves into an iterable, reagent, or producer, and returns an appropriate producer. The `producer` function is idempotent, so it can be called safely on values that might already be producers and will simply return them back to the caller.
+Format a string as Base64, adapted based on [RFC 4648's][0] "base64url" mapping.
 
-##### Example
+[0]:http://tools.ietf.org/html/rfc4648#section-5
 
-```coffee
-i = producer [1..5]
-assert i.next().value == 1
-```
+### Generators
 
-#### pull
+#### async
 
-Transform a synchronous iterator into an asynchronous iterator by extracting a Promise from the value produced by the iterator. The extracted Promise yields the value the original promise resolves to.
+#### call
 
-#### repeat
+### Numeric Functions
 
-Analogous to `wrap`for an iterator. Always produces the same value `x`.
+#### gt, lt, gte, lte
 
-#### events
+#### odd, even
 
-#### stream
+#### Functions exported from Math
 
-Turns a stream into reactor.
+### Object Functions
 
-#### flow
+#### include, extend
+
+Adds the properties of one or more objects to another. Aliased as `extend`.
+
+#### merge
+
+Creates new object by progressively adding the properties of each given object.
+
+#### clone
+
+Perform a deep clone on an object. Taken from [The CoffeeScript Cookboox][0].
+
+[0]:http://coffeescriptcookbook.com/chapters/classesAndObjects/cloning
+
+#### property
+
+Extract a property from an object. You can extract nested properties by composing curried `property` invocations.
+
+#### delegate
+
+Delegates from one object to another by creating functions in the first object that call the second.
+
+#### bind
+
+Define a function based on a prototype function and an instance of the prototype. **Important** In the past, this did not always work for some natively implemented functions. That is hopefully no longer the case.
+
+#### detach
+
+Define a function based on a prototype function, taking as its first argument an instance of prototype. **Important** In the past, this did not always work for some natively implemented functions. That is hopefully no longer the case.
+
+#### properties
+
+Define getters and setters on an object.
+
+Properties defined using `properties` are enumerable.
+
+#### has
+
+Check if an object has a property.
+
+#### keys
+
+Get the keys for an object.
+
+#### values
+
+Get the values for an object.
+
+#### pairs
+
+Convert an object into association array.
+
+#### pick
+
+#### omit
+
+#### query
+
+#### toJSON, fromJSON
+
+### String Functions
+
+#### toString
+
+#### toUpper
+
+#### toLower
+
+#### plainText
+
+Convert an camel-case or underscore- or dash-separated string into a
+whitespace separated string.
+
+#### capitalize
+
+Capitalize the first letter of a string.
+
+#### titleCase
+
+Capitalize the first letter of each word in a string.
+
+#### camelCase
+
+Convert a sequence of words into a camel-cased string.
+
+#### underscored
+
+Convert a sequence of words into an underscore-separated string.
+
+#### dashed
+
+Convert a sequence of words into a dash-separated string.
+
+#### htmlEscape
+
+Escape a string so that it can be embedded into HTML. Adapted from Mustache.js.
+
+#### w
+
+Split a string on whitespace. Useful for concisely creating arrays of strings.
+
+#### blank
+
+Check to see if a string has zero length.
+
+### Type Functions
+
+#### type
+
+Get the type of a value. Possible values are: `number`, `string`, '`boolean`, `date`, `regexp`, `function`, `array`, `object`, `null`, `undefined`.
+
+#### isType
+
+#### instanceOf
+
+#### isNumber
+
+#### isNaN
+
+#### isFinite
+
+#### isInteger
+
+#### isFloat
+
+Adapted from [StackOverflow][isFloat].
+
+[isFloat]:http://stackoverflow.com/questions/3885817/how-to-check-if-a-number-is-float-or-integer/3885844#3885844
+
+#### isBoolean
+
+#### isDate
+
+#### isRegExp
+
+#### isString
+
+#### isFunction
+
+#### isObject
+
+#### isArray
+
+#### isDefined
+
+#### isGenerator
+
+#### isPromise
+
+### Utility Functions
+
+These should probably all go somewhere else. For the moment, this is a holding pen of sorts for functions that we're not sure what to do with.
+
+#### memoize
+
+A very simple way to cache results of functions that take a single argument. Also takes an optional hash function that defaults to calling `toString` on the function's argument.
+
+#### timer
+
+Set a timer. Takes an interval in microseconds and an action. Returns a function to cancel the timer. Basically, a more convenient way to call `setTimeout` and `clearTimeout`.
+
+#### sleep
+
+Returns a promise that resolves after a given interval.
+
+#### times
+
+Run a function N number of times.
+
+#### benchmark
+
+Run a function an record how long it took. Use this in conjunction with `times` to benchmark a function over N repetitions.
+
+#### empty
+
+Returns true if a contains no value. For arrays and strings, this means that its length is zero. For an object, it means that `keys` returns an array of length zero. For any other value, it will return true unless it's `undefined`.
+
+#### length
+
+Returns the length property of an object. This is so frequently used with strings and arrays that it's reasonable to include it. We were tempted to add a variant for objects, but that could produce surprising results. Instead, just use `length keys object`, which is still much more readable than `Object.keys(foo).length`. And, of course, if you're just comparing to zero, use `empty`: `empty foo` works on objects.
+
+#### deepEqual
+
+## Process
+
+### Process Functions
+
+#### abort
+
+Simple wrapper around `process.exit(-1)`.
+
+#### shell
+
+Execute a shell command. Returns a promise that resolves to an object with properties `stdout` and `stdin`, or is rejected with an error.
+
+## File System
+
+### File System Functions
+
+#### stat
+
+Synchronously get the stat object for a file.
+
+#### exists
+
+Check to see if a file exists.
+
+#### read
+
+Read a file and return a UTF-8 string of the contents.
+
+Passing an explicit 'null'/`undefined` or 'binary'/'buffer' as the encoding will return the raw buffer.
+
+You can also just pass in a readable stream.
+
+#### readDir / readdir
+
+Get the contents of a directory as an array.
+
+#### ls
+
+Get the contents of a directory as an array of pathnames.
+
+#### lsR / lsr
+
+Recursively get the contents of a directory as an array.
+
+#### glob
+
+Glob a directory.
+
+#### write
+
+Synchronously write a UTF-8 string or data buffer to a file.
+
+#### chDir / chdir
+
+Change directories. If a function is passed in execute the function, and restore the original working directory. Otherwise, returns a function to restore the original working directory. **Important** Do not rely on the automatic restoration feature when using asynchronous functions, since another function may also change the current directory.
+
+#### rm
+
+Removes a file.
+
+#### rmDir / rmdir
+
+Removes a directory.
+
+#### isDirectory
+
+#### isFile
+
+#### mkDir / mkdir
+
+Creates a directory. Takes a `mode` and a `path`. Assumes any intermediate directories in the path already exist.
+
+#### mkDirP / mkdirp
+
+Creates a directory and any intermediate directories in the given `path`. Takes a `mode` and a `path`.
+
+## Multimethods
+
+[Multimethods][1] are polymorphic functions on their arguments. Methods in JavaScript objects dispatch based only on the (implicit first argument, which is the) object itself. Multimethods provide a more functional and flexible approach.
+
+[1]:https://en.wikipedia.org/wiki/Multiple_dispatch
+
+The `dispatch` function is the soul of the multimethod implementation. Our approach is iterate through all the available method implementations (`entries`) and find the best match by checking each argument (given by `ax`).
+
+We score each match based on a set of precedence rules, from highest to lowest:
+
+* A predicate match, ex: `even` for matching an argument that is an even number
+
+* A value match, ex: `5` for matching a specific value
+
+* A type match, defined by a match against the argument's constructor function
+
+* A inherited type match, defined by `instanceof` returning true
+
+All the arguments must match, otherwise the score is zero. If no match is found, the `default` method will be selected.
+
+The method definition can either be a value or a function. If it's a function, the function is run using the given arguments. Otherwise, the value is returned directly.
+
+For definitions which the value is itself a function, you must wrap the function inside another function. The `dispatch` function is not exposed directly.
+
+A map function allows for the transformation of the arguments for matching purposes. For example, variadic functions can be implemented by simply providing a variadic map function that returns the arguments as an Array.
+
+The `method` function defines a new multimethod, taking an optional description of the method. This can be accessed via the `description` property of the method.
+
+The `define` function adds an entry into the dispatch table. It takes the method, the signature, and the definition (implementation) as arguments.
+
+### Method
+
+#### Method.create
+
+#### Method.define
