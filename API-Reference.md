@@ -1,3 +1,5 @@
+## Table of Contents
+
 - [Core Functions](#Core-Functions)
 - [Reactive Programming](#Reactive-Programming)
 
