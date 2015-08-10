@@ -5,7 +5,10 @@ marked = require "marked"
 [path] = process.argv[2..]
 
 name = (heading) ->
-  dashed toLower heading.replace "/", ""
+  heading
+  .toLowerCase()
+  .replace /[^\w\s]/g, ""
+  .replace /\s/g, "-"
 
 call ->
   toc = ""

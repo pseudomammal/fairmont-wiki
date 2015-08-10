@@ -41,7 +41,7 @@
 
 **[Helpers](#helpers)**
 
-- [Array Functions](#array-functions): [<small>`push`</small>](#push) | [<small>`cat`</small>](#cat) | [<small>`slice`</small>](#slice) | [<small>`first, second, third, …, nth`</small>](#first-second-third-nth) | [<small>`last`</small>](#last) | [<small>`rest`</small>](#rest) | [<small>`includes`</small>](#includes) | [<small>`uniqueBy`</small>](#uniqueby) | [<small>`unique`</small>](#unique) | [<small>`dupes`</small>](#dupes) | [<small>`union`</small>](#union) | [<small>`intersection`</small>](#intersection) | [<small>`difference`</small>](#difference) | [<small>`complement`</small>](#complement) | [<small>`remove`</small>](#remove) | [<small>`shuffle`</small>](#shuffle) | [<small>`range`</small>](#range)
+- [Array Functions](#array-functions): [<small>`push`</small>](#push) | [<small>`cat`</small>](#cat) | [<small>`slice`</small>](#slice) | [<small>`first, second, third, …, nth`</small>](#first-second-third--nth) | [<small>`last`</small>](#last) | [<small>`rest`</small>](#rest) | [<small>`includes`</small>](#includes) | [<small>`uniqueBy`</small>](#uniqueby) | [<small>`unique`</small>](#unique) | [<small>`dupes`</small>](#dupes) | [<small>`union`</small>](#union) | [<small>`intersection`</small>](#intersection) | [<small>`difference`</small>](#difference) | [<small>`complement`</small>](#complement) | [<small>`remove`</small>](#remove) | [<small>`shuffle`</small>](#shuffle) | [<small>`range`</small>](#range)
 
 
 
@@ -81,13 +81,13 @@
 
 **[File System](#file-system)**
 
-- [File System Functions](#file-system-functions): [<small>`stat`</small>](#stat) | [<small>`exists`</small>](#exists) | [<small>`read`</small>](#read) | [<small>`readDir / readdir`</small>](#readdir-readdir) | [<small>`ls`</small>](#ls) | [<small>`lsR / lsr`</small>](#lsr-lsr) | [<small>`glob`</small>](#glob) | [<small>`write`</small>](#write) | [<small>`chDir / chdir`</small>](#chdir-chdir) | [<small>`rm`</small>](#rm) | [<small>`rmDir / rmdir`</small>](#rmdir-rmdir) | [<small>`isDirectory`</small>](#isdirectory) | [<small>`isFile`</small>](#isfile) | [<small>`mkDir / mkdir`</small>](#mkdir-mkdir) | [<small>`mkDirP / mkdirp`</small>](#mkdirp-mkdirp)
+- [File System Functions](#file-system-functions): [<small>`stat`</small>](#stat) | [<small>`exists`</small>](#exists) | [<small>`read`</small>](#read) | [<small>`readDir / readdir`</small>](#readdir--readdir) | [<small>`ls`</small>](#ls) | [<small>`lsR / lsr`</small>](#lsr--lsr) | [<small>`glob`</small>](#glob) | [<small>`write`</small>](#write) | [<small>`chDir / chdir`</small>](#chdir--chdir) | [<small>`rm`</small>](#rm) | [<small>`rmDir / rmdir`</small>](#rmdir--rmdir) | [<small>`isDirectory`</small>](#isdirectory) | [<small>`isFile`</small>](#isfile) | [<small>`mkDir / mkdir`</small>](#mkdir--mkdir) | [<small>`mkDirP / mkdirp`</small>](#mkdirp--mkdirp)
 
 
 
 **[Multimethods](#multimethods)**
 
-- [Method](#method): [<small>`Method.create`</small>](#method-create) | [<small>`Method.define`</small>](#method-define)
+- [Method](#method): [<small>`Method.create`</small>](#methodcreate) | [<small>`Method.define`</small>](#methoddefine)
 
 <!-- end: toc -->
 
