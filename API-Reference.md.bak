@@ -1,7 +1,3 @@
-
-> fairmont.wiki@ toc /Users/dyoder/Dropbox/panda-strike/repos/fairmont.wiki
-> coffee --nodejs --harmony script/toc.coffee "API-Reference.md"
-
 [core]:https://github.com/pandastrike/fairmont-core
 [helpers]:https://github.com/pandastrike/fairmont-helpers
 [reactive]:https://github.com/pandastrike/fairmont-reactive
@@ -10,106 +6,9 @@
 
 <!-- begin: toc -->
 
-**[Core](#core)**
+This is not a real table of contents.
 
-[Core Functions](#core-functions)
-
-[<small>`noOp`</small>](#noop) | [<small>`identity`</small>](#identity) | [<small>`wrap`</small>](#wrap) | [<small>`curry`</small>](#curry) | [<small>`_`</small>](#_) | [<small>`partial`</small>](#partial) | [<small>`flip`</small>](#flip) | [<small>`compose`</small>](#compose) | [<small>`pipe`</small>](#pipe) | [<small>`spread`</small>](#spread) | [<small>`unary, binary, and ternary`</small>](#unary-binary-and-ternary) | [<small>`negate`</small>](#negate)
-
-
-**[Reactive](#reactive)**
-
-[Iterators](#iterators)
-
-[<small>`isIterable`</small>](#isiterable) | [<small>`isIterator`</small>](#isiterator) | [<small>`iterator`</small>](#iterator)
-
-
-[Reactors](#reactors)
-
-[<small>`isReagent, isAsyncIterable`</small>](#isreagent-isasynciterable) | [<small>`isReactor, isAsyncIterator`</small>](#isreactor-isasynciterator) | [<small>`reactor, asyncIterator`</small>](#reactor-asynciterator)
-
-
-[Observers](#observers)
-
-[<small>`observe`</small>](#observe)
-
-
-[Adapters](#adapters)
-
-[<small>`producer`</small>](#producer) | [<small>`pull`</small>](#pull) | [<small>`repeat`</small>](#repeat) | [<small>`events`</small>](#events) | [<small>`stream`</small>](#stream) | [<small>`flow`</small>](#flow)
-
-
-[Filters](#filters)
-
-[<small>`map`</small>](#map) | [<small>`select/filter`</small>](#select-filter) | [<small>`reject`</small>](#reject) | [<small>`project`</small>](#project) | [<small>`compact`</small>](#compact) | [<small>`partition`</small>](#partition) | [<small>`take`</small>](#take) | [<small>`takeN`</small>](#taken) | [<small>`where`</small>](#where) | [<small>`split`</small>](#split) | [<small>`lines`</small>](#lines) | [<small>`tee`</small>](#tee) | [<small>`throttle`</small>](#throttle) | [<small>`pump`</small>](#pump)
-
-
-[Reducers](#reducers)
-
-[<small>`fold/reduce`</small>](#fold-reduce) | [<small>`foldr/reduceRight`</small>](#foldr-reduceright) | [<small>`collect`</small>](#collect) | [<small>`each`</small>](#each) | [<small>`start`</small>](#start) | [<small>`any`</small>](#any) | [<small>`all`</small>](#all) | [<small>`zip`</small>](#zip) | [<small>`unzip`</small>](#unzip) | [<small>`assoc`</small>](#assoc) | [<small>`flatten`</small>](#flatten) | [<small>`sum`</small>](#sum) | [<small>`average`</small>](#average) | [<small>`join`</small>](#join) | [<small>`delimit`</small>](#delimit)
-
-
-**[Helpers](#helpers)**
-
-[Array Functions](#array-functions)
-
-[<small>`push`</small>](#push) | [<small>`cat`</small>](#cat) | [<small>`slice`</small>](#slice) | [<small>`first, second, third, …, nth`</small>](#first-second-third-nth) | [<small>`last`</small>](#last) | [<small>`rest`</small>](#rest) | [<small>`includes`</small>](#includes) | [<small>`uniqueBy`</small>](#uniqueby) | [<small>`unique`</small>](#unique) | [<small>`dupes`</small>](#dupes) | [<small>`union`</small>](#union) | [<small>`intersection`</small>](#intersection) | [<small>`difference`</small>](#difference) | [<small>`complement`</small>](#complement) | [<small>`remove`</small>](#remove) | [<small>`shuffle`</small>](#shuffle) | [<small>`range`</small>](#range)
-
-
-[Hashing/Encoding Functions](#hashing-encoding-functions)
-
-[<small>`md5`</small>](#md5) | [<small>`base64`</small>](#base64) | [<small>`base64url`</small>](#base64url)
-
-
-[Generators](#generators)
-
-[<small>`async`</small>](#async) | [<small>`call`</small>](#call)
-
-
-[Numeric Functions](#numeric-functions)
-
-[<small>`gt, lt, gte, lte`</small>](#gt-lt-gte-lte) | [<small>`odd, even`</small>](#odd-even) | [<small>`Functions exported from Math`</small>](#functions-exported-from-math)
-
-
-[Object Functions](#object-functions)
-
-[<small>`include, extend`</small>](#include-extend) | [<small>`merge`</small>](#merge) | [<small>`clone`</small>](#clone) | [<small>`property`</small>](#property) | [<small>`delegate`</small>](#delegate) | [<small>`bind`</small>](#bind) | [<small>`detach`</small>](#detach) | [<small>`properties`</small>](#properties) | [<small>`has`</small>](#has) | [<small>`keys`</small>](#keys) | [<small>`values`</small>](#values) | [<small>`pairs`</small>](#pairs) | [<small>`pick`</small>](#pick) | [<small>`omit`</small>](#omit) | [<small>`query`</small>](#query) | [<small>`toJSON, fromJSON`</small>](#tojson-fromjson)
-
-
-[String Functions](#string-functions)
-
-[<small>`toString`</small>](#tostring) | [<small>`toUpper`</small>](#toupper) | [<small>`toLower`</small>](#tolower) | [<small>`plainText`</small>](#plaintext) | [<small>`capitalize`</small>](#capitalize) | [<small>`titleCase`</small>](#titlecase) | [<small>`camelCase`</small>](#camelcase) | [<small>`underscored`</small>](#underscored) | [<small>`dashed`</small>](#dashed) | [<small>`htmlEscape`</small>](#htmlescape) | [<small>`w`</small>](#w) | [<small>`blank`</small>](#blank)
-
-
-[Type Functions](#type-functions)
-
-[<small>`type`</small>](#type) | [<small>`isType`</small>](#istype) | [<small>`instanceOf`</small>](#instanceof) | [<small>`isNumber`</small>](#isnumber) | [<small>`isNaN`</small>](#isnan) | [<small>`isFinite`</small>](#isfinite) | [<small>`isInteger`</small>](#isinteger) | [<small>`isFloat`</small>](#isfloat) | [<small>`isBoolean`</small>](#isboolean) | [<small>`isDate`</small>](#isdate) | [<small>`isRegExp`</small>](#isregexp) | [<small>`isString`</small>](#isstring) | [<small>`isFunction`</small>](#isfunction) | [<small>`isObject`</small>](#isobject) | [<small>`isArray`</small>](#isarray) | [<small>`isDefined`</small>](#isdefined) | [<small>`isGenerator`</small>](#isgenerator) | [<small>`isPromise`</small>](#ispromise)
-
-
-[Utility Functions](#utility-functions)
-
-[<small>`memoize`</small>](#memoize) | [<small>`timer`</small>](#timer) | [<small>`sleep`</small>](#sleep) | [<small>`times`</small>](#times) | [<small>`benchmark`</small>](#benchmark) | [<small>`empty`</small>](#empty) | [<small>`length`</small>](#length) | [<small>`deepEqual`</small>](#deepequal)
-
-
-**[Process](#process)**
-
-[Process Functions](#process-functions)
-
-[<small>`abort`</small>](#abort) | [<small>`shell`</small>](#shell)
-
-
-**[File System](#file-system)**
-
-[File System Functions](#file-system-functions)
-
-[<small>`stat`</small>](#stat) | [<small>`exists`</small>](#exists) | [<small>`read`</small>](#read) | [<small>`readDir / readdir`</small>](#readdir-readdir) | [<small>`ls`</small>](#ls) | [<small>`lsR / lsr`</small>](#lsr-lsr) | [<small>`glob`</small>](#glob) | [<small>`write`</small>](#write) | [<small>`chDir / chdir`</small>](#chdir-chdir) | [<small>`rm`</small>](#rm) | [<small>`rmDir / rmdir`</small>](#rmdir-rmdir) | [<small>`isDirectory`</small>](#isdirectory) | [<small>`isFile`</small>](#isfile) | [<small>`mkDir / mkdir`</small>](#mkdir-mkdir) | [<small>`mkDirP / mkdirp`</small>](#mkdirp-mkdirp)
-
-
-**[Multimethods](#multimethods)**
-
-[Method](#method)
-
-[<small>`Method.create`</small>](#method-create) | [<small>`Method.define`</small>](#method-define) | <!-- end: toc -->
+<!-- end: toc -->
 
 ## Core
 
@@ -775,4 +674,3 @@ The `define` function adds an entry into the dispatch table. It takes the method
 #### Method.create
 
 #### Method.define
-

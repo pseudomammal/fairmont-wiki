@@ -1,6 +1,6 @@
 marked = require "marked"
 
-{call, read, dashed, toLower} = require "fairmont"
+{call, read, write, dashed, toLower} = require "fairmont"
 
 [path] = process.argv[2..]
 
@@ -8,29 +8,31 @@ name = (heading) ->
   dashed toLower heading
 
 call ->
-  toc = "## Table of Contents\n\n"
-  tokens = marked.lexer yield read path
+  toc = ""
+  md = yield read path
+  tokens = marked.lexer md
   for token, index in tokens when token.type == "heading"
-    if token.text == "Table of Contents"
-      tocIndex = index
-    else
+    if token.text != "Table of Contents"
       toc += switch token.depth
-        when 2 then "\n\n### [#{token.text}](##{name token.text})\n\n"
-        when 3 then "\n\n#### [#{token.text}](##{name token.text})\n\n"
-        when 4
-          token.text = if token.text in ["_"] then "\\_" else token.text
-          "[`#{token.text}`](##{name token.text}) | "
+        when 2 then "\n\n**[#{token.text}](##{name token.text})**\n\n"
+        when 3 then "\n\n- [#{token.text}](##{name token.text}): "
+        when 4 then "[<small>`#{token.text}`</small>](##{name token.text}) | "
         else ""
 
   toc = toc
-    .replace /\n\n+/g, "\n\n"
-    .replace(/ \| \n/g, "")
+    .replace /\n\n+/mg, "\n\n"
+    .replace(/ \| $/mg, "\n\n")
 
-  tokensBeforeTOC = tokens[0...tocIndex]
-  tokensAfterTOC = tokens[(tocIndex + 1)..-1]
-  tocTokens = marked.lexer toc
-  links = tokens.links
-  tokens = [tokensBeforeTOC..., tocTokens..., tokensAfterTOC...]
-  tokens.links = tokens
+  startDelimiter = "<!-- begin: toc -->"
+  endDelimiter = "<!-- end: toc -->"
+  start = md.indexOf startDelimiter
+  if start == -1
+    start = 0
+  else
+    start += startDelimiter.length
+  end = md.indexOf endDelimiter
+  if end == -1
+    end = start + 1
+  md = md[...start] + toc + md[end..]
 
-  console.log marked.parser tokens
+  write path, md
