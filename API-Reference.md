@@ -31,11 +31,11 @@
 
 
 
-- [Filters](#filters): [<small>`map`</small>](#map) | [<small>`select/filter`</small>](#select-filter) | [<small>`reject`</small>](#reject) | [<small>`project`</small>](#project) | [<small>`compact`</small>](#compact) | [<small>`partition`</small>](#partition) | [<small>`take`</small>](#take) | [<small>`takeN`</small>](#taken) | [<small>`where`</small>](#where) | [<small>`split`</small>](#split) | [<small>`lines`</small>](#lines) | [<small>`tee`</small>](#tee) | [<small>`throttle`</small>](#throttle) | [<small>`pump`</small>](#pump)
+- [Filters](#filters): [<small>`map`</small>](#map) | [<small>`select/filter`</small>](#selectfilter) | [<small>`reject`</small>](#reject) | [<small>`project`</small>](#project) | [<small>`compact`</small>](#compact) | [<small>`partition`</small>](#partition) | [<small>`take`</small>](#take) | [<small>`takeN`</small>](#taken) | [<small>`where`</small>](#where) | [<small>`split`</small>](#split) | [<small>`lines`</small>](#lines) | [<small>`tee`</small>](#tee) | [<small>`throttle`</small>](#throttle) | [<small>`pump`</small>](#pump)
 
 
 
-- [Reducers](#reducers): [<small>`fold/reduce`</small>](#fold-reduce) | [<small>`foldr/reduceRight`</small>](#foldr-reduceright) | [<small>`collect`</small>](#collect) | [<small>`each`</small>](#each) | [<small>`start`</small>](#start) | [<small>`any`</small>](#any) | [<small>`all`</small>](#all) | [<small>`zip`</small>](#zip) | [<small>`unzip`</small>](#unzip) | [<small>`assoc`</small>](#assoc) | [<small>`flatten`</small>](#flatten) | [<small>`sum`</small>](#sum) | [<small>`average`</small>](#average) | [<small>`join`</small>](#join) | [<small>`delimit`</small>](#delimit)
+- [Reducers](#reducers): [<small>`fold/reduce`</small>](#foldreduce) | [<small>`foldr/reduceRight`</small>](#foldrreduceright) | [<small>`collect`</small>](#collect) | [<small>`each`</small>](#each) | [<small>`start`</small>](#start) | [<small>`any`</small>](#any) | [<small>`all`</small>](#all) | [<small>`zip`</small>](#zip) | [<small>`unzip`</small>](#unzip) | [<small>`assoc`</small>](#assoc) | [<small>`flatten`</small>](#flatten) | [<small>`sum`</small>](#sum) | [<small>`average`</small>](#average) | [<small>`join`</small>](#join) | [<small>`delimit`</small>](#delimit)
 
 
 
@@ -45,7 +45,7 @@
 
 
 
-- [Hashing/Encoding Functions](#hashing-encoding-functions): [<small>`md5`</small>](#md5) | [<small>`base64`</small>](#base64) | [<small>`base64url`</small>](#base64url)
+- [Hashing/Encoding Functions](#hashingencoding-functions): [<small>`md5`</small>](#md5) | [<small>`base64`</small>](#base64) | [<small>`base64url`</small>](#base64url)
 
 
 
@@ -95,7 +95,7 @@
 
 Module: [`fairmont-core`][core]
 
-The core functions are functions that provide the FP glue for JavaScript. Includes support for currying, partial application, and composition of functions.
+The core functions are functions that provide the functional programming glue for JavaScript. Includes support for currying, partial application, and composition of functions.
 
 ### Core Functions
 

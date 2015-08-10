@@ -5,7 +5,7 @@ marked = require "marked"
 [path] = process.argv[2..]
 
 name = (heading) ->
-  dashed toLower heading
+  dashed toLower heading.replace "/", ""
 
 call ->
   toc = ""
@@ -32,7 +32,7 @@ call ->
     start += startDelimiter.length
   end = md.indexOf endDelimiter
   if end == -1
-    end = start + 1
+    end = start
   md = md[...start] + toc + md[end..]
 
   write path, md
