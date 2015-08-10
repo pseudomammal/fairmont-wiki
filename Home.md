@@ -1,1 +1,3 @@
-Welcome to the fairmont wiki!
+Welcome to the Fairmont wiki!
+
+* [[API Reference]]
