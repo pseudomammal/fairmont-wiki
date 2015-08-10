@@ -570,7 +570,7 @@ Check to see if a string has zero length.
 
 #### type
 
-Get the type of a value. Possible values are: `number`, `string`, '`boolean`, `date`, `regexp`, `function`, `array`, `object`, `null`, `undefined`.
+Return the constructor function of the value, or `undefined`.
 
 #### isType
 
