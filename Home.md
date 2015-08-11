@@ -1,3 +1,6 @@
 Welcome to the Fairmont wiki!
 
-* [[API Reference]]
+- [[Overview]]
+- [[Getting Started]]
+- [[Tutorial]]
+- [[API Reference]]
