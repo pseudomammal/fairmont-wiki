@@ -650,7 +650,13 @@ Returns the length property of an object. This is so frequently used with string
 
 #### abort
 
-Simple wrapper around `process.exit(-1)`.
+Simple wrapper around `process.exit(-1)`, optionally taking a message.
+
+##### Example
+
+```coffee
+abort "Cap'n she can't hold any longer!"
+```
 
 #### shell
 
