@@ -232,7 +232,7 @@ Take a given function taking a variable number of arguments and return one takin
 
 ```coffee
 f = -> a + b
-g = binary curry f
+g = curry binary f
 a = g "a"
 assert (a "b") == "ab"
 ```
