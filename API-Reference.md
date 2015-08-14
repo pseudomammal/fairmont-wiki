@@ -116,12 +116,19 @@ Takes a value and returns it. Useful in conjunction with combinators when you do
 ##### Example
 
 ```coffee
-assert identity(7) == 7
+assert (identity 7) == 7
 ```
 
 #### wrap
 
 Takes a value and returns a function that always returns the given value.
+
+##### Example
+
+```coffee
+f = wrap 7
+assert f() == 7
+```
 
 #### curry
 
@@ -129,9 +136,30 @@ Convert a function taking N arguments into a function that:
 - given M < N arguments, returns another (curried) function taking N - M arguments
 - given N arguments, runs the given function
 
+##### Example
+
+```coffee
+slice = curry (begin, end, array) -> array.slice begin, end
+truncate = slice 0
+x = truncate 3, [1..5]
+assert x.length == 3
+```
+
 #### _
 
 Special value to allow for late-binding of an argument. See `partial`.
+
+#### substitute
+
+Given two arrays, substitute values from the second array for elements in the first array with the special value `_`.
+
+##### Example
+
+```coffee
+ax = substitute [1, _, 3], [2]
+assert ax[1] == 2
+```
+
 
 #### partial
 
@@ -149,21 +177,65 @@ assert (square 3) == 9
 
 Flip the arguments of the given function.
 
+##### Example
+
+```coffee
+pow = curry flip Math.pow
+square =  pow 2
+assert (square 3) == 9
+```
+
 #### compose
 
-Compose a list of functions, returning a new function. You can compose functions returning promises (defined as returning a value having a `then` property) and you'll get a promise back, resolving to the result of the composition.
+Compose a list of functions, returning a new function.
+You can compose functions returning promises (defined as returning a value having a `then` property) and you'll get a promise back, resolving to the result of the composition.
+
+##### Example
+
+```coffee
+inverse = (x) -> 1/x
+square = (x) -> x * x
+inverseSquare = compose inverse, square
+assert inverseSquare 5 == 1/25
+```
 
 #### pipe
 
 Composition, except the functions arguments are in order of application.
 
+##### Example
+
+```coffee
+a = (x) -> x + "a"
+b = (x) -> x + "b"
+ab = pipe a, b
+assert (ab "S") == "Sab"
+```
+
 #### spread
 
 Converts a function taking a list of arguments into a function taking an array.
 
+##### Example
+
+```coffee
+cat = (a, b) -> a + b
+catPair = spread cat
+assert (catPair ["a", "b"]) == "ab"
+```
+
 #### unary, binary, and ternary
 
 Take a given function taking a variable number of arguments and return one taking 1, 2, or 3 arguments. Useful in conjuction with `curry`.
+
+##### Example
+
+```coffee
+f = -> a + b
+g = binary curry f
+a = g "a"
+assert (a "b") == "ab"
+```
 
 #### negate
 
