@@ -9,13 +9,13 @@
 
 **[Core](#core)**
 
-- [Core Functions](#core-functions): [<small>`noOp`</small>](#noop) | [<small>`identity`</small>](#identity) | [<small>`wrap`</small>](#wrap) | [<small>`curry`</small>](#curry) | [<small>`_`</small>](#_) | [<small>`partial`</small>](#partial) | [<small>`flip`</small>](#flip) | [<small>`compose`</small>](#compose) | [<small>`pipe`</small>](#pipe) | [<small>`spread`</small>](#spread) | [<small>`unary, binary, and ternary`</small>](#unary-binary-and-ternary) | [<small>`negate`</small>](#negate)
+- [Core Functions](#core-functions): [<small>`noOp`</small>](#noop) | [<small>`identity`</small>](#identity) | [<small>`wrap`</small>](#wrap) | [<small>`curry`</small>](#curry) | [<small>`_`</small>](#_) | [<small>`substitute`</small>](#substitute) | [<small>`partial`</small>](#partial) | [<small>`flip`</small>](#flip) | [<small>`compose`</small>](#compose) | [<small>`pipe`</small>](#pipe) | [<small>`spread`</small>](#spread) | [<small>`unary, binary, and ternary`</small>](#unary-binary-and-ternary) | [<small>`negate`</small>](#negate)
 
 
 
 **[Reactive](#reactive)**
 
-- [Iterators](#iterators): [<small>`isIterable`</small>](#isiterable) | [<small>`isIterator`</small>](#isiterator) | [<small>`iterator`</small>](#iterator)
+- [Iterators](#iterators): [<small>`isIterable`</small>](#isiterable) | [<small>`isIterator`</small>](#isiterator) | [<small>`iterator`</small>](#iterator) | [<small>`next`</small>](#next)
 
 
 
@@ -27,11 +27,11 @@
 
 
 
-- [Adapters](#adapters): [<small>`producer`</small>](#producer) | [<small>`pull`</small>](#pull) | [<small>`repeat`</small>](#repeat) | [<small>`events`</small>](#events) | [<small>`stream`</small>](#stream) | [<small>`flow`</small>](#flow)
+- [Adapters](#adapters): [<small>`producer`</small>](#producer) | [<small>`pull`</small>](#pull) | [<small>`combine`</small>](#combine) | [<small>`repeat`</small>](#repeat) | [<small>`events`</small>](#events) | [<small>`stream`</small>](#stream) | [<small>`flow`</small>](#flow)
 
 
 
-- [Filters](#filters): [<small>`map`</small>](#map) | [<small>`select/filter`</small>](#selectfilter) | [<small>`reject`</small>](#reject) | [<small>`project`</small>](#project) | [<small>`compact`</small>](#compact) | [<small>`partition`</small>](#partition) | [<small>`take`</small>](#take) | [<small>`takeN`</small>](#taken) | [<small>`where`</small>](#where) | [<small>`split`</small>](#split) | [<small>`lines`</small>](#lines) | [<small>`tee`</small>](#tee) | [<small>`throttle`</small>](#throttle) | [<small>`pump`</small>](#pump)
+- [Filters](#filters): [<small>`map`</small>](#map) | [<small>`accumulate`</small>](#accumulate) | [<small>`select/filter`</small>](#selectfilter) | [<small>`reject`</small>](#reject) | [<small>`project`</small>](#project) | [<small>`compact`</small>](#compact) | [<small>`partition`</small>](#partition) | [<small>`take`</small>](#take) | [<small>`takeN`</small>](#taken) | [<small>`where`</small>](#where) | [<small>`split`</small>](#split) | [<small>`lines`</small>](#lines) | [<small>`tee`</small>](#tee) | [<small>`throttle`</small>](#throttle) | [<small>`pump`</small>](#pump)
 
 
 
@@ -267,6 +267,10 @@ For the moment, generator functions in Node aren't iterables for some reason. So
 
 (If what you want is an async iterator from a generator function (that is, a co-routine) use `async` to adapt it into a function that returns promises first and then call `reactor` on it.)
 
+#### next
+
+Produce the next value for an iterator or reactor.
+
 ### Reactors
 
 Reactors are async iterators. That is, they are iterators that return promises that resolve to value-wrappers.
@@ -304,6 +308,10 @@ assert i.next().value == 1
 
 Transform a synchronous iterator into an asynchronous iterator by extracting a Promise from the value produced by the iterator. The extracted Promise yields the value the original promise resolves to.
 
+#### combine
+
+Take two or more producers and combine them into a single producer.
+
 #### repeat
 
 Analogous to `wrap`for an iterator. Always produces the same value `x`.
@@ -323,6 +331,10 @@ Filters transform an iterator or reactor into another iterator/reactor.
 #### map
 
 Return a new iterator that will apply the given function to each value produced by the iterator.
+
+#### accumulate
+
+Like `reduce`, except produces the values for each iteration.
 
 #### select/filter
 
