@@ -19,7 +19,7 @@
 
 
 
-- [Reactors](#reactors): [<small>`isReagent`</small>](#isreagent) | [<small>`isReactor`</small>](#isreactor) | [<small>`reactor, asyncIterator`</small>](#reactor-asynciterator)
+- [Reactors](#reactors): [<small>`isReagent`</small>](#isreagent) | [<small>`isReactor`</small>](#isreactor) | [<small>`reactor`</small>](#reactor)
 
 
 
