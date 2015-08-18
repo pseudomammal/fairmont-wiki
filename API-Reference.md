@@ -392,7 +392,21 @@ assert isReactor r
 
 ### Observers
 
+Observer functions provide a way to asynchronously observe changes to values. The observer receives a temporally ordered sequence of notifications based on changes to the observed value.
+
 #### observe
+
+Given an object or an array value, returns an event emitter that generates events when the value is changed.
+
+##### Example
+
+```coffee
+x = value: 7
+events = observe x
+events.on "change", (x) -> y = x.value
+x.value = 3
+assert y == 3
+```
 
 ### Adapters
 
@@ -400,7 +414,7 @@ Adapters are functions that create iterators or reactors (aka, producers) from a
 
 #### producer
 
-Takes an iterable, reagent, or producer, or a Promise that resolves into an iterable, reagent, or producer, and returns an appropriate producer. The `producer` function is idempotent, so it can be called safely on values that might already be producers and will simply return them back to the caller.
+Given an iterable or reagent, or a Promise that resolves into an iterable, reagent, or producer, and returns an appropriate producer. The `producer` function is idempotent, so it can be called safely on values that might already be producers and will simply return them back to the caller.
 
 ##### Example
 
