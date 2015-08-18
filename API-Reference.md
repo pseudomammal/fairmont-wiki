@@ -9,17 +9,17 @@
 
 **[Core](#core)**
 
-- [Core Functions](#core-functions): [<small>`noOp`</small>](#noop) | [<small>`identity`</small>](#identity) | [<small>`wrap`</small>](#wrap) | [<small>`curry`</small>](#curry) | [<small>`_`</small>](#_) | [<small>`substitute`</small>](#substitute) | [<small>`partial`</small>](#partial) | [<small>`flip`</small>](#flip) | [<small>`compose`</small>](#compose) | [<small>`pipe`</small>](#pipe) | [<small>`spread`</small>](#spread) | [<small>`unary, binary, and ternary`</small>](#unary-binary-and-ternary) | [<small>`negate`</small>](#negate)
+- [Core Functions](#core-functions): [<small>`noOp`</small>](#noop) | [<small>`identity`</small>](#identity) | [<small>`wrap`</small>](#wrap) | [<small>`curry`</small>](#curry) | [<small>`_`</small>](#_) | [<small>`substitute`</small>](#substitute) | [<small>`partial`</small>](#partial) | [<small>`flip`</small>](#flip) | [<small>`compose`</small>](#compose) | [<small>`pipe`</small>](#pipe) | [<small>`apply`</small>](#apply) | [<small>`spread`</small>](#spread) | [<small>`unary, binary, and ternary`</small>](#unary-binary-and-ternary) | [<small>`negate`</small>](#negate)
 
 
 
 **[Reactive](#reactive)**
 
-- [Iterators](#iterators): [<small>`isIterable`</small>](#isiterable) | [<small>`isIterator`</small>](#isiterator) | [<small>`iterator`</small>](#iterator) | [<small>`next`</small>](#next)
+- [Iterators](#iterators): [<small>`isIterable`</small>](#isiterable) | [<small>`isIterator`</small>](#isiterator) | [<small>`iterator`</small>](#iterator) | [<small>`next`</small>](#next) | [<small>`value`</small>](#value) | [<small>`isDone`</small>](#isdone)
 
 
 
-- [Reactors](#reactors): [<small>`isReagent, isAsyncIterable`</small>](#isreagent-isasynciterable) | [<small>`isReactor, isAsyncIterator`</small>](#isreactor-isasynciterator) | [<small>`reactor, asyncIterator`</small>](#reactor-asynciterator)
+- [Reactors](#reactors): [<small>`isReagent`</small>](#isreagent) | [<small>`isReactor`</small>](#isreactor) | [<small>`reactor, asyncIterator`</small>](#reactor-asynciterator)
 
 
 
@@ -212,6 +212,16 @@ ab = pipe a, b
 assert (ab "S") == "Sab"
 ```
 
+#### apply
+
+Call a function with the given arguments. Useful when composing operations on functions.
+
+##### Example
+
+```coffee
+assert (apply identity, 1) == 1
+```
+
 #### spread
 
 Converts a function taking a list of arguments into a function taking an array.
@@ -241,6 +251,14 @@ assert (a "b") == "ab"
 
 Take a given function and return a new function that passes its arguments to the given function and negates the return value.
 
+##### Example
+
+```coffee
+_false = -> false
+_true = negate _false
+assert _true()
+```
+
 ## Reactive
 
 Module: [`fairmont-reactive`][reactive]
@@ -249,41 +267,117 @@ Reactive programming functions provide support for reactive programming based on
 
 ### Iterators
 
+Iterators are [defined in ES6][]:
+
+> An object is an iterator when it knows how to access items from a collection one at a time, while keeping track of its current position within that sequence. In JavaScript an iterator is an object that provides a next() method which returns the next item in the sequence. This method returns an object with two properties: done and value.
+
+In Fairmont, we refer to such an object, in general, as a _product_.
+
+[defined in ES6]:https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Iterators_and_Generators
+
 #### isIterable
 
-We want a simple predicate to tell us if something is an iterator. This is simple enough: it should have a `Symbol.iterator` property. However, generators in Node don't look like iterables (yet?). So we add that case.
+A simple predicate that returns true if the argument is iterable.
+This is simple enough: it should have a `Symbol.iterator` property.
+However, generators in Node don't look like iterables (yet?).
+So we also return true for generators.
+
+##### Example
+
+```coffee
+assert isIterable [1..5]
+assert !(isIteratable 7)
+```
 
 #### isIterator
 
+A predicate that returns true if the argument is an iterator.
+Iterators are iterable (that is, they have a `Symbol.iterator` property) and also have a `next` property whose value is a function.
+
+##### Example
+
+```coffee
+assert isIterator iterator [1..5]
+```
+
 #### iterator
 
-The `iterator` function takes a given value and attempts to return an iterator based upon it. We're using predicates here throughout because they have a higher precedence than `constructor` matches.
+The `iterator` function takes a given value and attempts to return an iterator using the value.
+If the value is an iterable, we simply call the function returned by the `Symbol.iterator` property.
+If the value is a already an iterator, we simply return it.
+If the value is a generator, we call the generator.
+If the value is a function, we assign it's `Symbol.iterator` and `next` properties to itself, and return it. (This makes it possible to convert arbitrary functions into iterators, too.)
 
-If we don't have an iterable, we might have a function. In that case, we assume we're dealing with an iterator function (a function that keeps returning the `next` value), so we turn it into a proper iterator. This allows us to easily define iterators from simple functions.
+##### Example
 
-The simplest case is to just call the iterator method on the value. We can do this when we have something iterable. We have sync and async variants. These are defined last to avoid infinite recursion.
-
-For the moment, generator functions in Node aren't iterables for some reason. So we'll add this case here for the moment.
-
-(If what you want is an async iterator from a generator function (that is, a co-routine) use `async` to adapt it into a function that returns promises first and then call `reactor` on it.)
+```coffee
+i = iterator [1..5]
+assert 1 == value next i
+assert 2 == value next i
+assert 3 == value next i
+assert 4 == value next i
+assert 5 == value next i
+assert isDone next i
+```
 
 #### next
 
-Produce the next value for an iterator or reactor.
+Given an iterator or reactor, return a product. Equivalent to calling `i.next()` for a given iterator `i`.
+
+#### value
+
+Returns the `value` property from a product. Equivalent to calling `x.value` for a given object `x`.
+
+#### isDone
+
+Returns the `done` property from a product. Equivalent to calling `x.done` for a given object `x`.
 
 ### Reactors
 
-Reactors are async iterators. That is, they are iterators that return promises that resolve to value-wrappers.
+Reactors are Fairmont's term for asynchronous iterators.
+Asynchronous iterators are an ES7 proposal.
+Instead of returning products, asynchronous iterators (reactors) return Promises that resolve to products (objects with `done` and `value` properties).
 
-#### isReagent, isAsyncIterable
+#### isReagent
 
-#### isReactor, isAsyncIterator
+Analogous to `isIterable`.
+A predicate that returns true if its operand is an asynchronous iterator.
+Specifically, returns true if the `Symbol.asyncIterator` property is defined and is a function.
+
+Since reactors are based on an ES7 proposal, there are no built-in types that are asynchronous iterables. Fairmont provides a variety of functions for adapting values to reactors. See `reactor`.
+
+##### Example
+
+```coffee
+button[Symbol.asyncIterator] = -> events "click", button
+assert isReagent button
+```
+
+#### isReactor
+
+Analogous to `isIterator`.
+A predicate that returns true if its operand is a reactor.
+Reactors are reagents (that is, they have a `Symbol.asyncIterator` property) and also have a `next` property whose value is a function.
+
+```coffee
+r = (events "click", button)
+assert isReactor r
+```
 
 #### reactor, asyncIterator
 
-The `reactor` function is analogous to the `iterator` function—it's job is to ensure that the object given as an argument is a proper asynchronous iterator.
+Analogous to `iterator`. The `reactor` function takes a given value and attempts to return an reactor using the value.
+If the value is a reagent, we simply call the function returned by the `Symbol.asyncIterator` property.
+If the value is already a reactor, we simply return it.
+If the value is a function, we assign its `Symbol.asyncIterator` and `next` properties to itself, and return it. (This makes it possible to convert arbitrary functions into reactors, too.)
 
-For the moment, generator functions in Node aren't iterables for some reason. So we'll add this case here for the moment.
+If you want to use a generator function as an semi-coroutine, simply pass it in via the `async` helper function to convert it into a promise-returning function, and then call `reactor` with the resulting function.
+
+```coffee
+button[Symbol.asyncIterator] = -> events "click", button
+r = reactor button
+assert isReactor r
+```
 
 ### Observers
 
