@@ -348,6 +348,9 @@ Since reactors are based on an ES7 proposal, there are no built-in types that ar
 
 ##### Example
 
+In this example, `events` is a function that takes an event producer and returns a reactor whose products are the given event. See [`events`](#events).
+
+
 ```coffee
 button[Symbol.asyncIterator] = -> events "click", button
 assert isReagent button
