@@ -359,19 +359,27 @@ Analogous to `isIterator`.
 A predicate that returns true if its operand is a reactor.
 Reactors are reagents (that is, they have a `Symbol.asyncIterator` property) and also have a `next` property whose value is a function.
 
+##### Example
+
+In this example, `events` is a function that takes an event producer and returns a reactor whose products are the given event. See [`events`](#events).
+
 ```coffee
 r = (events "click", button)
 assert isReactor r
 ```
 
-#### reactor, asyncIterator
+#### reactor
 
 Analogous to `iterator`. The `reactor` function takes a given value and attempts to return an reactor using the value.
 If the value is a reagent, we simply call the function returned by the `Symbol.asyncIterator` property.
 If the value is already a reactor, we simply return it.
 If the value is a function, we assign its `Symbol.asyncIterator` and `next` properties to itself, and return it. (This makes it possible to convert arbitrary functions into reactors, too.)
 
-If you want to use a generator function as an semi-coroutine, simply pass it in via the `async` helper function to convert it into a promise-returning function, and then call `reactor` with the resulting function.
+If you want to use a generator function as an semi-coroutine, simply pass it in via the [`async`](#async) helper function to convert it into a promise-returning function, and then call `reactor` with the resulting function.
+
+##### Example
+
+In this example, `events` is a function that takes an event producer and returns a reactor whose products are the given event. See [`events`](#events).
 
 ```coffee
 button[Symbol.asyncIterator] = -> events "click", button
