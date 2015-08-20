@@ -414,7 +414,7 @@ Adapters are functions that create iterators or reactors (aka, producers) from a
 
 #### producer
 
-Given an iterable or reagent, or a Promise that resolves into an iterable, reagent, or producer, and returns an appropriate producer. The `producer` function is idempotent, so it can be called safely on values that might already be producers and will simply return them back to the caller.
+Given a producible (that is, an iterable or reagent), or a Promise that resolves into a producible, returns a corresponding producer. Idempotent: if the operand is a already producer, it is simply returned.
 
 ##### Example
 
@@ -425,31 +425,133 @@ assert i.next().value == 1
 
 #### pull
 
-Transform a synchronous iterator into an asynchronous iterator by extracting a Promise from the value produced by the iterator. The extracted Promise yields the value the original promise resolves to.
+Given an iterator whose product values are Promises, returns a reactor. This is useful if an iterator is used in combination with an asynchronous function.
+
+##### Example
+
+Let's suppose we want a function that will convert an iterator that produces pathnames into a reactor producing hashes for the contents of the corresponding files. We might implement it like this.
+
+```coffee
+hashFiles = (pathnames) ->
+  flow [
+    pathnames
+    map (pathname) -> read pathname
+    map (promise) ->
+      promise.then (content) -> md5 content
+  ]
+```
+
+The appearance of the promise is due to the fact that `read` returns a promise that resolves when the read operation completes. In turn, that means our product `value` is going to be a promise, too. We basically have a reactor in the form of an iterator.
+
+We can use `pull` to avoid this problem.
+
+```coffee
+hashFiles = (pathnames) ->
+  flow [
+    pathnames
+    map (pathname) -> read pathname
+    pull
+    map (content) -> md5 content
+  ]
+```
+
+Our `hashFiles` function now returns a reactor instead of an iterator whose prouct values are promises.
 
 #### combine
 
-Take two or more producers and combine them into a single producer.
+Given two or more producers, combines them into a single producer whose products are those of the given producers in aggregate.
+
+##### Example
+
+In the example below, `updates` is an array of reactors producing update functions, perhaps in response to `change` events for fields of a form.
+
+```coffee
+go [
+  combine updates...
+  map (update) -> update data
+]
+```
 
 #### repeat
 
-Analogous to `wrap`for an iterator. Always produces the same value `x`.
+Given a value, returns an iterator that always produces that value. Analogous to `wrap`for an iterator.
+
+##### Example
+
+```coffee
+alwaysTrue = repeat true
+assert alwaysTrue.next()
+```
 
 #### events
 
+Given an event name and an event emitter, returns a reactor whose products are the events corresponding to the given event name. You can also pass in a dictionary of event names, which makes it possible to specify error and end event names. Otherwise, these default to `error` and `end`.
+
+##### Example
+
+```coffee
+clickStream = events "click", button
+```
+
 #### stream
 
-Turns a stream into reactor.
+Given a stream object, returns a reactor whose products correspond to those of the stream. This is useful for treating a stream as a reactor.
+
+##### Example
+
+```coffee
+tokens = fold [], cat, [
+  stream fs.createReadStream path
+  map (chunk) -> chunk.split /\s+/
+]
+```
 
 #### flow
 
+Given an producer and a list of functions, composes the functions (via [`pipe`](#pipe)) and then invokes the resulting function with the producer, returning another producer.
+
+##### Example
+
+```coffee
+squares = (numbers) ->
+  flow [
+    numbers
+    map (n) -> n * n
+  ]
+
+i = squares [1..5]
+assert i.next() == 1
+assert i.next() == 4
+```
+
+The `flow` function makes it easier to do reactive programming. For example, here's a simple Web app implementing a counter.
+
+```coffee
+data = counter: 0
+
+start flow [
+  events "click", $("a[href='#increment']")
+  map -> data.counter++
+]
+
+start flow [
+  events "change", observe data
+  map ->
+    $("p.counter")
+    .html data.counter
+]
+```
+
+You can find more examples in the [`fairmont-reactive` repo](https://github.com/pandastrike/fairmont-reactive/tree/master/examples).
+
 ### Filters
 
-Filters transform an iterator or reactor into another iterator/reactor.
+Filters transform producers into other producers.
 
 #### map
 
-Return a new iterator that will apply the given function to each value produced by the iterator.
+Given a function and a producer, returns a new producer whose products are obtained by applying the function to the products of the given producer.
+
 
 #### accumulate
 
