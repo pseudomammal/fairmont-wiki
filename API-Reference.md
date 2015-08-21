@@ -31,7 +31,7 @@
 
 
 
-- [Filters](#filters): [<small>`map`</small>](#map) | [<small>`accumulate`</small>](#accumulate) | [<small>`select/filter`</small>](#selectfilter) | [<small>`reject`</small>](#reject) | [<small>`project`</small>](#project) | [<small>`compact`</small>](#compact) | [<small>`partition`</small>](#partition) | [<small>`take`</small>](#take) | [<small>`takeN`</small>](#taken) | [<small>`where`</small>](#where) | [<small>`split`</small>](#split) | [<small>`lines`</small>](#lines) | [<small>`tee`</small>](#tee) | [<small>`throttle`</small>](#throttle) | [<small>`pump`</small>](#pump)
+- [Filters](#filters): [<small>`map`</small>](#map) | [<small>`accumulate`</small>](#accumulate) | [<small>`select/filter`</small>](#selectfilter) | [<small>`reject`</small>](#reject) | [<small>`project`</small>](#project) | [<small>`compact`</small>](#compact) | [<small>`partition`</small>](#partition) | [<small>`take`</small>](#take) | [<small>`takeN`</small>](#taken) | [<small>`where`</small>](#where) | [<small>`lines`</small>](#lines) | [<small>`tee`</small>](#tee) | [<small>`throttle`</small>](#throttle) | [<small>`pump`</small>](#pump)
 
 
 
