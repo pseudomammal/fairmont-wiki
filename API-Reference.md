@@ -420,7 +420,7 @@ Given a producible (that is, an iterable or reagent), or a Promise that resolves
 
 ```coffee
 i = producer [1..5]
-assert i.next().value == 1
+assert (value next i) == 1
 ```
 
 #### pull
@@ -520,8 +520,12 @@ squares = (numbers) ->
   ]
 
 i = squares [1..5]
-assert i.next() == 1
-assert i.next() == 4
+assert (value next i) == 1
+assert (value next i) == 4
+assert (value next i) == 9
+assert (value next i) == 16
+assert (value next i) == 25
+assert isDone i
 ```
 
 The `flow` function makes it easier to do reactive programming. For example, here's a simple Web app implementing a counter.
@@ -550,52 +554,221 @@ Filters transform producers into other producers.
 
 #### map
 
-Given a function and a producer, returns a new producer whose products are obtained by applying the function to the products of the given producer.
+Given a unary function and a producer, returns a new producer whose products are obtained by applying the function to the products of the original producer.
 
+##### Example
+
+```coffee
+i = map Math.sqrt, [1,4,9,16,25]
+assert (value next i) == 1
+assert (value next i) == 2
+assert (value next i) == 3
+assert (value next i) == 4
+assert (value next i) == 5
+assert isDone i
+```
 
 #### accumulate
 
-Like `reduce`, except produces the values for each iteration.
+Given an initial value, a binary function, and a producer, returns a new producer whose products are obtained by applying the function to a running (accumulated) value and the products of the original producer.
+
+This works like [`reduce`](#reduce) except it produces the values returned by the reduce function instead of just the final value.
+
+##### Example
+
+```coffee
+i = accumulate 0, add, [1..5]
+assert (value next i) == 1
+assert (value next i) == 3
+assert (value next i) == 6
+assert (value next i) == 10
+assert (value next i) == 15
+assert isDone i
+```
 
 #### select/filter
 
-Given a function and an iterator, return an iterator that produces values from the given iterator for which the function returns true.
+Given a function and a producer, return a producer whose products are obtained by applying the function to the products of the original producer until it finds one for which the function return true.
+
+##### Example
+
+```coffee
+i = select odd, [1..5]
+assert (value next i) == 1
+assert (value next i) == 3
+assert (value next i) == 5
+assert isDone i
+```
 
 #### reject
 
-Given a function and an iterator, return an iterator that produces values from the given iterator for which the function returns false.
+Given a function and a producer, return a producer whose products are obtained by applying the function to the products of the original producer until it finds one for which the function return false. This is the complement to [`select`](#select).
+
+##### Example
+
+```coffee
+i = reject odd, [1..5]
+assert (value next i) == 2
+assert (value next i) == 4
+assert isDone i
+```
 
 #### project
 
+Given a property specifier (see [`property`](#property)) and a producer, return a producer whose products are obtained by taking the given property from the product values of the original producer. Equalent to `map (property specifier)`.
+
+##### Example
+
+```coffee
+i = project ["name", "first"], people
+assert (value next i) == "Jack"
+assert (value next i) == "Jill"
+```
+
 #### compact
+
+Given a producer, returns a producer whose products are the products from the original producer with defined values. Equivalent to `select isDefined`.
+
+##### Example
+
+```coffee
+i = compact [1, undefined, 2, undefined, 3]
+assert (value next i) == 1
+assert (value next i) == 2
+assert (value next i) == 3
+assert isDone i
+```
 
 #### partition
 
+Given an integer and a producer, returns a producers whose products are arrays of products from the original producer, whose length is equal to (or less than, for the last product) the given integer.
+
+##### Example
+
+```coffee
+i = partition 2, [1..10]
+assert (first value next i) == 1
+assert (first value next i) == 3
+assert (first value next i) == 5
+assert (first value next i) == 7
+assert (first value next i) == 9
+assert isDone i
+```
+
 #### take
 
-Given a function and an iterator, return an iterator that produces values from the given iterator until the given function returns false when applied to the given iterator's values.
+Given a function and a producer, return a producer whose products are those of the original producer, until the given function returns false when applied to the products.
+
+##### Example
+
+```coffee
+i = take ((n) -> n <= 5), [1..10]
+assert (value next i) == 1
+assert (value next i) == 2
+assert (value next i) == 3
+assert (value next i) == 4
+assert (value next i) == 5
+assert isDone i
+```
 
 #### takeN
 
-Given an iterator, produces the first N values from the given iterator.
+Given an integer _n_ and a producer, returns a producer whose products are the first _n_ products of the original producer.
+
+##### Example
+
+```coffee
+i = takeN 5, [1..10]
+assert (value next i) == 1
+assert (value next i) == 2
+assert (value next i) == 3
+assert (value next i) == 4
+assert (value next i) == 5
+assert isDone i
+```
 
 #### where
 
-Performs a `select` using a given object object. See `query`.
+Given a query _q_ and a producer _p_, equivalent to `select query q, p`. See also: [`query`](#query).
 
-#### split
+##### Example
 
-Given a function and an iterator, produce a new iterator whose values are delimited based on the given function.
+```coffee
+i = where length: 3, ["one", "two", "three"]
+assert (value next i) == "one"
+assert (value next i) == "two"
+assert isDone i
+```
 
 #### lines
 
+Given a producer whose products are strings, returns a producer whose products are the strings of the original producer, delimited by newlines.
+
+##### Example
+
+Define a functon that computes the average line length of a given file.
+
+```coffee
+averageLineLength = (path) ->
+  average [
+    stream create fs.createReadStream path
+    lines
+    project "length"
+  ]
+```
+
 #### tee
+
+Given a function and a producer, returns a producer whose products are those of the original producers. The given function is also applied to the original products. This function is like `map` except that it doesn't return the result of applying the function to the original product, it just returns the product. This is useful if you want to use the product more than once within a flow.
+
+##### Example
+
+Here's an HTTP server that passes a request context to a handler and then logs it in a fashion similar to Express/Connect middleware.
+
+```coffee
+go [
+  events "request", server
+  map spread (request, response) -> {request, response}
+  tee (context) -> handler context
+  map spread logger
+]
+```
 
 #### throttle
 
+Given a integer specifying an interval in milliseconds and reactor, returns a reactor whose product are those of the original reactor, provided that the interval between any consecutive products is greater than the given interval. Products are discarded until the interval is reached or exceeded.
+
+##### Example
+
+Here is a file update watcher that ignores updates that occur close together.
+
+```coffee
+watch = (path, interval=3000) ->
+  go [
+    events "change", fs.watch path
+    throttle interval
+  ]
+```
+
 #### pump
 
-Write the values produced by the iterator to a stream.
+Given a stream and a producer, returns a producer whose products are the stream after writing the product of the original producer to the stream.
+
+##### Example
+
+Here is a simple echo server.
+
+```coffee
+go [
+  events name: "connection", end: "close",  
+    net.createServer().listen(1337)
+  map (s) ->
+    go [
+      stream s
+      pump s
+    ]
+]
+```
 
 ### Reducers
 
