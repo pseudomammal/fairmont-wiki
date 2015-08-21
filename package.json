@@ -1,7 +1,7 @@
 {
   "name": "fairmont.wiki",
   "scripts": {
-    "toc": "coffee --nodejs --harmony script/toc.coffee API-Reference.md"
+    "toc": "coffee --nodejs --harmony script/toc.coffee API-Reference.md && coffee --nodejs --harmony script/toc.coffee Glossary.md"
   },
   "repository": {
     "type": "git",
