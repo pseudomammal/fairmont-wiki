@@ -4,3 +4,4 @@ Welcome to the Fairmont wiki!
 - [[Getting Started]]
 - [[Tutorial]]
 - [[API Reference]]
+- [[Glossary]]
