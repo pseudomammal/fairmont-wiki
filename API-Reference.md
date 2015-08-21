@@ -31,11 +31,11 @@
 
 
 
-- [Filters](#filters): [<small>`map`</small>](#map) | [<small>`accumulate`</small>](#accumulate) | [<small>`select/filter`</small>](#selectfilter) | [<small>`reject`</small>](#reject) | [<small>`project`</small>](#project) | [<small>`compact`</small>](#compact) | [<small>`partition`</small>](#partition) | [<small>`take`</small>](#take) | [<small>`takeN`</small>](#taken) | [<small>`where`</small>](#where) | [<small>`lines`</small>](#lines) | [<small>`tee`</small>](#tee) | [<small>`throttle`</small>](#throttle) | [<small>`pump`</small>](#pump)
+- [Filters](#filters): [<small>`map`</small>](#map) | [<small>`accumulate`</small>](#accumulate) | [<small>`select/filter`</small>](#selectfilter) | [<small>`reject`</small>](#reject) | [<small>`project`</small>](#project) | [<small>`compact`</small>](#compact) | [<small>`partition`</small>](#partition) | [<small>`take`</small>](#take) | [<small>`takeN`</small>](#taken) | [<small>`where`</small>](#where) | [<small>`lines`</small>](#lines) | [<small>`tee`</small>](#tee) | [<small>`throttle`</small>](#throttle) | [<small>`pump`</small>](#pump) | [<small>`zip`</small>](#zip)
 
 
 
-- [Reducers](#reducers): [<small>`fold/reduce`</small>](#foldreduce) | [<small>`foldr/reduceRight`</small>](#foldrreduceright) | [<small>`collect`</small>](#collect) | [<small>`each`</small>](#each) | [<small>`start`</small>](#start) | [<small>`any`</small>](#any) | [<small>`all`</small>](#all) | [<small>`zip`</small>](#zip) | [<small>`unzip`</small>](#unzip) | [<small>`assoc`</small>](#assoc) | [<small>`flatten`</small>](#flatten) | [<small>`sum`</small>](#sum) | [<small>`average`</small>](#average) | [<small>`join`</small>](#join) | [<small>`delimit`</small>](#delimit)
+- [Reducers](#reducers): [<small>`fold/reduce`</small>](#foldreduce) | [<small>`foldr/reduceRight`</small>](#foldrreduceright) | [<small>`collect`</small>](#collect) | [<small>`each`</small>](#each) | [<small>`start`</small>](#start) | [<small>`any`</small>](#any) | [<small>`all`</small>](#all) | [<small>`assoc`</small>](#assoc) | [<small>`flatten`</small>](#flatten) | [<small>`sum`</small>](#sum) | [<small>`average`</small>](#average) | [<small>`join`</small>](#join) | [<small>`delimit`</small>](#delimit)
 
 
 
@@ -500,7 +500,7 @@ Given a stream object, returns a reactor whose products correspond to those of t
 ##### Example
 
 ```coffee
-tokens = fold [], cat, [
+tokens = fold cat, [], [
   stream fs.createReadStream path
   map (chunk) -> chunk.split /\s+/
 ]
@@ -570,14 +570,14 @@ assert isDone i
 
 #### accumulate
 
-Given an initial value, a binary function, and a producer, returns a new producer whose products are obtained by applying the function to a running (accumulated) value and the products of the original producer.
+Given a binary function, an initial value, and a producer, returns a new producer whose products are obtained by applying the function to a running (accumulated) value and the products of the original producer.
 
 This works like [`reduce`](#reduce) except it produces the values returned by the reduce function instead of just the final value.
 
 ##### Example
 
 ```coffee
-i = accumulate 0, add, [1..5]
+i = accumulate add, 0, [1..5]
 assert (value next i) == 1
 assert (value next i) == 3
 assert (value next i) == 6
@@ -770,67 +770,165 @@ go [
 ]
 ```
 
+#### zip
+
+Given a function and two producers, return a producer whose products are obtained by applying the given function to the products of the original producer.
+
 ### Reducers
 
 Some functions _reduce_ an iterator into another value. Once a reduce function is introduced, the associated iterator functions will run.
 
 #### fold/reduce
 
-Given an initial value, a function, and an iterator, reduce the iterator to a single value, ex: sum a list of integers.
+Given a function, an initial value, and a producer, reduce the producer to a single value, ex: sum a list of integers.
+
+##### Example
+
+```coffee
+assert (reduce add, 0, [1..5]) == 15
+```
 
 #### foldr/reduceRight
 
-Given function and an initial value, reduce an iterator to a single value, ex: sum a list of integers, starting from the right, or last, value.
+Given an initial value, a function, and a producer, reduce the producer to a single value, ex: sum a list of integers, starting from the last (or rightmost) value.
+
+
+##### Example
+
+```coffee
+assert (foldr add, "", "panama") == "amanap"
+```
 
 #### collect
 
-Collect an iterator's values into an array.
+Given a producer, collect its product values into an array.
+
+
+##### Example
+
+```coffee
+results = collect accumulate add, 0, [1..5]
+assert results[0] == 1
+assert results[0] == 3
+assert results[0] == 6
+assert results[0] == 10
+assert results[0] == 15
+assert results.length == 5
+```
 
 #### each
 
-Apply a function to each element but discard the results. This is a reducer because there isn't any point in having an iterator that simply discards the value from another iterator. Basically, use `each` when you want to reduce an iterator without taking up any additional memory.
+Given a function _f_ and a producer _p_, equivalent to `start map f, p`. Useful for applying a function to a producer without collecting the results.
+
+##### Example
+
+```coffee
+each ((value) -> console.log value), [1..5]
+```
 
 #### start
 
-Works like `each` but doesn't apply a function to each element. This is useful with producers that encapsulate operations, like request processing in a server or handling browser events.
+Given a reactor, calls `next` until the reactor is exhausted. (That is, it's products' `done` property returns true.) Does not return a value.
+
+##### Example
+
+```coffee
+start map log, events
+```
 
 #### any
 
-Given a function and an iterator, return true if the given function returns true for any value produced by the iterator.
+Given a function and a producer, return true if the given function returns true for any product value.
+
+##### Example
+
+```coffee
+assert any odd, [1..5]
+```
 
 #### all
 
-Given a function and an iterator, return true if the function returns true for all the values produced by the iterator.
+Given a function and a producer, return true if the given function returns true for all the product values.
 
-#### zip
+##### Example
 
-Given a function and two iterators, return an iterator that produces values by applying a function to the values produced by the given iterators.
-
-#### unzip
+```coffee
+assert all ((n) -> n <= 5), [1..5]
+```
 
 #### assoc
 
-Given an iterator that produces associative pairs, return an object whose keys are the first element of the pair and whose values are the second element of the pair.
+Given an producer whose products are associative pairs, return an object whose keys are the first element of the pair and whose values are the second element of the pair.
+
+##### Example
+
+```coffee
+person = assoc [["name", "Long John Silver"], ["occupation"], "Pirate"]]
+assert person.name == "Long John Silver" &&
+  person.occupation == "Pirate"
+```
 
 #### flatten
 
+Given a producer whose product values may themselves be producers, return an array whose elements are the products of a depth-first traversal of the resulting producer tree.
+
+##### Example
+
+```coffee
+values = (flatten [1, [2, 3], 4, [5, [6, 7]]])
+assert values[0] == 1
+assert values[0] == 2
+assert values[0] == 3
+assert values[0] == 4
+assert values[0] == 5
+assert values[0] == 6
+assert values[0] == 7
+assert (length values) == 7
+```
+
 #### sum
 
-Sum the numbers produced by a given iterator.
+Given a producer _p_ whose products are numbers, return their sum. Equivalent to `fold add, 0`.
+
+##### Example
+
+```coffee
+assert (sum [1..5]) == 15
+```
 
 #### average
 
-Average the numbers producced by a given iterator.
+Given a producer _p_ whose products are numbers, return their average.
+
+##### Example
+
+```coffee
+assert (average [1..5]) == 3
+```
 
 #### join
 
-Concatenate the strings produced by a given iterator. Unlike `Array::join`, this function does not delimit the strings. See also: `delimit`.
+Given a producer whose products are strings, concatenate the strings. Unlike `Array::join`, this function does not delimit the strings. See also: `delimit`.
 
 This is here instead of in [String Functions](./string.litcoffee) to avoid forward declaring `fold`.
 
+##### Example
+
+```coffee
+assert (join w "one two three") == "onetwothree"
+```
+
 #### delimit
 
-Like `join`, except that it takes a delimeter, separating each string with the delimiter. Similar to `Array::join`, except there's no default delimiter. The function is curried, though, so calling `delimit ' '` is analogous to `Array::join` with no delimiter argument.
+Given a delimiter and a producer whose products are strings, concatenate the strings using the delimiter.
+
+Like `join`, except that it each string is separated with the delimiter. Similar to `Array::join`, except there's no default delimiter and the function is curried. Calling `delimit ' '` is the same as calling `Array::join` with no delimiter argument.
+
+##### Example
+
+```coffee
+assert (delimit ", ", w "one two three") == "one, two, three"
+```
 
 ## Helpers
 
