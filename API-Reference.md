@@ -934,76 +934,326 @@ assert (delimit ", ", w "one two three") == "one, two, three"
 
 Module: [`fairmont-helpers`][helpers]
 
+Helpers are general utility functions that are here to make your life easier by removing some of the tedium involved with manipulating JavaScript data structures.  Functions in `fairmont-helpers` draw on superpowers in `fairmont-core`, making them composable with each other and other modules.
+
+
 ### Array Functions
 
 #### push
 
+Attaches one element to the right side of the given array.  Returns the new, augmented array. Note that if you push an array onto an array, the result is a nested array.  For ***joining*** arrays, see `cat`.
+
+##### Example
+```coffee
+fruits = ["apple", "blueberry"]
+fruits = push fruits, "strawberry"
+assert.deepEqual fruits, ["apple", "blueberry", "strawberry"]
+
+citrus = ["lemon", "lime"]
+fruits = push fruits, citrus
+assert.deepEqual fruits, ["apple", "blueberry", "strawberry", ["lemon", "lime"]]
+```
+
 #### cat
 
-Concatenates (joins) arrays.
+Takes two arrays and concatenates (joins) them.  Returns the new, single array.
+
+##### Example
+```coffee
+fruits = ["apple", "blueberry"]
+citrus = ["lemon", "lime"]
+fruits = cat fruits, citrus
+assert.deepEqual fruits, ["apple", "blueberry", "lemon", "lime"]
+```
 
 #### slice
 
-Curried version of `Array::slice`.
+A curried version of JavaScript's `Array::slice` and `String::slice`. `slice` takes two numbers and an array.  The two numbers specify a start and end index for desired sub-array within the input array.  Both indices are zero-based, inclusive on the start index, and exclusive on the end index.  `slice` returns a sub-array, as specified, while leaving the original array unchanged.  
 
-#### first, second, third, …, nth
+`slice` may also be used with strings where it treats characters in a string like members of an array.  In that case, however, a sub-string is returned.
 
-Returns the first, second…nth element of an array.
+When specifying an end index in excess of the array's length, the sub-array will only extend to the end of the original array.  Invalid indices (ie, negative values or a start index larger than its end index) cause `slice` to return an empty array.
+
+##### Example
+```coffee
+fruits = ["apple", "blueberry", "lemon", "lime", "orange", "strawberry", "cherry"]
+citrus = slice 2, 5, fruits
+assert.deepEqual citrus, ["lemon", "lime", "orange"]
+
+string = "supercalifragilisticexpialidocious"
+sub_string = slice 9, 20, string
+assert.deepEqual sub_string, "fragilistic"
+
+citrus = slice 2, 10, fruits
+assert.deepEqual citrus, ["lemon", "lime", "orange", "strawberry", "cherry"]
+
+# -- Invalid inputs --
+citrus = slice -1, 5, fruits
+assert.deepEqual citrus, []
+
+citrus = slice 5, 2, fruits
+assert.deepEqual citrus, []
+```
+
+#### first, second, third, fourth, fifth
+
+Takes an array or string.  For arrays, returns the first, second, third, fourth, and fifth element, respectively.  For strings, returns the first, second, third, fourth, and fifth character, respectively.  Returns `undefined` for objects and numbers.
+
+##### Example
+```coffee
+fruits = ["apple", "blueberry", "lemon", "lime", "orange", "strawberry", "cherry"]
+string = "supercalifragilisticexpialidocious"
+
+fruit = first fruits
+assert.deepEqual fruit, "apple"
+
+char = second string
+assert.deepEqual char, "u"
+
+fruit = third fruits
+assert.deepEqual fruit, "lemon"
+
+char = fourth string
+assert.deepEqual char, "e"
+
+fruit = fifth fruits
+assert.deepEqual fruit, "orange"
+```
+
+#### nth
+
+A generalization of `first`, `second`, etc, from above.  `nth` takes an index and either an array or string.    Returns the element (or character) at the specified index, however the index is one-based.  This stands in contrast to the usual, zero-based index in JavaScript.  `nth` returns `undefined` for objects and numbers.
+
+##### Example
+```coffee
+fruits = ["apple", "blueberry", "lemon", "lime", "orange", "strawberry", "cherry"]
+string = "supercalifragilisticexpialidocious"
+
+fruit = nth 3, fruits
+assert.deepEqual fruit, "lemon"
+
+char = nth 22, string
+assert.deepEqual char, "x"
+```
+
 
 #### last
 
-Returns the last element of an array.
+Takes an array or string.  For arrays, `last` returns the last element.  For strings, `last` returns the last character.  `last` returns `undefined` for objects and numbers.
+
+##### Example
+```coffee
+fruits = ["apple", "blueberry", "lemon", "lime", "orange", "strawberry", "cherry"]
+string = "supercalifragilisticexpialidocious"
+
+fruit = last fruits
+assert.deepEqual fruit, "cherry"
+
+char = last string
+assert.deepEqual char, "s"
+```
 
 #### rest
 
-Returns all array elements but the first.
+Takes an array or string.  For arrays, `rest` returns a sub-array containing all elements *except* the first.  For strings, `rest` returns a sub-string containing all characters *except* the first.  `rest` returns `undefined` for objects and numbers.
+
+##### Example
+```coffee
+fruits = ["apple", "blueberry", "lemon", "lime", "orange", "strawberry", "cherry"]
+string = "supercalifragilisticexpialidocious"
+
+bunch = rest fruits
+assert.deepEqual bunch, ["blueberry", "lemon", "lime", "orange", "strawberry", "cherry"]
+
+char = rest string
+assert.deepEqual char, "upercalifragilisticexpialidocious"
+```
 
 #### includes
 
-Check if an element is a member of an array.
+Check if an element is a member of an array.  Takes a candidate element and the array to test.  Returns `true` or `false`.
 
-#### uniqueBy
+##### Example
+```coffee
+fruits = ["apple", "blueberry", "lemon", "lime", "orange", "strawberry", "cherry"]
 
-Returns a new array containing only unique members of an array,
-after transforming them with `f`. This is a generalized version of
-[`unique`](#unique) below.
+is_present = includes "lemon", fruits
+assert.deepEqual fruit, true
+
+is_present = includes "pear", fruits
+assert.deepEqual fruit, false
+```
 
 #### unique
 
-Returns a new array containing only unique member of an array.
+Strip repeated elements out of an input.  Takes a single array or string as input.  For arrays, `unique` returns a new array containing only the unique members of the original.  For strings, `unique` returns a new array containing unique *characters* from the original string.  For inputs that are a JavaScript object or number, `unique` returns an empty array.  In all cases, the original input remains unchanged.
+
+##### Example
+```coffee
+fruits = ["apple", "lemon", "apple", "lime", "apple", "orange", "apple", "cherry"]
+string = "supercalifragilisticexpialidocious"
+
+fruit = unique fruits
+assert.deepEqual fruit, ["apple", "lemon", "lime", "orange", "cherry"]
+
+letters = unique string
+assert.deepEqual letters, ['s', 'u', 'p', 'e', 'r', 'c', 'a', 'l', 'i', 'f', 'g', 't', 'x', 'd', 'o']
+```
+
+#### uniqueBy
+
+A generalized version of [`unique`](#unique).  `uniqueBy` takes an input function, `f()`, and an array, `a`.  `f()` is mapped on the members of `a`, transforming them, ie `f()` should be designed to act upon one element at a time.   `uniqueBy` returns a new array containing only the unique members ***after*** being transfomred by `f()`.
+
+##### Example
+```coffee
+numbers = [2, 3, 6, 9, 10, 14, 15, 18, 21, 22, 26, 27, 30, 33, 34, 39, 45, 51]
+f = (x) -> if x % 2 == 0 then x * 3 else x * 2
+
+output = uniqueBy f, numbers
+assert.deepEqual output, [6, 18, 30, 42, 54, 66, 78, 90, 102]
+```
 
 #### dupes
 
-Returns only the elements that exist more than once.
+Locate duplicated, or repeated, elements in an array.  Takes a single array or string as input.  For arrays, `dupes` returns a new array containing only the members of the original that appear more than once.  For strings, `dupes` returns a new array containing ***characters*** from the original string that appear more than once.  For inputs that are a JavaScript object or number, `dupes` returns an empty array.  In all cases, the original input remains unchanged.
+
+##### Example
+```coffee
+fruits = ["apple", "lemon", "apple", "lime", "apple", "orange", "apple", "cherry"]
+string = "supercalifragilisticexpialidocious"
+
+fruit = dupes fruits
+assert.deepEqual fruit, ["apple"]
+
+letters = dupes string
+assert.deepEqual letters, ['u', 'p', 'e', 'r', 'a', 'l', 's', 'c', 'i', 'o']
+```
 
 #### union
 
-Set union (combination of two array with duplicates removed).
+Generate the [set union][set-union] of two arrays.  `union` takes two arrays and returns a new, concatenated array with any duplicate elements removed.  The original arrays remain unchanged.
+
+[set-union]:https://en.wikipedia.org/wiki/Union_(set_theory)
+
+##### Example
+```coffee
+fruits1 = ["apple", "lemon", "apple", "lime", "apple", "orange", "apple", "cherry"]
+fruits2 = ["pear", "apple", "mango", "kiwi", "lemon", "lime", "apple", "cherry"]
+
+output = union fruits1, fruits2
+assert.deepEqual output, ['apple', 'lemon', 'lime', 'orange', 'cherry', 'pear', 'mango', 'kiwi']
+
+letters = dupes string
+assert.deepEqual letters, ['u', 'p', 'e', 'r', 'a', 'l', 's', 'c', 'i', 'o']
+```
 
 #### intersection
 
+Generate the [set intersection][set-intersection] of two arrays.  `intersection` takes two arrays and returns a new, single array of elements present in both arrays.  This includes repeated elements if and only if they are repeated in both inputs.  The original arrays remain unchanged.
+
+[set-intersection]:https://en.wikipedia.org/wiki/Intersection_(set_theory)
+
+##### Example
+```coffee
+fruits1 = ["apple", "lemon", "apple", "lime", "apple", "orange", "apple", "cherry"]
+fruits2 = ["pear", "apple", "mango", "kiwi", "lemon", "lime", "apple", "cherry"]
+
+output = intersection fruits1, fruits2
+assert.deepEqual output, ["apple", "lemon", "lime", "apple", "cherry"]
+```
+
 #### difference
 
-Returns the elements that are not shared between two arrays.
+Generate the [symmetric difference][symmetric-difference] of two arrays.  `difference` takes two arrays and returns a new, single array of elements that are not shared between the inputs.  Additionally, the output array presents only ***unique*** elements, removing duplicates.  The original arrays remain unchanged.
+
+[symmetric-difference]:https://en.wikipedia.org/wiki/Symmetric_difference
+
+##### Example
+```coffee
+fruits1 = ["apple", "orange", "lemon", "apple", "lime", "apple", "orange", "apple", "cherry"]
+fruits2 = ["pear", "apple", "mango", "kiwi", "lemon", "lime", "apple", "cherry", "mango"]
+
+output = difference fruits1, fruits2
+assert.deepEqual output, ["orange", "pear", "mango", "kiwi"]
+```
+
 
 #### complement
 
-Returns the complement of the second array relative to the first array.
+Generate the [relative complement][relative-complement] of an array with respect to another.  `complement` takes two arrays, `a` and `b`, and returns a new array of elements that are present in `a` but not `b`.  This includes repeated elements if `a` has duplicates.  The original arrays remain unchanged.
+
+[relative-complement]:https://en.wikipedia.org/wiki/Complement_(set_theory)#Relative_complement
+
+##### Example
+```coffee
+fruits1 = ["apple", "orange", "lemon", "apple", "lime", "apple", "orange", "apple", "cherry"]
+fruits2 = ["pear", "apple", "mango", "kiwi", "lemon", "lime", "apple", "cherry", "mango"]
+
+# Note that order matters.  Relative complement is not associative.
+output = complement fruits1, fruits2
+assert.deepEqual output, ["orange", "orange"]
+
+output = complement fruits2, fruits1
+assert.deepEqual output, ["pear", "mango", "kiwi", "mango"]
+```
 
 #### remove
 
-Destructively remove an element from an array. Returns the element removed.
+Destructively remove an element from an array. `remove` takes a candidate element and array.  `remove` returns the element if it is present in the array.  If it is not present, `remove` returns `null`.  
+
+The input array is altered by `remove` if the element is present.  If there is more than one instance of the element within the array, only the first instance is removed.
+
+##### Example
+```coffee
+fruits = ["apple", "orange", "lemon", "apple", "lime", "apple"]
+
+output = remove "orange", fruits
+assert.deepEqual output, "orange"
+assert.deepEqual fruits, ["apple", "lemon", "apple", "lime", "apple"]
+
+output = remove "apple", fruits
+assert.deepEqual output, "apple"
+assert.deepEqual fruits, ["lemon", "apple", "lime", "apple"]
+
+output = remove "orange", fruits
+assert.deepEqual output, null
+assert.deepEqual fruits, ["lemon", "apple", "lime", "apple"]
+```
 
 #### shuffle
 
-Takes an array and returns a new array with all values shuffled randomly. Use the [Fisher-Yates algorithm][shuffle-1]. Adapted from the [CoffeeScript Cookbook][shuffle-2].
+Randomize the order of elements within an array.  `shuffle` takes an array and returns a new array where all values have been ordered pseudorandomly.  Please note that `shuffle` is ***guaranteed*** to produce a different ordering (which is a non-random behavoir).  Specifically, `shuffle` uses the [Fisher-Yates algorithm][shuffle-1] as adapted from [this CoffeeScript Cookbook recipe][shuffle-2].
 
-[shuffle-1]:http://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
+[shuffle-1]:https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
 [shuffle-2]:http://coffeescriptcookbook.com/chapters/arrays/shuffling-array-elements
+
+##### Example
+```coffee
+numbers = [1..10]
+
+scrambled = shuffle numbers
+assert.notDeepEqual numbers, scrambled  
+# Example result, [ 5, 2, 4, 9, 8, 10, 1, 7, 3, 6 ]
+```
 
 #### range
 
-Generates an array of integers based on the given range.
+Generate an array of ordered integers.  `range` takes two numbers specifying the start and end of the titular range.  `range` returns a new array containing an ordered list, either ascending or decending, of all integers from the start value to end value, inclusive.  When the start and end values are identical, an array with one element is returned.  Invalid input causes `range` to return an empty array.
+
+##### Example
+```coffee
+output = range 1, 5
+assert.deepEqual output, [1, 2, 3, 4, 5]
+
+output = range 5, 1
+assert.deepEqual output, [5, 4, 3, 2, 1]
+
+output = range 5, 5
+assert.deepEqual output, [ 5 ]
+
+output = range 1, "foobar"
+assert.deepEqual output, []
+```
 
 ### Hashing/Encoding Functions
 
