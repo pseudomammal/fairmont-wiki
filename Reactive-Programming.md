@@ -9,13 +9,11 @@ Fairmont provides a library of functions that operate on iterators and reactors,
 
 ## Producers Instead of Collections
 
-For example, in Fairmont, `map` returns another producer instead of, say, an array. There are two big advantages to doing this. First, we can treat all producers the same way. That is, we can treat iterators and reactors the same way. For example, we can call `map` with an array of integers or a click-stream. More importantly, we can think about them the same way.
-
-The second advantage is that we can compose, or chain, these functions together. For example, since `map` returns a producer, we can pass that return value to any function that operates on a producer. So we could pass it to, say, `select` or `reduce` and so on. In combination with currying all the functions that operate on producers, this makes it easy to snap producer functions together.
+For example, in Fairmont, `map` returns another producer instead of, say, an array. There are two big advantages to doing this. First, we get a uniform interface for producers, whether they're arrays on integers or a click-stream. Second, we can compose these functions to processing _flows_, analogous to method chaining.
 
 ## Composing Reactive Flows
 
-Fairmont provides a special `flow` function to help do exactly that. It's basically a composition function, specialized for reactive programming. It takes a producer and a list of producer functions that return other producers, like `map` and `filter`. (We call these kinds of functions _filters_.) The values from the producer (we call these _products_) are passed into the “pipeline” formed by the functions.
+Fairmont provides a special `flow` function to help compose producer functions, like `map` and `select`. THe `flow` function takes a producer and a list of these producer functions. The values from the producer (we call these _products_) are passed into the pipeline formed by composing the functions.
 
 For example, here's a simple flow that increments a counter when a button is clicked. In this case, the producer is the click events and there's only one function in our pipeline, `map`.
 
@@ -24,7 +22,7 @@ For example, here's a simple flow that increments a counter when a button is cli
 ```javascript
 var data = { counter: 0 };
 
-flow(
+var incrementCounter = flow(
   events("click", button),
   map(() => data.counter++)
 );
@@ -35,7 +33,7 @@ flow(
 ```coffee
 data = counter: 0
 
-flow [
+incrementCounter = flow [
   events "click", button
   map -> data.counter++
 ]
@@ -46,7 +44,7 @@ Of course, you can create a synchronous flow as well. Here's a flow for doing in
 ###### JavaScript
 
 ```javascript
-flow(
+var inverseSquare = flow(
   [1, 2, 3, 4, 5],
   map(n => 1 / n),
   map(n => n * n)
@@ -56,7 +54,7 @@ flow(
 ###### CoffeeScript
 
 ```coffee
-flow [
+inverseSquare = flow [
   [1..5]
   map (n) -> 1/n
   map (n) -> n * n
@@ -97,22 +95,22 @@ Since `read` returns a promise, we use `pull` to effectively extract that promis
 
 ## Reducers, `start`, and `go`
 
-If producer functions always return other producers, how do we _do_ anything with them. That's what _reducers_ are for. Reducers take a producer and _reduce_ it to a value. For example, `collect` takes a producer and returns an array of it's product values.
+If producer functions always return other producers, how do we _do_ anything with them? That's what _reducers_ are for. Reducers take a producer and _reduce_ it to a value. For example, `collect` takes a producer and returns an array of it's product values.
 
 There's a special reducer called `start` which is useful with reactors and, in particular, those produced by flow. The `start` reducer effectively “runs” a flow. Think of it as the equivalent of starting an event loop.
 
-For example, given our `hashFiles` function above, here's how we might have used it.
+For example, given our `incrementCounter` function above, here's how we might have used it.
 
 ###### JavaScript
 
 ```javascript
-start(hashFiles(anArrayOfPaths))
+start(incrementCounter)
 ```
 
 ###### CoffeeScript
 
 ```coffee
-start hashFiles anArrayOfPaths
+start incrementCounter
 ```
 
 Since we often use `start` and `flow` together, Fairmont provides a helper function, `go` that can be used to start a flow. It takes the same arguments as `flow`.
