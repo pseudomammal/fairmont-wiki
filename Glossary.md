@@ -2,9 +2,7 @@
 
 Fairmont builds on ES6/7 standards to create a true functional reactive programming library. However, to make it easier to talk about the concepts, we've introduced some terminology. That can be a bit confusing at first. This glossary can help.
 
-<!-- begin: toc -->
-
-[<small>`adapters`</small>](#adapters) | [<small>`iterable`</small>](#iterable) | [<small>`iterator`</small>](#iterator) | [<small>`filters`</small>](#filters) | [<small>`producer`</small>](#producer) | [<small>`producible`</small>](#producible) | [<small>`product`</small>](#product) | [<small>`reactor`</small>](#reactor) | [<small>`reagent`</small>](#reagent) | [<small>`reducers`</small>](#reducers)
+<!-- begin: toc -->[<small>`adapters`</small>](#adapters) | [<small>`iterable`</small>](#iterable) | [<small>`iterator`</small>](#iterator) | [<small>`filters`</small>](#filters) | [<small>`producer`</small>](#producer) | [<small>`producible`</small>](#producible) | [<small>`product`</small>](#product) | [<small>`reactor`</small>](#reactor) | [<small>`reagent`</small>](#reagent) | [<small>`reducers`</small>](#reducers)
 
 <!-- end: toc -->
 
