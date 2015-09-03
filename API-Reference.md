@@ -941,22 +941,35 @@ Helpers are general utility functions that are here to make your life easier by 
 
 #### push
 
-Attaches one element to the right side of the given array.  Returns the new, augmented array. Note that if you push an array onto an array, the result is a nested array.  For ***joining*** arrays, see `cat`.
+Attach one or more elements to the right side of the given array.  `push` takes a target array and N elements to attach.  `push` directly affects the target array as a side effect, while also returning the augmented array.
+
+Note that pushing an array onto an array results in a nested array.  For ***joining*** arrays, you may use `cat` or CoffeeScript's splat operator.
 
 ##### Example
 ```coffee
+# Directly affects "fruits" without storing return value.
 fruits = ["apple", "blueberry"]
-fruits = push fruits, "strawberry"
+push fruits, "strawberry"
 assert.deepEqual fruits, ["apple", "blueberry", "strawberry"]
 
 citrus = ["lemon", "lime"]
-fruits = push fruits, citrus
+push fruits, citrus
 assert.deepEqual fruits, ["apple", "blueberry", "strawberry", ["lemon", "lime"]]
+
+# push accepts more than one element.
+fruits = ["apple", "blueberry"]
+push fruits, "strawberry", citrus
+assert.deepEqual fruits, ["apple", "blueberry", "strawberry", ["lemon", "lime"]]
+
+# With CoffeeScript's splat operator, we may achieve array concatenation.
+fruits = ["apple", "blueberry"]
+push fruits, "strawberry", citrus...
+assert.deepEqual fruits, ["apple", "blueberry", "strawberry", "lemon", "lime"]
 ```
 
 #### cat
 
-Takes two arrays and concatenates (joins) them.  Returns the new, single array.
+Takes two arrays and concatenates (joins) them.  Returns the new, single array.  The input arrays remain unchanged.
 
 ##### Example
 ```coffee
@@ -968,11 +981,13 @@ assert.deepEqual fruits, ["apple", "blueberry", "lemon", "lime"]
 
 #### slice
 
-A curried version of JavaScript's `Array::slice` and `String::slice`. `slice` takes two numbers and an array.  The two numbers specify a start and end index for desired sub-array within the input array.  Both indices are zero-based, inclusive on the start index, and exclusive on the end index.  `slice` returns a sub-array, as specified, while leaving the original array unchanged.  
+Extract a subset of an array.  `slice` takes two numbers and an array.  The two numbers specify a start and end index for the desired sub-array within the input array.  Both indices are zero-based, inclusive on the start index, and exclusive on the end index.  `slice` returns a sub-array, as specified, while leaving the original array unchanged.
 
-`slice` may also be used with strings where it treats characters in a string like members of an array.  In that case, however, a sub-string is returned.
+`slice` may also be used with strings where it treats characters like members of an array.  `slice` returns a sub-string when working with strings.
 
-When specifying an end index in excess of the array's length, the sub-array will only extend to the end of the original array.  Invalid indices (ie, negative values or a start index larger than its end index) cause `slice` to return an empty array.
+When specifying an end index in excess of the array's length, the sub-array will only extend to the end of the original array.  The end index is allowed to be negative, where it counts to the left from the end of the target array.  The start index must be smaller than the end index, except when the end index is negative.  Invalid indices cause `slice` to return an empty array.
+
+`slice` is curried, meaning that it returns a function when given an insufficient number of arguments.  This new function accepts the remaining arguments, see the "snip" example below.
 
 ##### Example
 ```coffee
@@ -980,19 +995,36 @@ fruits = ["apple", "blueberry", "lemon", "lime", "orange", "strawberry", "cherry
 citrus = slice 2, 5, fruits
 assert.deepEqual citrus, ["lemon", "lime", "orange"]
 
+# Works on strings too.
 string = "supercalifragilisticexpialidocious"
 sub_string = slice 9, 20, string
 assert.deepEqual sub_string, "fragilistic"
 
-citrus = slice 2, 10, fruits
-assert.deepEqual citrus, ["lemon", "lime", "orange", "strawberry", "cherry"]
+# Even if the end index is large, slice can only go as far the original array.
+long = slice 2, 10, fruits
+assert.deepEqual long, ["lemon", "lime", "orange", "strawberry", "cherry"]
 
-# -- Invalid inputs --
-citrus = slice -1, 5, fruits
-assert.deepEqual citrus, []
+# The end index may be negative, counting from the right side of the original array.
+negative = slice 1, -2, fruits
+assert.deepEqual negative, ["blueberry", "lemon", "lime", "orange"]
 
-citrus = slice 5, 2, fruits
-assert.deepEqual citrus, []
+
+
+# Slice is curried, so it returns a function when you don't pass all three arguments.
+snip = slice 2, 5
+
+# And the new function takes only the remaining argument (or arguments).
+f = snip fruits
+assert.deepEqual f, ['lemon', 'lime', 'orange']
+
+# Just to be clear, snip is reusable as a function.
+ax = [1..10]
+bx = [11..20]
+
+a = snip ax
+b = snip bx
+assert.deepEqual a, [ 3, 4, 5 ]
+assert.deepEqual b, [13, 14, 15]
 ```
 
 #### first, second, third, fourth, fifth
@@ -1238,7 +1270,7 @@ assert.notDeepEqual numbers, scrambled
 
 #### range
 
-Generate an array of ordered integers.  `range` takes two numbers specifying the start and end of the titular range.  `range` returns a new array containing an ordered list, either ascending or decending, of all integers from the start value to end value, inclusive.  When the start and end values are identical, an array with one element is returned.  Invalid input causes `range` to return an empty array.
+Generate an array of ordered integers.  `range` takes two numbers specifying the start and end of the titular range.  `range` returns a new array containing an ordered list, either ascending or descending, of all integers from the start value to end value, inclusive.  When the start and end values are identical, an array with one element is returned.  Invalid input causes `range` to return an empty array.
 
 ##### Example
 ```coffee
@@ -1259,23 +1291,85 @@ assert.deepEqual output, []
 
 #### md5
 
-Return the MD5 hash of a string.
+Generate the [MD5 hash][md5-1] of a string.  `md5` takes a UTF-8 encoded string.  Returns a the hash result of the MD5 message digest algorithm.  The hash is 128-bit value, represented as a stringified 32 digit hexidecimal number.  
+
+The MD5 algorithm is deterministic, meaning that a given input corresponds to a specific output and will always return the same hash.  The MD5 algorithm's output is fixed length, meaning that regardless of the input, the output hash will always be a 32 digit hexidecimal string.
+
+`md5` effectively assigns a value to each input string, and because there are 2^128 possible outcomes (340 trillion trillion trillion), it is incredibly unlikely that any two inputs will produce the same hash.  This uniqueness allows you to do useful things, however ***the MD5 algorithm has been proven to be cryptographically insecure***.  Therefore, while `md5` is a useful function, you ***MUST NOT*** ever use this function as part of a security architecture.
+
+[md5-1]:https://en.wikipedia.org/wiki/MD5
+
+##### Example
+```coffee
+output = md5 "panda"
+assert output == "ce61649168c4550c2f7acab92354dc6e"
+
+# Putting in the same string will yield the same output.
+output = md5 "panda"
+assert output == "ce61649168c4550c2f7acab92354dc6e"
+
+# The output of md5 is always the same length.
+output = md5 "Regardless of the length of the input string, this MD5 function always returns a 32 digit hexidecimal number."
+assert output == "682f5e81981d68d2b196137042d17c79"
+```
 
 #### base64
 
-Base64 encode a string. (Not URL safe.)
+Convert a string to Base64 encoding.  `base64` takes an UTF-8 encoded string.  Returns a string of the same content, but encoded in Base64.  Please note that this function ***does not*** produce a URL-safe string.  Please use `base64url` for that case.
+
+```coffee
+output = base64 "abc123!?$*&()'-=@~~"
+assert output == "YWJjMTIzIT8kKiYoKSctPUB+fg"
+```
 
 #### base64url
 
-Format a string as Base64, adapted based on [RFC 4648's][0] "base64url" mapping.
+Convert a string to a URL-safe variant of Base64 encoding.  `base64url` takes an UTF-8 encoded string.  Returns a string of the same content, but encoded in a URL-safe variant of Base64, based on [RFC 4648's][base64url-1] "base64url" mapping.  The URL-safe variant avoids outputting `+`, `/`, or `=`, but is otherwise very similar to `base64`.
 
-[0]:http://tools.ietf.org/html/rfc4648#section-5
+```coffee
+output = base64 "abc123!?$*&()'-=@~~"
+assert output == "YWJjMTIzIT8kKiYoKSctPUB-fg"
+```
+
+[base64url-1]:http://tools.ietf.org/html/rfc4648#section-5
 
 ### Generators
 
-#### async
-
 #### call
+Execute a generator containing asynchronous instructions.  Takes a generator and is a pass-through for its return.
+
+ES6's introduction of generators offers a wonderful way to handle asynchronous methods.  A generator is any function with one or more `yield` operators, which is where the execution enters a non-blocking wait for the result.  However, we cannot use `yield` without a containing generator.  `call` is a convenience function that lets you to wrap your async code with a generator that immediately begins executing.
+
+```coffee
+# Putting in the asynchronous sleep is contrived, but it keeps this simple.
+call ->
+  string = "panda"
+  yield sleep 100
+  assert string == "panda"
+```
+
+#### async
+Establish a reusable generator function by wrapping it in a promise.  Takes a generator and returns a promise that either *resolves* the return value or *rejects* with an error.
+
+ES6's introduction of generators offers a wonderful way to handle asynchronous methods.  A generator is any function with one or more `yield` operators, which is where the execution enters a non-blocking wait for the result.  The trick to writing asynchronous code that follows a synchronous pattern is to always pair the `yield` operator with a promise.  
+
+That means when we write a generator that we'd like to reuse, we need to wrap it in a promise.  But it can be a burden to make your code promise aware.  Which is why Fairmont includes `async` as convenience function to handle all that for you.  As long as you include `yield`, you are free to write in a synchronous pattern.  `async` will promify your generator and allow you to continue the `yield` pattern throughout your callstack.  
+
+```coffee
+# Putting in the asynchronous sleep is contrived, but it keeps this simple.
+square = async (x) ->
+  yield sleep 100
+  x**2
+
+call ->
+  a = 2
+  a = yield square a
+  a = yield square a
+  a = yield square a
+  assert a == 256
+```
+
+
 
 ### Numeric Functions
 
@@ -1285,61 +1379,268 @@ Format a string as Base64, adapted based on [RFC 4648's][0] "base64url" mapping.
 
 #### Functions exported from Math
 
+
+
 ### Object Functions
 
 #### include, extend
 
-Adds the properties of one or more objects to another. Aliased as `extend`.
+Add the properties of one or more objects to another. Aliased as `extend`.  Takes a base object and N additional objects. `include` directly affects the base object as a side effect, while also returning the augmented object.  The additional objects (not the base object) remain unchanged.
+
+All properties that exist among the input objects will exist in the resultant object.  If a object property already exists, the last value entered will overwrite the previous.
+
+```coffee
+stats = {hp: 50, mp: 100}
+
+include stats, {stamina: 10, strength: 10}, {intelligence: 50, agility: 20}
+assert.deepEqual Object.keys(stats), ["hp", "mp", "stamina", "strength", "intelligence", "agility"]
+
+include stats, {stamina: 50}
+assert stats.stamina == 50
+```
 
 #### merge
 
-Creates new object by progressively adding the properties of each given object.
+Create a new object by merging the properties of one or more objects together.  Takes N objects. Returns a new object containing the properties of all input objects.
+
+`merge` is a more generalized accumulation function that always returns a new object.  If a object property already exists in another object, the last value entered will overwrite the previous.
+
+```coffee
+stats = {hp: 50, mp: 100}
+
+stats = merge {hp: 50, mp: 100}, {stamina: 10, strength: 10}, {intelligence: 50, agility: 20}
+assert.deepEqual Object.keys(stats), ["hp", "mp", "stamina", "strength", "intelligence", "agility"]
+```
 
 #### clone
 
-Perform a deep clone on an object. Taken from [The CoffeeScript Cookboox][0].
+Perform a deep clone on an object. Takes an object and returns a new object copy.
 
-[0]:http://coffeescriptcookbook.com/chapters/classesAndObjects/cloning
+The algorithm for copying the object is taken from [The CoffeeScript Cookboox][clone-1].  `clone` uses a recursive process to copy nested properties, providing a *deep* clone.  When passed a non-object, `clone` will still return a copy of what it is passed.
+
+```coffee
+person =
+  name: "Steve Jobs"
+  address:
+    street: "1 Infinite Loop"
+    city: "Cupertino, CA"
+    zip: 95014
+  birthdate: new Date 'Feb 24, 1955'
+  regex: /foo.*/igm
+
+
+assert.notEqual  (clone person), person  # Because birthdate == Date.getTime()
+assert.deepEqual (clone person), person
+
+assert (clone 1) == 1
+
+```
+
+[clone-1]:http://coffeescriptcookbook.com/chapters/classesAndObjects/cloning
 
 #### property
 
-Extract a property from an object. You can extract nested properties by composing curried `property` invocations.
+Extract a property from an object.  Takes a property name and a target object.  `property` returns the value of property on the target object.
+
+`property` is curried, meaning that it returns a function if you pass in only one of its two arguments.  This function will extract the set property from any target object.  These curried `property` invocations allow you to extract nested properties.
+
+```coffee
+a =
+  foo: 1
+  bar: 2
+  baz:
+    foo: 2
+
+assert (property "foo", a) == 1
+
+# Curried invocations allow you to extract nested properties.
+bazFoo = (compose (property "foo"), (property "baz"))
+assert (bazFoo a) == 2
+```
 
 #### delegate
 
-Delegates from one object to another by creating functions in the first object that call the second.
+Delegate from one object to another.  Takes two objects, the delegator and the delegatee.  `delegate` directly modifies the delegator's properties to reference the delegatee.
+
+Delegation is form of property inheritance separate from JavaScript's native prototype inheritance.  `delegate` allows any calls to the delegator's functions to reference their counterparts in the delgatee, if present.  Additionally, the delegator's context is shifted to the delgatee.
+
+The context shift is presented in the example below.  The second time we call `a.foo()` and access `this`, we are accessing the context of `b`, so `a.foo() == this.bar() == b.bar()`.
+
+```coffee
+a =
+  foo: -> this.bar()
+  bar: -> "This is a"
+
+b =
+  bar: -> "This is b"
+
+assert a.foo() == "This is a"
+assert a.bar() == "This is a"
+
+delegate a, b
+assert a.foo() == "This is b"
+assert a.bar() == "This is b"
+```
 
 #### bind
 
-Define a function based on a prototype function and an instance of the prototype. **Important** In the past, this did not always work for some natively implemented functions. That is hopefully no longer the case.
+Define a new function based on a prototype function while keeping the instance's context.  Takes a function and a object instance.  Returns a new function that shares its context with the original instance.
+
+By default, functions copied from prototype functions are bound to the outer, calling function's context.  `bind` overrides that behavior.  The new function's context will track the original instance's state.
+
+**Important** In the past, this did not always work for some natively implemented functions. That is hopefully no longer the case.
+
+```coffee
+this.x = 9
+foo =
+  x: 81
+  getX: -> this.x
+
+assert foo.getX() == 81     # accesses foo's internal context
+
+getX = foo.getX
+assert getX() == 9          # "this" refers to the outer or global context, not foo's
+
+boundGetX = bind getX, foo
+assert boundGetX() == 81    # Now, boundGetX's "this" is bound to foo's context
+
+foo.x = 11
+assert boundGetX() == 11    # Note that the context is *shared*, not copied.
+```
+
 
 #### detach
 
-Define a function based on a prototype function, taking as its first argument an instance of prototype. **Important** In the past, this did not always work for some natively implemented functions. That is hopefully no longer the case.
+Define a new function based on a prototype function, without taking any context.  Takes a function.  Returns a function that accepts a context followed by any arguments.
+
+By default, functions copied from prototype functions are bound to the outer, calling function's context.  `detach` overrides that behavior.  The new function is untethered from any context.  That gives you the control to pick what context should be applied with executing.  
+
+**Important** In the past, this did not always work for some natively implemented functions. That is hopefully no longer the case.
+
+```coffee
+# Establishing an instance of prototype.
+foo = ->
+foo::x = 81
+foo::f = (y) -> this.x / y
+
+# Establishing secondary contexts.
+this.x = 9
+bar = x: 36
+
+# Once detached, we may apply the other contexts to "f".
+g = detach foo::f
+assert (g this, 3) == 3
+assert (g bar, 3) == 12
+
+
+# Detaching reflective functions creates a function that only needs one argument (a context).
+trim = detach String::trim
+assert (trim "  panda    ") == "panda"
+```
 
 #### properties
 
-Define getters and setters on an object.
+Attach properties to a prototype.  Takes a target prototype and an object filled with the properties you wish to add.  Returns an array of statements associating the properties with the input prototype.
 
-Properties defined using `properties` are enumerable.
+Properties defined using `properties` are enumerable and configurable.
+
+```coffee
+class A
+  properties @::,
+    foo:
+      get: -> @_foo
+      set: (v) -> @_foo = v
+
+a = new A
+a.foo = "bar"
+assert a.foo == "bar"
+assert a._foo?
+```
 
 #### has
 
-Check if an object has a property.
+Check if an object has a property.  Takes a property name and a target object.  Returns `true` if the property is present or `false` if it is not.  `has` is curried, meaning that if you pass it only a property, `has` return a function that takes only an object and checks for that property.
+
+```coffee
+panda =
+  color: "black and white"
+  limbs: 4
+
+fish =
+  color: "silver"
+  limbs: 0
+
+car =
+  color: "red"
+  wheels: 4
+
+assert (has "limbs", panda) == true
+assert (has "limbs", fish) == true
+assert (has "limbs", car) == false
+
+# has is curried, so we can create a function that always checks for the same property.
+wheelCheck = has "wheels"
+assert (wheelCheck panda) == false
+assert (wheelCheck fish) == false
+assert (wheelCheck car) == true
+```
 
 #### keys
 
-Get the keys for an object.
+Get the keys for an object.  Takes an object.  Returns an array of the key names.
+
+```coffee
+panda =
+  c: 3
+  v: 1
+  q: 12
+  t: 10
+
+assert.deepEqual (keys panda), ["c", "v", "q", "t"]
+```
 
 #### values
 
-Get the values for an object.
+Get the values for an object.  Takes an object.  Returns an array of values for each key.
+
+```coffee
+panda =
+  c: 3
+  v: 1
+  q: 12
+  t: 10
+
+assert.deepEqual (values panda), [3, 1, 12, 10]
+```
 
 #### pairs
 
-Convert an object into association array.
+Convert an object into association array.  Takes an object.  Returns a nested array that pairs the object's keys with its values.
+
+```coffee
+obj =
+  a: 1
+  b: 2
+  c: 3
+
+output = pairs obj
+assert.deepEqual output, [["a", 1], ["b", 2], ["c", 3]]  
+
+# pairs only works on the top level.  Nested structures will just end up in the association array.
+obj =
+  a:
+    foo: 100
+    bar: 200
+  b: 2
+  c: 3
+
+output = pairs obj
+assert.deepEqual output, [ [ 'a', { foo: 100, bar: 200 } ], [ 'b', 2 ], [ 'c', 3 ] ]
+```
 
 #### pick
+
+Filter the properties of an object by  
 
 #### omit
 
