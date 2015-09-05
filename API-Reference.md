@@ -1327,7 +1327,7 @@ assert output == "YWJjMTIzIT8kKiYoKSctPUB+fg"
 Convert a string to a URL-safe variant of Base64 encoding.  `base64url` takes an UTF-8 encoded string.  Returns a string of the same content, but encoded in a URL-safe variant of Base64, based on [RFC 4648's][base64url-1] "base64url" mapping.  The URL-safe variant avoids outputting `+`, `/`, or `=`, but is otherwise very similar to `base64`.
 
 ```coffee
-output = base64 "abc123!?$*&()'-=@~~"
+output = base64url "abc123!?$*&()'-=@~~"
 assert output == "YWJjMTIzIT8kKiYoKSctPUB-fg"
 ```
 
@@ -1376,6 +1376,8 @@ call ->
 #### gt, lt, gte, lte
 
 #### odd, even
+
+Evaluates whether a value is odd or even.
 
 #### Functions exported from Math
 
@@ -1652,9 +1654,15 @@ Filter the properties of an object by
 
 #### toString
 
+Converts a value 
+
 #### toUpper
 
+Makes all characters in a string upper-case.
+
 #### toLower
+
+Makes all characters in a string lower-case.
 
 #### plainText
 
@@ -1701,13 +1709,23 @@ Return the constructor function of the value, or `undefined`.
 
 #### isType
 
+Verifies whether a variable is a specified type.
+
+Example: 
+
 #### instanceOf
 
+Verifies that a variable is an instance of an object, ie: a new object that maintains the properties of the original.
+
 #### isNumber
+
+Verifies that a variable has a numeric value. 
 
 #### isNaN
 
 #### isFinite
+
+Verifies that a variable number is finite.
 
 #### isInteger
 
@@ -1719,29 +1737,49 @@ Adapted from [StackOverflow][isFloat].
 
 #### isBoolean
 
+Verifies that a variable type is Boolean, ie: true or false.
+
 #### isDate
+
+Verifies that a variable contains a date.
 
 #### isRegExp
 
+
+
 #### isString
+
+Verifies that a variable contains a string of characters.
 
 #### isFunction
 
+Verifies that a variable is a function. A function takes one or more arguments as input and returns a value.
+
 #### isObject
+
+Verifies that a variable is an object, ie: {one: 1, two: 2}
 
 #### isArray
 
+Verifies that a variable is an array, ie: [1, 2, 3, 4, 5]
+
 #### isDefined
+
+Verifies that a variable has a defined value.
 
 #### isGenerator
 
+Verifies that a variable is a generator, ie: a function that returns a sequence of values one at a time.
+
 #### isPromise
+
+Verifies that a variable is a promise, ie: a value that is used for 
 
 ### Utility Functions
 
 These should probably all go somewhere else. For the moment, this is a holding pen of sorts for functions that we're not sure what to do with.
 
-#### memoize
+#### memorize
 
 A very simple way to cache results of functions that take a single argument. Also takes an optional hash function that defaults to calling `toString` on the function's argument.
 
