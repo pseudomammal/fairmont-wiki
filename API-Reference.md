@@ -1317,6 +1317,7 @@ assert output == "682f5e81981d68d2b196137042d17c79"
 
 Convert a string to Base64 encoding.  `base64` takes an UTF-8 encoded string.  Returns a string of the same content, but encoded in Base64.  Please note that this function ***does not*** produce a URL-safe string.  Please use `base64url` for that case.
 
+##### Example
 ```coffee
 output = base64 "abc123!?$*&()'-=@~~"
 assert output == "YWJjMTIzIT8kKiYoKSctPUB+fg"
@@ -1326,6 +1327,7 @@ assert output == "YWJjMTIzIT8kKiYoKSctPUB+fg"
 
 Convert a string to a URL-safe variant of Base64 encoding.  `base64url` takes an UTF-8 encoded string.  Returns a string of the same content, but encoded in a URL-safe variant of Base64, based on [RFC 4648's][base64url-1] "base64url" mapping.  The URL-safe variant avoids outputting `+`, `/`, or `=`, but is otherwise very similar to `base64`.
 
+##### Example
 ```coffee
 output = base64url "abc123!?$*&()'-=@~~"
 assert output == "YWJjMTIzIT8kKiYoKSctPUB-fg"
@@ -1340,6 +1342,7 @@ Execute a generator containing asynchronous instructions.  Takes a generator and
 
 ES6's introduction of generators offers a wonderful way to handle asynchronous methods.  A generator is any function with one or more `yield` operators, which is where the execution enters a non-blocking wait for the result.  However, we cannot use `yield` without a containing generator.  `call` is a convenience function that lets you to wrap your async code with a generator that immediately begins executing.
 
+##### Example
 ```coffee
 # Putting in the asynchronous sleep is contrived, but it keeps this simple.
 call ->
@@ -1349,12 +1352,13 @@ call ->
 ```
 
 #### async
-Establish a reusable generator function by wrapping it in a promise.  Takes a generator and returns a promise that either *resolves* the return value or *rejects* with an error.
+Establish a reusable generator function by wrapping it in a promise.  Takes a generator and returns a promise that either ***resolves*** the return value or ***rejects*** with an error.
 
 ES6's introduction of generators offers a wonderful way to handle asynchronous methods.  A generator is any function with one or more `yield` operators, which is where the execution enters a non-blocking wait for the result.  The trick to writing asynchronous code that follows a synchronous pattern is to always pair the `yield` operator with a promise.  
 
-That means when we write a generator that we'd like to reuse, we need to wrap it in a promise.  But it can be a burden to make your code promise aware.  Which is why Fairmont includes `async` as convenience function to handle all that for you.  As long as you include `yield`, you are free to write in a synchronous pattern.  `async` will promify your generator and allow you to continue the `yield` pattern throughout your callstack.  
+That means when we write a generator that we'd like to reuse, we need to wrap it in a promise.  But it can be a burden to make your code promise aware.  Which is why Fairmont includes `async` as convenience function to handle all that for you.  As long as you include `yield`, you are free to write in a synchronous pattern.  `async` will promisify your generator and allow you to continue the `yield` pattern throughout your callstack.  
 
+##### Example
 ```coffee
 # Putting in the asynchronous sleep is contrived, but it keeps this simple.
 square = async (x) ->
@@ -1391,6 +1395,7 @@ Add the properties of one or more objects to another. Aliased as `extend`.  Take
 
 All properties that exist among the input objects will exist in the resultant object.  If a object property already exists, the last value entered will overwrite the previous.
 
+##### Example
 ```coffee
 stats = {hp: 50, mp: 100}
 
@@ -1407,6 +1412,7 @@ Create a new object by merging the properties of one or more objects together.  
 
 `merge` is a more generalized accumulation function that always returns a new object.  If a object property already exists in another object, the last value entered will overwrite the previous.
 
+##### Example
 ```coffee
 stats = {hp: 50, mp: 100}
 
@@ -1420,6 +1426,7 @@ Perform a deep clone on an object. Takes an object and returns a new object copy
 
 The algorithm for copying the object is taken from [The CoffeeScript Cookboox][clone-1].  `clone` uses a recursive process to copy nested properties, providing a *deep* clone.  When passed a non-object, `clone` will still return a copy of what it is passed.
 
+##### Example
 ```coffee
 person =
   name: "Steve Jobs"
@@ -1435,7 +1442,6 @@ assert.notEqual  (clone person), person  # Because birthdate == Date.getTime()
 assert.deepEqual (clone person), person
 
 assert (clone 1) == 1
-
 ```
 
 [clone-1]:http://coffeescriptcookbook.com/chapters/classesAndObjects/cloning
@@ -1446,6 +1452,7 @@ Extract a property from an object.  Takes a property name and a target object.  
 
 `property` is curried, meaning that it returns a function if you pass in only one of its two arguments.  This function will extract the set property from any target object.  These curried `property` invocations allow you to extract nested properties.
 
+##### Example
 ```coffee
 a =
   foo: 1
@@ -1468,6 +1475,7 @@ Delegation is form of property inheritance separate from JavaScript's native pro
 
 The context shift is presented in the example below.  The second time we call `a.foo()` and access `this`, we are accessing the context of `b`, so `a.foo() == this.bar() == b.bar()`.
 
+##### Example
 ```coffee
 a =
   foo: -> this.bar()
@@ -1492,6 +1500,7 @@ By default, functions copied from prototype functions are bound to the outer, ca
 
 **Important** In the past, this did not always work for some natively implemented functions. That is hopefully no longer the case.
 
+##### Example
 ```coffee
 this.x = 9
 foo =
@@ -1519,6 +1528,7 @@ By default, functions copied from prototype functions are bound to the outer, ca
 
 **Important** In the past, this did not always work for some natively implemented functions. That is hopefully no longer the case.
 
+##### Example
 ```coffee
 # Establishing an instance of prototype.
 foo = ->
@@ -1542,27 +1552,30 @@ assert (trim "  panda    ") == "panda"
 
 #### properties
 
-Attach properties to a prototype.  Takes a target prototype and an object filled with the properties you wish to add.  Returns an array of statements associating the properties with the input prototype.
+Attach properties to a prototype.  Takes a target prototype and an object filled with the properties you wish to add.  `properties` directly adds the object to the target prototype.  Also, returns an array of statements associating the properties with the target prototype.
 
 Properties defined using `properties` are enumerable and configurable.
 
+##### Example
 ```coffee
+# Define a prototype with a property that uses JavaScript's native getter and setter.
 class A
   properties @::,
     foo:
       get: -> @_foo
       set: (v) -> @_foo = v
 
+# Test with an instance of "A".
 a = new A
 a.foo = "bar"
-assert a.foo == "bar"
-assert a._foo?
+assert a._foo == "bar"  # Proves the setter was used to create and set "_foo".
 ```
 
 #### has
 
 Check if an object has a property.  Takes a property name and a target object.  Returns `true` if the property is present or `false` if it is not.  `has` is curried, meaning that if you pass it only a property, `has` return a function that takes only an object and checks for that property.
 
+##### Example
 ```coffee
 panda =
   color: "black and white"
@@ -1591,6 +1604,7 @@ assert (wheelCheck car) == true
 
 Get the keys for an object.  Takes an object.  Returns an array of the key names.
 
+##### Example
 ```coffee
 panda =
   c: 3
@@ -1605,6 +1619,7 @@ assert.deepEqual (keys panda), ["c", "v", "q", "t"]
 
 Get the values for an object.  Takes an object.  Returns an array of values for each key.
 
+##### Example
 ```coffee
 panda =
   c: 3
@@ -1619,6 +1634,7 @@ assert.deepEqual (values panda), [3, 1, 12, 10]
 
 Convert an object into association array.  Takes an object.  Returns a nested array that pairs the object's keys with its values.
 
+##### Example
 ```coffee
 obj =
   a: 1
@@ -1642,19 +1658,146 @@ assert.deepEqual output, [ [ 'a', { foo: 100, bar: 200 } ], [ 'b', 2 ], [ 'c', 3
 
 #### pick
 
-Filter the properties of an object by  
+Filter the properties of an object on the result returned by a filter function.  Takes a function and a target object.  Returns a new object with only the filtered properties.  The original input object remains unchanged.
+
+The filter function processes the object's properties individually, accepting a given key and its value.  If the filter's return value is *truthy*, the property is added to the ***new*** object.  If the filter's return function is *falsey*, the property is omitted.  In this way, the new object is built up with only the desired properties.
+
+`pick` is curried.
+
+##### Example
+```coffee
+fruits =
+  apples: 3
+  oranges: null
+  mangos: 12
+
+f = (key, value) -> value?            # Only if the value is truthy
+g = (key, value) -> value % 2 == 1    # Only if there is an odd number
+h = (key, value) -> key == "mangos"   # Really likes mangos?
+
+assert.deepEqual (pick f, fruits), {apples: 3, mangos: 12}
+assert.deepEqual (pick g, fruits), {apples: 3}
+assert.deepEqual (pick h, fruits), {mangos: 12}
+```
 
 #### omit
+The inverse of `pick`.  Filter the properties of an object on the result returned by a filter function.  Takes a function and a target object.  Returns a new object with only the filtered properties.  The original input object remains unchanged.
+
+The filter function processes the object's properties individually, accepting a given key and its value.  If the filter's return value is *falsey*, the property is added to the ***new*** object.  If the filter's return function is *truthy*, the property is omitted.  In this way, the new object is built up with only the desired properties.
+
+`omit` is curried.
+
+##### Example
+```coffee
+fruits =
+  apples: 3
+  oranges: null
+  mangos: 12
+
+f = (key, value) -> value?            # Only if the value is falsey
+g = (key, value) -> value % 2 == 0    # Only if there is an even number
+h = (key, value) -> key == "mangos"   # Really hates mangos?
+
+assert.deepEqual (omit f, fruits), {oranges: null}
+assert.deepEqual (omit g, fruits), {apples: 3}
+assert.deepEqual (omit h, fruits), {apples: 3, oranges: null}
+```
 
 #### query
+Check if an object has a given sub-object.  Takes a sub-object and a target object.  Returns `true` if the sub-object is found within the target or `false` if it is not.  `query` does not recurse beyond the first level of a nested target structure.  However, `query` can match on sub-objects with multiple members, including when the sub-object's shape is incongruent to the one within the target object.
+
+`query` may also be used with non-objects, however it only returns `true` on a `deepEqual` match, rather than checking for substructures within the target.
+
+`query` is curried.
+
+##### Example
+```coffee
+princess =
+  name: "Aurora"
+  alias:
+    name: "Sleeping Beauty"
+  dwarves: 7
+  enemy: "Maleficent"
+
+# Query will find an object within a larger object.
+assert query({name: "Aurora"}, princess) == true
+assert query({name: "Belle"}, princess) == false
+
+# But query cannot find the sub-object within a nested structure.
+findBeauty = query {name: "Sleeping Beauty"}
+assert findBeauty(princess) == false
+assert findBeauty(princess.alias) == true
+
+# If query is passed non-objects, it simply performs a deepEqual comparison.
+princesses = [
+  "Ariel", "Aurora", "Belle", "Cinderella",
+  "Jasmine", "Merida", "Mulan", "Pocahontas",
+  "Rapunzel", "Snow White", "Tiana"
+]
+
+assert query({name: "Aurora"}, princesses) == false
+assert query("Aurora", princesses) == false
+assert query(11, princesses.length) == true
+```
 
 #### toJSON, fromJSON
+Stringify a JSON object and vice-versa.  
+
+`toJSON` accepts a JavaScript data structure and an optional "pretty-print" boolean.  Returns a new string containing the data structure in JSON.  If the "pretty-print" value is set to `true`, the result will feature newline characters and 2-space indentation.  If `false`, the result will feature no extra spaces or newlines. The "pretty-print" value defaults to false.
+
+##### Example
+```coffee
+mage =
+  vitals:
+    hp: 50
+    mp: 100
+  attributes:
+    stamina: 10
+    strength: 10
+    intelligence: 50
+    agility: 20
+
+string = toJSON mage
+pretty = toJSON mage, true
+
+assert string == '{"vitals":{"hp":50,"mp":100},"attributes":{"stamina":10,"strength":10,"intelligence":50,"agility":20}}'
+assert pretty,
+  '{
+    "vitals": {
+      "hp": 50,
+      "mp": 100
+    },
+    "attributes": {
+      "stamina": 10,
+      "strength": 10,
+      "intelligence": 50,
+      "agility": 20
+    }
+  }'
+```
+
+`fromJSON` accepts a string with proper JSON format, parses it, and returns the data structure it represents.
+
+##### Example
+```coffee
+mage = fromJSON '{"vitals":{"hp":50,"mp":100},"attributes":{"stamina":10,"strength":10,"intelligence":50,"agility":20}}'
+
+assert mage,
+  vitals:
+    hp: 50
+    mp: 100
+  attributes:
+    stamina: 10
+    strength: 10
+    intelligence: 50
+    agility: 20
+```
 
 ### String Functions
 
 #### toString
 
-Converts a value 
+Converts a value
 
 #### toUpper
 
@@ -1711,7 +1854,7 @@ Return the constructor function of the value, or `undefined`.
 
 Verifies whether a variable is a specified type.
 
-Example: 
+Example:
 
 #### instanceOf
 
@@ -1719,7 +1862,7 @@ Verifies that a variable is an instance of an object, ie: a new object that main
 
 #### isNumber
 
-Verifies that a variable has a numeric value. 
+Verifies that a variable has a numeric value.
 
 #### isNaN
 
@@ -1773,7 +1916,7 @@ Verifies that a variable is a generator, ie: a function that returns a sequence 
 
 #### isPromise
 
-Verifies that a variable is a promise, ie: a value that is used for 
+Verifies that a variable is a promise, ie: a value that is used for
 
 ### Utility Functions
 
