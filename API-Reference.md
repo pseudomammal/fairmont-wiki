@@ -1920,37 +1920,191 @@ Verifies that a variable is a promise, ie: a value that is used for
 
 ### Utility Functions
 
-These should probably all go somewhere else. For the moment, this is a holding pen of sorts for functions that we're not sure what to do with.
+"Utility" is a euphemism for this collection of functions that are very useful, but hard to categorize.  For the moment, this is a holding pen of sorts for functions that we're not sure what to do with.  As Fairmont grows and matures, these functions may be placed into another collection.
 
-#### memorize
+#### memoize
 
-A very simple way to cache results of functions that take a single argument. Also takes an optional hash function that defaults to calling `toString` on the function's argument.
+Cache the results of functions that take a single argument.  Takes a function, an optional hash scheme, and an optional cache. (See more below.)  Returns the input function, but imbues it with a cache object.  Memoization is a powerful optimization technique to avoiding making computationally expensive calls needlessly.  `memoize` provides a no-fuss cache in memory without requring you to setup anything cumbersome, like a lookup table.
+
+**Arguments**
+1. Input Function (required) - This function must accept only a single argument.  `memoize` returns this function, but gives it a cache to remember past results.
+2. Hashing Scheme (optional) - The cache is a JavaScript object, where the results are stored as values... but we need a name to give the corresponding keys.  `memoize` needs a hash scheme so it can always lookup a result.  By default, `memoize` is unimaginiative and merely stringifies the function's input as the key.  In most cases, this should be good enough, but you can substitute a scheme of your choosing.  For example, if you wanted the keys to be rendered as hexidecimal strings:
+```coffee
+f = (x) -> x * 2
+hash = (x) = x.toString(16)
+double = memoize f, hash
+```
+The choice is yours.  But if you need to pass in a cache (see below), it is probably sufficient to just set this argument to `null`.
+3. Cache (optional) - It is possible to pass `memoize` a "pre-heated" cache if you already have values available.  This is simply a JavaScript object, but be careful to not input incorrect values, because the returned function will not run if there is a cached result already available.  
+
+
+##### Example
+```coffee
+# Just stick memoize before a function and cache answers for the future.
+double = memoize (x) -> 2 * x
+assert double(5) == 10
+
+# We can also pass a "preheated" cache to memoize.  Here we prove by caching
+# an incorrect answer.
+f = (x) -> 2 * x
+double = memoize f, null, {"5": 25}
+assert double(5) == 25  # Incorrect, but expected.
+
+#===========================================================================
+# That was simple enough, but lets prove that we're getting a performance
+# boost from memoize.  Here we define a function with a "sleep" duration we
+# artificially impose for simplicity.
+triple = memoize async (x) ->
+  yield sleep 100
+  3 * x
+
+# Run "triple", but record the execution duration.  If it is less than 100ms,
+# we've proved that the cached answer was used.
+call ->
+  startTime = Date.now()
+  result = yield triple 5
+  duration = Date.now() - startTime
+  assert result == 15
+  assert duration >= 100 # Because of generator ping-pong, this is around 106ms.
+
+  # Do it again!!  But this time, the cached answer will be accessed.
+  startTime = Date.now()
+  result = yield triple 5
+  duration = Date.now() - startTime
+  assert result == 15
+  assert duration <= 100 # Never makes it to generator, this is around 0ms.
+```
 
 #### timer
 
-Set a timer. Takes an interval in microseconds and an action. Returns a function to cancel the timer. Basically, a more convenient way to call `setTimeout` and `clearTimeout`.
+Execute a time-delayed function.  Takes an interval in microseconds and a function (the "action").  Returns a cancel function.  `timer` is a functional approach to JavaScript's native `setTimeout` and `clearTimeout`.  
+
+Normally, when the timer reaches zero, the action executes.  But you can stop the timer and prevent the action from executing by calling the cancel function.  However, once the timer reaches zero, the cancel function is rendered useless.
+
+##### Example
+```coffee
+# We need an action to put into "timer", but we'll cancel it before it runs.
+x = 5
+tooLong = -> x = x * 2
+cancel = timer 10000, tooLong
+
+# 10 seconds is too long to wait.  Cancel it!!
+cancel()
+assert x == 5   # We kept tooLong from executing.
+```
 
 #### sleep
 
-Returns a promise that resolves after a given interval.
+Perform a non-blocking wait before resuming execution.  Takes a duration in milliseconds.  Returns a promise that resolves after the given duration, resuming execution.  Because `sleep` non-blocking, other actions may take place while the generator that contains `sleep` is idle.
+
+##### Example
+```coffee
+# Provide a containing generator for the sleep calls.
+call ->
+  startTime = Date.now()
+  yield sleep 100
+  duration = Date.now() - startTime
+  assert duration > 50  # Without "sleep", this would take fractions of a millisecond.
+```
 
 #### times
 
-Run a function N number of times.
+Run a function N times.  Takes a function and the number of times you'd like it to run.  Returns an array containing the result of each function call.  `times` is curried.
+
+##### Example
+```coffee
+x = 2
+square = -> x = x ** 2
+
+result = times square, 5
+assert.deepEqual result, [ 4, 16, 256, 65536, 4294967296 ] # That escalated quickly!!
+```
 
 #### benchmark
 
-Run a function an record how long it took. Use this in conjunction with `times` to benchmark a function over N repetitions.
+Determine the execution time of a function.  Takes a function.  Returns the time it took to complete in milliseconds.  This is a great little function for monitoring performance within your code.  You can even use this in conjunction with `times` to benchmark a function over N repetitions.
+
+##### Example
+```coffee
+# Simple function that just burns cycles.
+useless = ->
+  for i in [0...1000000]
+    y = 1 + i
+
+single = benchmark useless                 # Got around 30ms
+multiple = benchmark -> times(useless, 5)  # Got around 500ms
+
+assert 0 < single < multiple
+```
 
 #### empty
 
-Returns true if a contains no value. For arrays and strings, this means that its length is zero. For an object, it means that `keys` returns an array of length zero. For any other value, it will return true unless it's `undefined`.
+Determine if a data structure contains no value.  Takes a JavaScript data structure.  Returns `true` if it contains "no value".
+
+- For arrays and strings, this means that its length is zero.
+- For an object, it means that `keys` returns an array of length zero.
+- For any other value, it will return true unless it's falsey.
+
+##### Example
+```coffee
+assert empty( [] )        == true
+assert empty( "" )        == true
+assert empty( {} )        == true
+assert empty( null )      == true
+assert empty( undefined ) == true
+
+assert empty( 1 )     == false
+assert empty( [1] )   == false
+assert empty( "abc" ) == false
+assert empty( a: 0 )  == false
+assert empty( true )  == false
+assert empty( false ) == false
+```
 
 #### length
 
-Returns the length property of an object. This is so frequently used with strings and arrays that it's reasonable to include it. We were tempted to add a variant for objects, but that could produce surprising results. Instead, just use `length keys object`, which is still much more readable than `Object.keys(foo).length`. And, of course, if you're just comparing to zero, use `empty`: `empty foo` works on objects.
+Return the length property of an object.  Takes a JavaScript data structure.  Returns the value of the length property, if it exists.  If the length propery does not exist, an error is thrown.
+
+Working with lengths crops up so frequently, this function is included to better integrate it into functional programming.  We *were* tempted to add a variant for objects, but innumerable properties would yield potentially surprising results. Instead, just use `length keys object`, which is still much more readable than `Object.keys(foo).length`.  And, if you're just comparing to zero, use `empty`, which works on all data structures, including objects.
+
+##### Example
+```coffee
+assert length([]) == 0
+assert length([1]) == 1
+assert length([1, 2]) == 2
+assert length([1, 2, 3]) == 3
+
+assert length("") == 0
+assert length("p") == 1
+assert length("pan") == 3
+assert length("panda") == 5
+```
 
 #### deepEqual
+Assess the equality of two data structures, and go beyond superficial comparison.  Takes two JavaScript data structures.  Returns `true` if they are equal or `false` if they are not.
+
+JavaScript possesses the comparison operator `===`, which works for simple data structures, but fails for arrays and differently shaped objects.  `deepEqual` does the extra computation to determine if two values are truely equal.
+
+##### Example
+```coffee
+a = [1, 2, 3, 4, 5]
+b = [1, 2, 3, 4, 5]
+assert (a == b) == false  # Really, JavaScript?  The comparison operator failed us.
+assert deepEqual a, b     # deepEqual saves the day.
+
+a =
+  foo: 1
+  bar: 2
+  baz: 3
+
+b =
+  bar: 2
+  foo: 1
+  baz: 3
+
+assert (a == b) == false  # The comparison operator failed us.
+assert deepEqual a, b     # Again, deepEqual saves the day.
+```
 
 ## Process
 
