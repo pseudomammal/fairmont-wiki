@@ -1927,7 +1927,9 @@ Verifies that a variable is a promise, ie: a value that is used for
 Cache the results of functions that take a single argument.  Takes a function, an optional hash scheme, and an optional cache. (See more below.)  Returns the input function, but imbues it with a cache object.  Memoization is a powerful optimization technique to avoiding making computationally expensive calls needlessly.  `memoize` provides a no-fuss cache in memory without requring you to setup anything cumbersome, like a lookup table.
 
 **Arguments**
+
 1. Input Function (required) - This function must accept only a single argument.  `memoize` returns this function, but gives it a cache to remember past results.
+
 2. Hashing Scheme (optional) - The cache is a JavaScript object, where the results are stored as values... but we need a name to give the corresponding keys.  `memoize` needs a hash scheme so it can always lookup a result.  By default, `memoize` is unimaginiative and merely stringifies the function's input as the key.  In most cases, this should be good enough, but you can substitute a scheme of your choosing.  For example, if you wanted the keys to be rendered as hexidecimal strings:
 ```coffee
 f = (x) -> x * 2
@@ -1935,6 +1937,7 @@ hash = (x) = x.toString(16)
 double = memoize f, hash
 ```
 The choice is yours.  But if you need to pass in a cache (see below), it is probably sufficient to just set this argument to `null`.
+
 3. Cache (optional) - It is possible to pass `memoize` a "pre-heated" cache if you already have values available.  This is simply a JavaScript object, but be careful to not input incorrect values, because the returned function will not run if there is a cached result already available.  
 
 
