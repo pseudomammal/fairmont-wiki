@@ -2115,17 +2115,42 @@ assert deepEqual a, b     # Again, deepEqual saves the day.
 
 #### abort
 
-Simple wrapper around `process.exit(-1)`, optionally taking a message.
+End the current process.  Takes an optional message to output.  Exits with status code `-1`.
 
 ##### Example
 
 ```coffee
+console.log "You see this message."
+
 abort "Cap'n she can't hold any longer!"
+console.log "This will never be seen."
 ```
 
 #### shell
 
-Execute a shell command. Returns a promise that resolves to an object with properties `stdout` and `stdin`, or is rejected with an error.
+Execute a shell command. Takes a string containing a shell command.  Returns a promise that either *resolves* to a result object or *rejects* with an error.  The result object contains the properties `stdout` and `stderr`, the final results piped to the shell's Standard Output and Standard Error, respectively.
+
+`shell` makes use of the[ NodeJS `child_process` API][shell-0] to handle the system call separately and asynchronously.  Your JavaScript execution enters a non-blocking wait until the child process ends, and you have no access to the output until `shell` resolves.  Additionally, `shell` is based on [NodeJS's `exec` subcommand][shell-1], which returns a buffer of limited size (200 kB).  If your shell command is long-running or returns a large amount of data it could trigger a maxBuffer exceeded error.  For these reasons, `shell` should only be used for short-lived processes that don't return much data.
+
+[shell-0]:https://nodejs.org/api/child_process.html
+[shell-1]:https://nodejs.org/api/child_process.html#child_process_child_process_exec_command_options_callback
+
+##### Example
+
+```coffee
+# Assume that we're sitting in a directory with this structure:
+# index.coffee
+# data/
+#   panda.md
+#   bamboo.md
+
+{stdout} = yield shell "ls #{__dirname}/data"
+
+# Remember that we get a string back from shell.  ls returns a newline delimited
+# list of files, so we can parse the output string on that.
+files = stdout.split "\n"
+assert.deepEqual files, [ 'panda.md', 'bamboo.md', '' ]
+```
 
 ## File System
 
