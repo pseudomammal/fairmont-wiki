@@ -81,7 +81,7 @@
 
 **[File System](#file-system)**
 
-- [File System Functions](#file-system-functions): [<small>`stat`</small>](#stat) | [<small>`exists`</small>](#exists) | [<small>`read`</small>](#read) | [<small>`readDir / readdir`</small>](#readdir--readdir) | [<small>`ls`</small>](#ls) | [<small>`lsR / lsr`</small>](#lsr--lsr) | [<small>`glob`</small>](#glob) | [<small>`write`</small>](#write) | [<small>`chDir / chdir`</small>](#chdir--chdir) | [<small>`mv`</small>](#mv) | [<small>`cp`</small>](#cp) | [<small>`rm`</small>](#rm) | [<small>`rmDir / rmdir`</small>](#rmdir--rmdir) | [<small>`isDirectory`</small>](#isdirectory) | [<small>`isFile`</small>](#isfile) | [<small>`mkDir / mkdir`</small>](#mkdir--mkdir) | [<small>`mkDirP / mkdirp`</small>](#mkdirp--mkdirp)
+- [File System Functions](#file-system-functions): [<small>`read`</small>](#read) | [<small>`write`</small>](#write) | [<small>`stat`</small>](#stat) | [<small>`exists`</small>](#exists) | [<small>`readDir / readdir`</small>](#readdir--readdir) | [<small>`ls`</small>](#ls) | [<small>`lsR / lsr`</small>](#lsr--lsr) | [<small>`glob`</small>](#glob) |  [<small>`chDir / chdir`</small>](#chdir--chdir) | [<small>`mv`</small>](#mv) | [<small>`cp`</small>](#cp) | [<small>`rm`</small>](#rm) | [<small>`rmDir / rmdir`</small>](#rmdir--rmdir) | [<small>`isDirectory`</small>](#isdirectory) | [<small>`isFile`</small>](#isfile) | [<small>`mkDir / mkdir`</small>](#mkdir--mkdir) | [<small>`mkDirP / mkdirp`</small>](#mkdirp--mkdirp)
 
 
 
@@ -2128,7 +2128,7 @@ console.log "This will never be seen."
 
 #### shell
 
-Execute a shell command. Takes a string containing a shell command.  Returns a promise that either *resolves* to a result object or *rejects* with an error.  The result object contains the properties `stdout` and `stderr`, the final results piped to the shell's Standard Output and Standard Error, respectively.
+Asynchronously execute a shell command. Takes a string containing a shell command.  Returns a promise that either *resolves* to a result object or *rejects* with an error.  The result object contains the properties `stdout` and `stderr`, the final results piped to the shell's Standard Output and Standard Error, respectively.
 
 `shell` makes use of the[ NodeJS `child_process` API][shell-0] to handle the system call separately and asynchronously.  Your JavaScript execution enters a non-blocking wait until the child process ends, and you have no access to the output until `shell` resolves.  Additionally, `shell` is based on [NodeJS's `exec` subcommand][shell-1], which returns a buffer of limited size (200 kB).  If your shell command is long-running or returns a large amount of data it could trigger a maxBuffer exceeded error.  For these reasons, `shell` should only be used for short-lived processes that don't return much data.
 
@@ -2156,69 +2156,385 @@ assert.deepEqual files, [ 'panda.md', 'bamboo.md', '' ]
 
 ### File System Functions
 
-#### stat
-
-Synchronously get the stat object for a file.
-
-#### exists
-
-Check to see if a file exists.
-
 #### read
 
-Read a file and return a UTF-8 string of the contents.
+Asynchronously read from a data source.  `read` is an overloaded function that operates on files and streams.  In both cases, `read` returns a promise that either *resolves* to a result or *rejects* with an error. Please see the applicable section below to see the respective inputs and outputs.
 
-Passing an explicit 'null'/`undefined` or 'binary'/'buffer' as the encoding will return the raw buffer.
+**Files**
 
-You can also just pass in a readable stream.
+Takes a file path and an optional string encoding.    The result is a promise resolving to a JavaScript `String` of the binary file's contents, encoded as specified.  `read` will not resolve until the entire file has been processed.  Until that time, you will not be able to access the result value.
 
-#### readDir / readdir
+By default, `read` uses UTF-8 encoding on the binary data it finds.  [NodeJS supports other encodings][read-0], including `hex`, `base64`, `ascii`, and `utf16le` (aka `ucs2`).  
 
-Get the contents of a directory as an array.
+Additionally, you may retrieve a raw `Buffer` of a file's contents by passing `null`, `undefined`, `binary`, or  `buffer` as the second argument.
 
-#### ls
+##### Example
+```coffee
+# Assume that we're in a directory that has the this file.
+a = yield read "#{__dirname}/panda.txt"  # UTF-8 encoding.
+assert a == "Pandas love bamboo."
 
-Get the contents of a directory as an array of pathnames.
+b = yield read "#{__dirname}/panda-64.txt", "base64"  # file with base64 encoding
+assert b == "Pandas love bamboo."
 
-#### lsR / lsr
+c = yield read "#{__dirname}/panda.txt", "buffer"    # Returns Buffer object
+assert.deepEqual c, new Buffer("Pandas love bamboo.")
+```
 
-Recursively get the contents of a directory as an array.
+**Streams**
 
-#### glob
+Takes a readable stream and an optional string encoding.  The result is a promise resolving to a JavaScript `String` of the stream's binary data, encoded as specified.  `read` consumes the input stream and will not resolve until the stream's `end` event fires.  Until that time, you will not have access to the result value.
 
-Glob a directory.
+By default, `read` uses UTF-8 encoding on the binary data it finds.  [NodeJS supports other encodings][read-0] that include `hex`, `base64`, `ascii`, and `utf16le` (aka `ucs2`).  
+
+Additionally, you may retrieve a raw `Buffer` of a stream's contents by passing `null`, `undefined`, `binary`, or  `buffer` as the second argument.
+
+##### Example
+```coffee
+# Assume "stream" is a readable stream containing UTF-8 encoded data.
+a = yield read stream
+assert a == "Pandas love bamboo."
+
+# Assume "stream64" is a readable stream containing base64 encoded data.
+b = yield read stream64, "base64"
+assert b == "Pandas love bamboo."
+
+c = yield read stream, "buffer"
+assert.deepEqual c, new Buffer("Pandas love bamboo.")
+```
+
+[read-0]:https://nodejs.org/api/buffer.html#buffer_buffer
+
 
 #### write
 
-Synchronously write a UTF-8 string or data buffer to a file.
+Asynchronously write a UTF-8 string or data buffer to a file.  Takes a target path and string (or buffer) to be written.  Returns a promise that either *resolves* if the write is successful and complete or *rejects* with an error.  The resolved return value is `undefined`.  `write` will overwrite a file if one already exists at the target path.
+
+##### Example
+```coffee
+# Store something unique in a file.
+currentTime = Date.now().toString()
+yield write "#{__dirname}/time.txt", currentTime
+
+# Read back the data and see if it worked.
+value = yield read "#{__dirname}/time.txt"
+assert value == currentTime
+```
+
+#### stat
+
+Asynchronously get the stat object for a file.  Takes a path.  Returns promise that either *resolves* to a result object or *rejects* with an error.  The result object's properties match Unix's stat output for a file.
+
+##### Example
+```coffee
+# Assume that we're in a directory that has this target file.
+result = yield stat "#{__dirname}/lines.txt"
+
+# Grab the keys of the result and compare them to the expected properties.
+resultKeys = keys result
+expectedKeys = [ 'dev', 'mode', 'nlink', 'uid', 'gid', 'rdev', 'blksize',
+  'ino', 'size', 'blocks', 'atime', 'mtime', 'ctime', 'birthtime' ]
+
+assert.deepEqual resultKeys, expectedKeys
+```
+
+#### exists
+
+Asynchronously check to see if a file exists.  Takes a path.  Returns a promise that either *resolves* to a result or *rejects* with an error.  The result is a boolean, `true` if the file exists, `false` if it does not.
+
+##### Example
+```coffee
+# Assume that we're in a directory that has the first file, but not the second.
+a = yield exists "#{__dirname}/lines.txt"
+b = yield exists "#{__dirname}/does-not-exist"
+
+assert a == true
+assert b == false
+```
+
+
+
+#### readDir / readdir
+
+Asynchronously retrieve the local filenames within a directory.  Aliased as `readdir`.  Takes a path.  Returns promise that either *resolves* with a result or *rejects* with an error.  A successful result is an array of localized filenames at the target path.  `readDir` does not discriminate between files and directories, so both will appear in the result array.
+
+```coffee
+# Assume we're in a directory with the following tree:
+# app/
+#   index.coffee
+#   index.html
+# index.coffee
+# index.css
+# index.html
+
+files = yield readDir __dirname
+expectedValues = [ "app", "index.coffee", "index.css", "index.html" ]
+assert.deepEqual files, expectedValues
+```
+
+#### ls
+
+Asynchronously retrieve absolute pathnames for a directory's contents.  Takes a target path.  Returns a promise that either *resolves* with a result or *rejects* with an error.  A successful result is an array of absolute filenames at the target path.  `ls` does not discriminate between files and directories, so both will appear in the result array.
+
+##### Example
+```coffee
+# Assume we're in a directory with the following tree:
+# app/
+#   index.coffee
+#   index.html
+# index.coffee
+# index.css
+# index.html
+
+files = yield ls __dirname
+expectedValues = [
+  "#{__dirname}/app"
+  "#{__dirname}/index.coffee"
+  "#{__dirname}/index.css"
+  "#{__dirname}/index.html"
+]
+
+# Notice how the returned files and directory are alphabetized.
+assert.deepEqual files, expectedValues
+```
+
+#### lsR / lsr
+
+Asynchronously retrieve the absolute pathnames for a directory's contents, including a recursive search through sub-directories.  Takes a target path.  Returns a promise that either *resolves* with a result or *rejects* with an error.   A successful result is an array of absolute paths.  `lsR` operates recursively and will return *every* file within the filesystem tree under the target path.
+
+##### Example
+
+```coffee
+# Assume we're in a directory with the following tree:
+# app/
+#   index.coffee
+#   index.html
+# index.coffee
+# index.css
+# index.html
+
+files = yield lsR __dirname
+expectedValues = [
+  "#{__dirname}/app/index.coffee"
+  "#{__dirname}/app/index.html"
+  "#{__dirname}/index.coffee"
+  "#{__dirname}/index.css"
+  "#{__dirname}/index.html"
+]
+
+# Notice how the returned filenames are alphabetized, including within sub-directories.
+assert.deepEqual files, expectedValues
+```
+
+#### glob
+
+Asynchronously glob on a directory's contents.  Takes a glob pattern and a target path.  Returns a promise that either *resolves* with a result or *rejects* with an error.   A successful result is an array of absolute *file* paths.
+
+A glob is a shell pattern that allows you to target multiple filenames that match a string with the glob "wildcard" character.  `glob` only matches on absolute paths, so you need the "Globstar" operator (`**`), which matches any parent directory, if you pass in a non-absolute path.  However, use with caution because `glob` recursively searches sub-directories for matches.  
+
+`glob` discriminates between files and directories and only returns matches on files.  If `glob` finds no matching files, an empty array is returned.
+
+##### Example
+```coffee
+# Assume we're in a directory with the following tree:
+# app/
+#   index.coffee
+#   index.html
+# index.coffee
+# index.css
+# index.html
+
+files = yield glob "#{__dirname}/*.coffee", __dirname
+expectedValues = [
+  "#{__dirname}/index.coffee"
+]
+assert.deepEqual files, expectedValues
+
+# With the Globstar, you get any file within the tree that matches.
+files = yield glob "**/*.coffee", __dirname
+expectedValues = [
+  "#{__dirname}/app/index.coffee"
+  "#{__dirname}/index.coffee"
+]
+assert.deepEqual files, expectedValues
+
+# Match for everything (files only) in the top-level directory.
+files = yield glob "#{dirname}/*", __dirname
+expectedValues = [
+  "#{__dirname}/index.coffee"
+  "#{__dirname}/index.css"
+  "#{__dirname}/index.html"
+]
+assert.deepEqual files, expectedValues
+
+
+# Match everything, equivalent to "lsR".
+files = yield glob "**/*", __dirname
+expectedValues = [
+  "#{dir}/app/index.coffee"
+  "#{dir}/app/index.html"
+  "#{dir}/index.coffee"
+  "#{dir}/index.css"
+  "#{dir}/index.html"]
+assert.deepEqual files, expectedValues
+
+# No matches.
+files = yield glob "**/signup*", dir
+expectedValues = []
+assert.deepEqual files, expectedValues
+```
 
 #### chDir / chdir
 
-Change directories. If a function is passed in execute the function, and restore the original working directory. Otherwise, returns a function to restore the original working directory. **Important** Do not rely on the automatic restoration feature when using asynchronous functions, since another function may also change the current directory.
+Change your working directory.  Aliased as `chdir`.  Takes a path and an optional function.   See below for possible results:
+
+**Without Optional Function**
+
+When only passed a path, `chdir` returns a function that will restore the original working directory when called.
+
+**With Optional Function**
+
+When passed a function, `chdir` executes the function.  The working directory is altered for the duration of execution and restored when the function returns.  **IMPORTANT:** Do not rely on the automatic restoration feature when using asynchronous functions, since another function may also change the current directory.
+
+##### Example
+```coffee
+# Assume we're in a directory with sub-directory "app".  Store the original cwd.
+cwd = process.cwd()
+
+# We can change the working directory.
+goBack = chdir "#{__dirname}/app"
+assert process.cwd() == "#{__dirname}/app"
+
+# Now, restore the working directory.
+goBack()
+assert process.cwd() == cwd
+
+# Using chdir with a function results in no change after executing.
+f = -> "foobar"
+chdir "#{__dirname}/app", f
+assert process.cwd() == cwd
+```
 
 #### mv
+Asynchronously move a file.  Takes a file's path and a destination path.  Returns a promise that either resolves on success or rejects with an error.  Execution enters a non-blocking wait until the move is complete.
+
+##### Example
+
+```coffee
+# Assume we're in a directory with a file "first", and that it reads:
+# "Pandas love bamboo."
+
+yield mv "#{__dirname}/first", "#{__dirname}/second"
+
+# Check that the first file is gone.
+assert (yield exist "#{__dirname}/first") == false
+
+# Check that the data moved to the second file.
+data = yield read "#{__dirname}/second"
+assert newData == "Pandas love bamboo."
+```
 
 #### cp
+Asynchronously copy a file.  Takes a file's path and a destination path.  Returns a promise that either resolves on success or rejects with an error.  Execution enters a non-blocking wait until the copy is complete.
+
+##### Example
+
+```coffee
+# Assume we're in a directory with a file "first", and that it reads:
+# "Pandas love bamboo."
+
+yield cp "#{__dirname}/first", "#{__dirname}/second"
+
+# Check that the first file is still there.
+assert (yield exist "#{__dirname}/first") == true
+
+# Check that the data was copied to the second file.
+data = yield read "#{__dirname}/second"
+assert newData == "Pandas love bamboo."
+```
 
 #### rm
 
-Removes a file.
+Asynchronously remove a file.  Takes a file's path.  Returns a promise that either resolves on success or rejects with an error.  Execution enters a non-blocking wait until the deletion is complete.
+
+##### Example
+
+```coffee
+# Assume we're in a directory with a file "test".
+yield rm "#{__dirname}/test"
+
+# Check that the file is gone.
+assert (yield exist "#{__dirname}/test") == false
+```
 
 #### rmDir / rmdir
 
-Removes a directory.
+Asynchronously remove a directory.  Takes a directory's path.  Returns a promise that either resolves on success or rejects with an error.  `rmDir` will fail if the target directory is not empty.  Execution enters a non-blocking wait until the deletion is complete.  
 
-#### isDirectory
+##### Example
 
-#### isFile
+```coffee
+# Assume we're in a directory with a directory "test".
+yield rmDir "#{__dirname}/test"
+
+# Check that the directory is gone.
+assert (yield exist "#{__dirname}/test") == false
+```
 
 #### mkDir / mkdir
 
-Creates a directory. Takes a `mode` and a `path`. Assumes any intermediate directories in the path already exist.
+Asynchronously create a directory.  Aliased as `mkdir`.  Takes a [mode][mkDir-0] (octal value only) and a path.  Returns a promise that either resolves on success or rejects with an error.  Assumes any intermediate directories in the path already exist.  Execution enters a non-blocking wait until the creation is complete.
+
+```coffee
+# Check that we don't already have a directory here.
+assert (yield exist "#{__dirname}/test") == false
+
+# Make the directory will unrestricted access.
+yield mkDir "0777", "#{__dirname}/test"
+
+# Check that the directory is exists
+assert (yield exist "#{__dirname}/test") == true
+```
+
+[mkDir-0]:http://help.unc.edu/help/how-to-use-unix-and-linux-file-permissions/
 
 #### mkDirP / mkdirp
 
-Creates a directory and any intermediate directories in the given `path`. Takes a `mode` and a `path`.
+Asynchronously create a directory and any intermediaries.  Aliased as `mkdirp`.  Takes a [mode][mkDirP-0] (octal value only) and a path.  Returns a promise that either resolves on success or rejects with an error.  Will create the specified directory and any intermediate directories, as necessary. Execution enters a non-blocking wait until the creation is complete.
+
+```coffee
+# Check that we don't already have a directory here, or its intermediary.
+assert (yield exist "#{__dirname}/foobar") == false
+assert (yield exist "#{__dirname}/foobar/test") == false
+
+# Make the directory will unrestricted access.
+yield mkDirP "0777", "#{__dirname}/foobar/test"
+
+# Check that the directory is exists
+assert (yield exist "#{__dirname}/foobar/test") == true
+```
+
+[mkDirP-0]:http://help.unc.edu/help/how-to-use-unix-and-linux-file-permissions/
+
+#### isDirectory
+
+Asynchronously discriminate between files and directories.  Takes a path.  Returns a promise that either resolves on success or rejects with an error.  Success is a boolean, `true` if the path names a directory, `false` if it does not.
+
+```coffee
+# Assume we are in a directory with one file (test-file) and one directory (test-directory).
+assert (yield isDirectory "#{__dirname}/test-directory") == true
+assert (yield isDirectory "#{__dirname}/test-file") == false
+```
+
+#### isFile
+
+Asynchronously discriminate between files and directories.  Takes a path.  Returns a promise that either resolves on success or rejects with an error.  Success is a boolean, `true` if the path names a file, `false` if it does not.
+
+```coffee
+# Assume we are in a directory with one file (test-file) and one directory (test-directory).
+assert (yield isDirectory "#{__dirname}/test-directory") == false
+assert (yield isDirectory "#{__dirname}/test-file") == true
+```
 
 ## Multimethods
 
