@@ -1379,13 +1379,63 @@ call ->
 
 #### gt, lt, gte, lte
 
+Curries a value to allow future evaluation of relative value.
+
+####Example
+```coffee
+belowFreezing = lte 32
+assert belowFreezing (15)
+```
+
+####add, sub, mul, div, mod
+
+Curries a value to allow future arithmetical operations.
+
+####Example
+```coffee
+recruits = add 5
+assert recruits 1 == 6
+```
+
 #### odd, even
 
 Evaluates whether a value is odd or even.
 
+####Example
+
+```coffee
+assert odd 5
+```
+
 #### Functions exported from Math
 
+####min, max
 
+Gives the lowest or highest value in a set of numbers.
+
+####Example
+
+```coffee
+assert max (1, 5, 10) == 10
+```
+
+####abs
+
+Calculates the absolute value of an argument.
+
+####Example
+```coffee
+assert abs -5 == 5
+```
+
+####pow
+
+Multiplies an argument by itself a specified number of times.
+
+####Example
+```coffee
+assert pow(3, 3) == 27
+```
 
 ### Object Functions
 
