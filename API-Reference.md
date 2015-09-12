@@ -1381,7 +1381,7 @@ call ->
 
 Curries a value to allow future evaluation of relative value.
 
-####Example
+#####Example
 ```coffee
 belowFreezing = lte 32
 assert belowFreezing (15)
@@ -1391,7 +1391,7 @@ assert belowFreezing (15)
 
 Curries a value to allow future arithmetical operations.
 
-####Example
+#####Example
 ```coffee
 recruits = add 5
 assert recruits 1 == 6
@@ -1401,7 +1401,7 @@ assert recruits 1 == 6
 
 Evaluates whether a value is odd or even.
 
-####Example
+#####Example
 
 ```coffee
 assert odd 5
@@ -1409,12 +1409,11 @@ assert odd 5
 
 #### Functions exported from Math
 
-####min, max
+#####min, max
 
 Gives the lowest or highest value in a set of numbers.
 
-####Example
-
+#####Example
 ```coffee
 assert max (1, 5, 10) == 10
 ```
@@ -1423,7 +1422,7 @@ assert max (1, 5, 10) == 10
 
 Calculates the absolute value of an argument.
 
-####Example
+#####Example
 ```coffee
 assert abs -5 == 5
 ```
