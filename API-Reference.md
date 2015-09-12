@@ -99,11 +99,11 @@ The core functions are functions that provide the functional programming glue fo
 
 ### Core Functions
 
-#### noOp
+- #### noOp
 
-A function that does nothing and returns `undefined`. Useful in conjunction with combinators when you don't want to perform an action.
+    A function that does nothing and returns `undefined`. Useful in conjunction with combinators when you don't want to perform an action.
 
-##### Example
+    ##### Example
 
 ```coffee
 assert (noOp 7) == undefined
