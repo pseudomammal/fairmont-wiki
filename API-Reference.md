@@ -99,13 +99,13 @@ The core functions are functions that provide the functional programming glue fo
 
 ### Core Functions
 
-- #### noOp
+#### noOp
 
     A function that does nothing and returns `undefined`. Useful in conjunction with combinators when you don't want to perform an action.
 
-    ##### Example
+##### Example
 
-    ```coffee
+```coffee
 assert (noOp 7) == undefined
 ```
 
@@ -1903,11 +1903,21 @@ Return the constructor function of the value, or `undefined`.
 
 Verifies whether a variable is a specified type.
 
-Example:
+#####Example:
+```coffee
+assert isType String, "word"
+```
 
 #### instanceOf
 
-Verifies that a variable is an instance of an object, ie: a new object that maintains the properties of the original.
+Curries a variable to allow future evaluations of descendants.
+
+#####Example:
+```coffee
+a = -> isType()
+b = new a
+assert b instanceOf a
+```
 
 #### isNumber
 
@@ -1915,13 +1925,13 @@ Verifies that a variable has a numeric value.
 
 #### isNaN
 
-#### isFinite
 
-Verifies that a variable number is finite.
 
-#### isInteger
+#### isFinite, isInteger, isFloat
 
-#### isFloat
+Verifies that is an argument is number of a specific type.
+
+
 
 Adapted from [StackOverflow][isFloat].
 
@@ -1929,11 +1939,21 @@ Adapted from [StackOverflow][isFloat].
 
 #### isBoolean
 
-Verifies that a variable type is Boolean, ie: true or false.
+Verifies that an argument is Boolean.
+
+#####Example
+```coffee
+assert isBoolean true
+```
 
 #### isDate
 
 Verifies that a variable contains a date.
+
+#####Example
+```coffee
+assert isDate (new Date)
+```
 
 #### isRegExp
 
@@ -1943,29 +1963,78 @@ Verifies that a variable contains a date.
 
 Verifies that a variable contains a string of characters.
 
+#####Example
+```coffee
+assert isString "Hello"
+```
+
 #### isFunction
 
 Verifies that a variable is a function. A function takes one or more arguments as input and returns a value.
 
+#####Example
+```coffee
+func = (a) -> a*a
+assert isFunction func
+```
+
 #### isObject
 
-Verifies that a variable is an object, ie: {one: 1, two: 2}
+Verifies that a variable is an object.
+
+#####Example
+```coffee
+thing = {one: 1, two: 2}
+assert isObject thing
+```
 
 #### isArray
 
-Verifies that a variable is an array, ie: [1, 2, 3, 4, 5]
+Verifies that a value is an array.
+
+#####Example
+```coffee
+assert isArray [1, 2, 3, 4, 5]
+```
 
 #### isDefined
 
-Verifies that a variable has a defined value.
+Verifies that a value exists.
+
+#####Example
+```coffee
+assert isDefined String
+```
 
 #### isGenerator
 
-Verifies that a variable is a generator, ie: a function that returns a sequence of values one at a time.
+Verifies that a variable is a generator. A generator can be used to systematically create iterators, with the subsequent steps built in ahead of time.
+
+Generators facilitate automation and simplify the task of creating iterators.
+
+#####Example
+```coffee
+count = () ->
+  yield 1
+  yield 2
+  yield 3
+assert isGenerator count
+```
 
 #### isPromise
 
-Verifies that a variable is a promise, ie: a value that is used for
+Verifies that a variable is a promise. A promise is essentially a link in a chain of operations, that checks to see whether a given condition has been met. If the condition is fulfilled, it moves on to another designated process (generally another promise). If an unexpected result occurs, the promise is rejected and it moves on to a different designated outcome. In other words, promises have "then" functionality built in.
+
+Among other things, promises allow easier step by step error checking and an ordered series of events in asynchronous programming.
+
+
+#####Example
+```coffee
+promise () ->
+
+assert isPromise promise
+```
+
 
 ### Utility Functions
 
