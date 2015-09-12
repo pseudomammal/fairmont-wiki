@@ -105,7 +105,7 @@ The core functions are functions that provide the functional programming glue fo
 
     ##### Example
 
-```coffee
+    ```coffee
 assert (noOp 7) == undefined
 ```
 
