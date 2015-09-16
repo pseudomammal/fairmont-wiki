@@ -101,7 +101,7 @@ The core functions are functions that provide the functional programming glue fo
 
 #### noOp
 
-    A function that does nothing and returns `undefined`. Useful in conjunction with combinators when you don't want to perform an action.
+A function that does nothing and returns `undefined`. Useful in conjunction with combinators when you don't want to perform an action.
 
 ##### Example
 
@@ -1846,52 +1846,115 @@ assert mage,
 
 #### toString
 
-Converts a value
+Converts a value to a string format.
+
+#####Example
+```coffee
+assert toString 12345 == "12345"
+```
 
 #### toUpper
 
 Makes all characters in a string upper-case.
 
+#####Example
+```coffee
+assert toUpper("allcaps") == "ALLCAPS"
+```
+
 #### toLower
 
 Makes all characters in a string lower-case.
+
+#####Example
+```coffee
+assert toLower ("LOWERCASE") == "lowercase"
+```
 
 #### plainText
 
 Convert an camel-case or underscore- or dash-separated string into a
 whitespace separated string.
 
+#####Example
+```coffee
+assert plainText ("Camel_under-dash") == "camel under dash"
+```
+
 #### capitalize
 
 Capitalize the first letter of a string.
+
+#####Example
+```coffee
+assert capitalize ("america") == "America"
+```
 
 #### titleCase
 
 Capitalize the first letter of each word in a string.
 
+#####Example
+```coffee
+assert capitalize ("los angeles") == "Los Angeles"
+```
+
 #### camelCase
 
 Convert a sequence of words into a camel-cased string.
+
+#####Example
+```coffee
+assert camelCase ("tostring") == "toString" 
+```
 
 #### underscored
 
 Convert a sequence of words into an underscore-separated string.
 
+#####Example
+```coffee
+assert underscored ("one two three") == "one_two_three" 
+```
+
 #### dashed
 
 Convert a sequence of words into a dash-separated string.
+
+#####Example
+```coffee
+assert dashed ("one two three") == "one-two-three"
+```
 
 #### htmlEscape
 
 Escape a string so that it can be embedded into HTML. Adapted from Mustache.js.
 
+#####Example
+```coffee
+assert htmlEscape ("<a href="www.msnbc.com">News Site</a>") == "&lt;a href=&quot;www.msnbc.com&quot;&gt;News Site&lt;/a&gt;"
+```
+
 #### w
 
 Split a string on whitespace. Useful for concisely creating arrays of strings.
 
+#####Example
+```coffee
+tres = w ("1 2 3")
+console.log(tres)
+# Will print ['1', '2', '3']
+assert tres.length == 3
+```
+
 #### blank
 
 Check to see if a string has zero length.
+
+#####Example
+```coffee
+assert blank ("")
+```
 
 ### Type Functions
 
