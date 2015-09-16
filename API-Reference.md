@@ -53,7 +53,7 @@
 
 
 
-- [Numeric Functions](#numeric-functions): [<small>`gt, lt, gte, lte`</small>](#gt-lt-gte-lte) | [<small>`odd, even`</small>](#odd-even) | [<small>`Functions exported from Math`</small>](#functions-exported-from-math)
+- [Numeric Functions](#numeric-functions): [<small>`gt, lt, gte, lte`</small>](#gt-lt-gte-lte) | [<small>'add, sub, mul, div, mod'</small>](#add-sub-mul-div-mod) | [<small>`odd, even`</small>](#odd-even) | [<small>`Functions exported from Math`</small>](#functions-exported-from-math) | [<small>'min, max'</small>](#minx-max) | [<small>'abs'</small>](#abs)| [<small>'pow'</small>](#pow)
 
 
 
@@ -65,7 +65,7 @@
 
 
 
-- [Type Functions](#type-functions): [<small>`type`</small>](#type) | [<small>`isType`</small>](#istype) | [<small>`instanceOf`</small>](#instanceof) | [<small>`isNumber`</small>](#isnumber) | [<small>`isNaN`</small>](#isnan) | [<small>`isFinite`</small>](#isfinite) | [<small>`isInteger`</small>](#isinteger) | [<small>`isFloat`</small>](#isfloat) | [<small>`isBoolean`</small>](#isboolean) | [<small>`isDate`</small>](#isdate) | [<small>`isRegExp`</small>](#isregexp) | [<small>`isString`</small>](#isstring) | [<small>`isFunction`</small>](#isfunction) | [<small>`isObject`</small>](#isobject) | [<small>`isArray`</small>](#isarray) | [<small>`isDefined`</small>](#isdefined) | [<small>`isGenerator`</small>](#isgenerator) | [<small>`isPromise`</small>](#ispromise)
+- [Type Functions](#type-functions): [<small>`type`</small>](#type) | [<small>`isType`</small>](#istype) | [<small>`instanceOf`</small>](#instanceof) | [<small>`isNumber`</small>](#isnumber) | [<small>`isNaN`</small>](#isnan) | [<small>`isFinite`</small>](#isfinite) | [<small>`isInteger`</small>](#isinteger) | [<small>`isFinite, isInteger, isFloat`</small>](#isfinite-isinteger-isfloat) | [<small>`isBoolean`</small>](#isboolean) | [<small>`isDate`</small>](#isdate) | [<small>`isRegExp`</small>](#isregexp) | [<small>`isString`</small>](#isstring) | [<small>`isFunction`</small>](#isfunction) | [<small>`isObject`</small>](#isobject) | [<small>`isArray`</small>](#isarray) | [<small>`isDefined`</small>](#isdefined) | [<small>`isGenerator`</small>](#isgenerator) | [<small>`isPromise`</small>](#ispromise)
 
 
 
@@ -1413,25 +1413,25 @@ assert odd 5
 
 Gives the lowest or highest value in a set of numbers.
 
-#####Example
+######Example
 ```coffee
 assert max (1, 5, 10) == 10
 ```
 
-####abs
+#####abs
 
 Calculates the absolute value of an argument.
 
-#####Example
+######Example
 ```coffee
 assert abs -5 == 5
 ```
 
-####pow
+#####pow
 
 Multiplies an argument by itself a specified number of times.
 
-####Example
+######Example
 ```coffee
 assert pow(3, 3) == 27
 ```
@@ -1962,6 +1962,11 @@ assert blank ("")
 
 Return the constructor function of the value, or `undefined`.
 
+#####Example
+```coffee
+assert type "word" == String
+```
+
 #### isType
 
 Verifies whether a variable is a specified type.
@@ -1984,21 +1989,33 @@ assert b instanceOf a
 
 #### isNumber
 
-Verifies that a variable has a numeric value.
+Verifies that an input has a numeric value.
+
+#####Example
+```coffee
+assert isNumber 7
+```
 
 #### isNaN
 
+Tests whether a given value is undefined or unrepresentable.
 
-
+#####Example
+```coffee
+assert !isNaN 7
+```
 #### isFinite, isInteger, isFloat
 
-Verifies that is an argument is number of a specific type.
-
-
+Verifies that is an argument is a number of a specific type.
 
 Adapted from [StackOverflow][isFloat].
 
 [isFloat]:http://stackoverflow.com/questions/3885817/how-to-check-if-a-number-is-float-or-integer/3885844#3885844
+
+#####Example
+```coffee
+assert isFloat 3.5
+```
 
 #### isBoolean
 
@@ -2020,7 +2037,12 @@ assert isDate (new Date)
 
 #### isRegExp
 
+Verifies that an input is a regular expression. Regular expressions are used as a basis for string searches.
 
+#####Example
+```coffee
+assert isRegExp /\s/
+```
 
 #### isString
 
@@ -2086,10 +2108,9 @@ assert isGenerator count
 
 #### isPromise
 
-Verifies that a variable is a promise. A promise is essentially a link in a chain of operations, that checks to see whether a given condition has been met. If the condition is fulfilled, it moves on to another designated process (generally another promise). If an unexpected result occurs, the promise is rejected and it moves on to a different designated outcome. In other words, promises have "then" functionality built in.
+Verifies that a variable is a promise. A promise is essentially a link in a chain of operations, that checks to see whether a given condition has been met. If the condition is fulfilled, it moves on to another designated process (generally another promise). If an unexpected result occurs, the promise is rejected and it moves on to a different designated outcome. Otherwise, a promise is in its pending state. In other words, promises have "then" functionality built in.
 
 Among other things, promises allow easier step by step error checking and an ordered series of events in asynchronous programming.
-
 
 #####Example
 ```coffee
