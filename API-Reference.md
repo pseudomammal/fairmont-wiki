@@ -2764,12 +2764,27 @@ For definitions which the value is itself a function, you must wrap the function
 
 A map function allows for the transformation of the arguments for matching purposes. For example, variadic functions can be implemented by simply providing a variadic map function that returns the arguments as an Array.
 
-The `method` function defines a new multimethod, taking an optional description of the method. This can be accessed via the `description` property of the method.
-
-The `define` function adds an entry into the dispatch table. It takes the method, the signature, and the definition (implementation) as arguments.
-
 ### Method
 
 #### Method.create
 
+The `create` function defines a new multimethod, taking an optional description of the method. This can be accessed via the `description` property of the method.
+
+#####Example
+```coffee
+jump = Method.create Description: "Upward Movement"
+```
+
 #### Method.define
+
+The `define` function adds an entry into the dispatch table. It takes the method, the signature, and the definition (implementation) as arguments.
+
+#####Example
+```coffee
+Method.define jump, ((y) -> y <= 0 )
+```
+
+#### Method.lookup
+
+The 'lookup' function calls the 'dispatch' function, which is detailed above.
+
