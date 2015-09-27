@@ -2772,7 +2772,7 @@ The `create` function defines a new multimethod, taking an optional description 
 
 #####Example
 ```coffee
-jump = Method.create Description: "Upward Movement"
+powerTwo = Method.create description: "Squared"
 ```
 
 #### Method.define
@@ -2781,10 +2781,21 @@ The `define` function adds an entry into the dispatch table. It takes the method
 
 #####Example
 ```coffee
-Method.define jump, ((y) -> y <= 0 )
+powerTwo = Method.create description: "Squared"
+Method.define powerTwo, ((x) -> x * x )
+assert (powerTwo 3) == 9
 ```
 
 #### Method.lookup
 
 The 'lookup' function calls the 'dispatch' function, which is detailed above.
 
+#####Example
+```coffee
+powerTwo = Method.create()
+
+Method.define powerTwo, Number, (x) -> x * x
+
+f = Method.lookup powerTwo, [ 4 ]
+assert (powerTwo 4) == 16
+```
