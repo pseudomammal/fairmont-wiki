@@ -87,7 +87,7 @@
 
 **[Multimethods](#multimethods)**
 
-- [Method](#method): [<small>`Method.create`</small>](#methodcreate) | [<small>`Method.define`</small>](#methoddefine)
+- [Method](#method): [<small>`Method.create`</small>](#methodcreate) | [<small>`Method.define`</small>](#methoddefine) | [<small>`Method.lookup`</small>](#methodlookup)
 
 <!-- end: toc -->
 
@@ -147,7 +147,7 @@ assert x.length == 3
 
 #### _
 
-Special value to allow for late-binding of an argument. See `partial`.
+Special value to allow for late-binding of an argument. See `[partial](#partial)`.
 
 #### substitute
 
@@ -163,7 +163,7 @@ assert ax[1] == 2
 
 #### partial
 
-Take a function and an argument list and return another function that takes its arguments and concatenates them with the first argument list, first performing argument substitution (see `substitute`).
+Take a function and an argument list and return another function that takes its arguments and concatenates them with the first argument list, first performing argument substitution (see `[substitute](#substitute)`).
 
 ##### Example
 
