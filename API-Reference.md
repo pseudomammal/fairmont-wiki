@@ -2748,6 +2748,8 @@ Fairmont's multi-method dispatch is based on a predicate provided for each argum
 
 Variadic functions can be handled by passing a variadic predicate (that is, a function whose length is 0), will be passed the remaining arguments. Any predicates following a variadic predicate will fail.
 
+Method definitions are considered based on the order in which they were declared. The last definition is considered first. The first definition is considered last. More general definitions should thus be defined first and specializations later.
+
 ### Method
 
 #### Method.create
