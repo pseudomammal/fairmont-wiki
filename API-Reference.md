@@ -85,7 +85,7 @@
 
 
 
-**[Multimethods](#multimethods)**
+**[Multi-methods](#Multi-methods)**
 
 - [Method](#method): [<small>`Method.create`</small>](#methodcreate) | [<small>`Method.define`</small>](#methoddefine) | [<small>`Method.lookup`</small>](#methodlookup)
 
@@ -1905,7 +1905,7 @@ Convert a sequence of words into a camel-cased string.
 
 #####Example
 ```coffee
-assert camelCase ("tostring") == "toString" 
+assert camelCase ("tostring") == "toString"
 ```
 
 #### underscored
@@ -1914,7 +1914,7 @@ Convert a sequence of words into an underscore-separated string.
 
 #####Example
 ```coffee
-assert underscored ("one two three") == "one_two_three" 
+assert underscored ("one two three") == "one_two_three"
 ```
 
 #### dashed
@@ -2738,31 +2738,15 @@ assert (yield isDirectory "#{__dirname}/test-directory") == false
 assert (yield isDirectory "#{__dirname}/test-file") == true
 ```
 
-## Multimethods
+## Multi-methods
 
-[Multimethods][1] are polymorphic functions on their arguments. Methods in JavaScript objects dispatch based only on the (implicit first argument, which is the) object itself. Multimethods provide a more functional and flexible approach.
+[Multi-methods][1] are polymorphic functions on their arguments. Methods in JavaScript objects dispatch based only on the (implicit first argument, which is the) object itself. Multi-methods provide a more functional and flexible approach.
 
 [1]:https://en.wikipedia.org/wiki/Multiple_dispatch
 
-The `dispatch` function is the soul of the multimethod implementation. Our approach is iterate through all the available method implementations (`entries`) and find the best match by checking each argument (given by `ax`).
+Fairmont's multi-method dispatch is based on a predicate provided for each argument. The first implementation for which each of the predicates returns true when given the corresponding argument is chosen.
 
-We score each match based on a set of precedence rules, from highest to lowest:
-
-* A predicate match, ex: `even` for matching an argument that is an even number
-
-* A value match, ex: `5` for matching a specific value
-
-* A type match, defined by a match against the argument's constructor function
-
-* A inherited type match, defined by `instanceof` returning true
-
-All the arguments must match, otherwise the score is zero. If no match is found, the `default` method will be selected.
-
-The method definition can either be a value or a function. If it's a function, the function is run using the given arguments. Otherwise, the value is returned directly.
-
-For definitions which the value is itself a function, you must wrap the function inside another function. The `dispatch` function is not exposed directly.
-
-A map function allows for the transformation of the arguments for matching purposes. For example, variadic functions can be implemented by simply providing a variadic map function that returns the arguments as an Array.
+Variadic functions can be handled by passing a variadic predicate (that is, a function whose length is 0), will be passed the remaining arguments. Any predicates following a variadic predicate will fail.
 
 ### Method
 
@@ -2772,7 +2756,7 @@ The `create` function defines a new multimethod, taking an optional description 
 
 #####Example
 ```coffee
-powerTwo = Method.create description: "Squared"
+Method.create multiply, description: "Multiply two values together"
 ```
 
 #### Method.define
@@ -2781,21 +2765,16 @@ The `define` function adds an entry into the dispatch table. It takes the method
 
 #####Example
 ```coffee
-powerTwo = Method.create description: "Squared"
-Method.define powerTwo, ((x) -> x * x )
-assert (powerTwo 3) == 9
+Method.define multiply, isNumber, isNumber, (x,y) -> x * y
+Method.define multiply, isArray, isNumber, (v, n) -> n * v for x in v
 ```
 
 #### Method.lookup
 
-The 'lookup' function calls the 'dispatch' function, which is detailed above.
+The 'lookup' function calls the 'dispatch' function, which is described above. This allows you to select a function without invoking it.
 
 #####Example
 ```coffee
-powerTwo = Method.create()
-
-Method.define powerTwo, Number, (x) -> x * x
-
-f = Method.lookup powerTwo, [ 4 ]
-assert (powerTwo 4) == 16
+f = Method.lookup multiply, [7, 5]
+assert (f 7, 5) == 35
 ```
