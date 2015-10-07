@@ -49,11 +49,11 @@
 
 
 
-- [Generators](#generators): [<small>`async`</small>](#async) | [<small>`call`</small>](#call)
+- [Generators](#generators): [<small>`call`</small>](#call) | [<small>`async`</small>](#async)
 
 
 
-- [Numeric Functions](#numeric-functions): [<small>`gt, lt, gte, lte`</small>](#gt-lt-gte-lte) | [<small>'add, sub, mul, div, mod'</small>](#add-sub-mul-div-mod) | [<small>`odd, even`</small>](#odd-even) | [<small>`Functions exported from Math`</small>](#functions-exported-from-math) | [<small>'min, max'</small>](#minx-max) | [<small>'abs'</small>](#abs)| [<small>'pow'</small>](#pow)
+- [Numeric Functions](#numeric-functions): [<small>`gt, lt, gte, lte`</small>](#gt-lt-gte-lte) | [<small>`odd, even`</small>](#odd-even) | [<small>`Functions exported from Math`</small>](#functions-exported-from-math)
 
 
 
@@ -65,7 +65,7 @@
 
 
 
-- [Type Functions](#type-functions): [<small>`type`</small>](#type) | [<small>`isType`</small>](#istype) | [<small>`instanceOf`</small>](#instanceof) | [<small>`isNumber`</small>](#isnumber) | [<small>`isNaN`</small>](#isnan) | [<small>`isFinite`</small>](#isfinite) | [<small>`isInteger`</small>](#isinteger) | [<small>`isFinite, isInteger, isFloat`</small>](#isfinite-isinteger-isfloat) | [<small>`isBoolean`</small>](#isboolean) | [<small>`isDate`</small>](#isdate) | [<small>`isRegExp`</small>](#isregexp) | [<small>`isString`</small>](#isstring) | [<small>`isFunction`</small>](#isfunction) | [<small>`isObject`</small>](#isobject) | [<small>`isArray`</small>](#isarray) | [<small>`isDefined`</small>](#isdefined) | [<small>`isGenerator`</small>](#isgenerator) | [<small>`isPromise`</small>](#ispromise)
+- [Type Functions](#type-functions): [<small>`prototype`</small>](#prototype) | [<small>`isPrototype`</small>](#isprototype) | [<small>`isType`</small>](#istype) | [<small>`isTransitivePrototype`</small>](#istransitiveprototype) | [<small>`isKind`</small>](#iskind) | [<small>`instanceOf`</small>](#instanceof) | [<small>`isNumber`</small>](#isnumber) | [<small>`isNaN`</small>](#isnan) | [<small>`isFinite`</small>](#isfinite) | [<small>`isInteger`</small>](#isinteger) | [<small>`isFloat`</small>](#isfloat) | [<small>`isBoolean`</small>](#isboolean) | [<small>`isDate`</small>](#isdate) | [<small>`isRegExp`</small>](#isregexp) | [<small>`isString`</small>](#isstring) | [<small>`isFunction`</small>](#isfunction) | [<small>`isObject`</small>](#isobject) | [<small>`isArray`</small>](#isarray) | [<small>`isDefined`</small>](#isdefined) | [<small>`isGenerator`</small>](#isgenerator) | [<small>`isPromise`</small>](#ispromise)
 
 
 
@@ -81,11 +81,11 @@
 
 **[File System](#file-system)**
 
-- [File System Functions](#file-system-functions): [<small>`read`</small>](#read) | [<small>`write`</small>](#write) | [<small>`stat`</small>](#stat) | [<small>`exists`</small>](#exists) | [<small>`readDir / readdir`</small>](#readdir--readdir) | [<small>`ls`</small>](#ls) | [<small>`lsR / lsr`</small>](#lsr--lsr) | [<small>`glob`</small>](#glob) |  [<small>`chDir / chdir`</small>](#chdir--chdir) | [<small>`mv`</small>](#mv) | [<small>`cp`</small>](#cp) | [<small>`rm`</small>](#rm) | [<small>`rmDir / rmdir`</small>](#rmdir--rmdir) | [<small>`isDirectory`</small>](#isdirectory) | [<small>`isFile`</small>](#isfile) | [<small>`mkDir / mkdir`</small>](#mkdir--mkdir) | [<small>`mkDirP / mkdirp`</small>](#mkdirp--mkdirp)
+- [File System Functions](#file-system-functions): [<small>`read`</small>](#read) | [<small>`write`</small>](#write) | [<small>`stat`</small>](#stat) | [<small>`exists`</small>](#exists) | [<small>`readDir / readdir`</small>](#readdir--readdir) | [<small>`ls`</small>](#ls) | [<small>`lsR / lsr`</small>](#lsr--lsr) | [<small>`glob`</small>](#glob) | [<small>`chDir / chdir`</small>](#chdir--chdir) | [<small>`mv`</small>](#mv) | [<small>`cp`</small>](#cp) | [<small>`rm`</small>](#rm) | [<small>`rmDir / rmdir`</small>](#rmdir--rmdir) | [<small>`mkDir / mkdir`</small>](#mkdir--mkdir) | [<small>`mkDirP / mkdirp`</small>](#mkdirp--mkdirp) | [<small>`isDirectory`</small>](#isdirectory) | [<small>`isFile`</small>](#isfile)
 
 
 
-**[Multi-methods](#Multi-methods)**
+**[Multi-methods](#multimethods)**
 
 - [Method](#method): [<small>`Method.create`</small>](#methodcreate) | [<small>`Method.define`</small>](#methoddefine) | [<small>`Method.lookup`</small>](#methodlookup)
 
@@ -1958,34 +1958,51 @@ assert blank ("")
 
 ### Type Functions
 
-#### type
+#### prototype
 
-Return the constructor function of the value, or `undefined`.
+Returns the prototype of the given value using `Object.getPrototypeOf`.
 
-#####Example
+#### isPrototype
+
+Binary predicate for determining whether the given prototype is the prototype for the given value.
+
+##### Example
+
 ```coffee
-assert type "word" == String
+assert isPrototype Number.prototype, 7
 ```
-
 #### isType
 
 Verifies whether a variable is a specified type.
 
-#####Example:
+##### Example:
 ```coffee
 assert isType String, "word"
 ```
 
+#### isTransitivePrototype
+
+Binary predicate for determining whether the given prototype is in the prototype chain for the given value.
+
+##### Example
+
+```coffee
+assert isTransitivePrototype Error.prototype, (new TypeError)
+```
+
+#### isKind
+
+Binary predicate for determining whether the given type's `prototype` property is in the prototype chain for the given value.
+
+##### Example
+
+```coffee
+assert isKind Error, (new TypeError)
+```
+
 #### instanceOf
 
-Curries a variable to allow future evaluations of descendants.
-
-#####Example:
-```coffee
-a = -> isType()
-b = new a
-assert b instanceOf a
-```
+Wrapper around `instanceof` operator.
 
 #### isNumber
 
@@ -1998,13 +2015,18 @@ assert isNumber 7
 
 #### isNaN
 
-Tests whether a given value is undefined or unrepresentable.
+Verifies whether a given value is `NaN`.
 
 #####Example
 ```coffee
 assert !isNaN 7
 ```
-#### isFinite, isInteger, isFloat
+#### isFinite
+
+#### isInteger
+
+
+#### isFloat
 
 Verifies that is an argument is a number of a specific type.
 
