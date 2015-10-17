@@ -53,7 +53,7 @@
 
 
 
-- [Numeric Functions](#numeric-functions): [<small>`gt, lt, gte, lte`</small>](#gt-lt-gte-lte) | [<small>`odd, even`</small>](#odd-even) | [<small>`Functions exported from Math`</small>](#functions-exported-from-math)
+- [Numeric Functions](#numeric-functions): [<small>`eq, neq`</small>](#eq-neq) | [<small>`gt, lt, gte, lte`</small>](#gt-lt-gte-lte) | [<small>`odd, even`</small>](#odd-even) | [<small>`Functions exported from Math`</small>](#functions-exported-from-math)
 
 
 
@@ -1376,6 +1376,18 @@ call ->
 
 
 ### Numeric Functions
+
+#### eq, neq
+
+Curries a value to evaluate whether a future value is equivalent or not equivalent.
+
+#####Example
+```coffee
+isEqual = eq 5
+notEqual = neq 5
+assert isEqual 5
+assert notEqual 6
+```
 
 #### gt, lt, gte, lte
 
