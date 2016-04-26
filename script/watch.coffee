@@ -6,6 +6,7 @@ root = join __dirname, ".."
 watched = [
   join root, "api-reference.md.tmpl"
   join root, "api-reference.yaml"
+  join root, "-api-reference.yaml"
 ]
 chokidar.watch watched
 .on "change", -> compile()
