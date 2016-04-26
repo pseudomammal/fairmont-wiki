@@ -13,7 +13,12 @@
   },
   "homepage": "https://github.com/pandastrike/fairmont.wiki#readme",
   "dependencies": {
-    "fairmont": "^1.0.0-beta-24",
-    "marked": "^0.3.5"
+    "chokidar": "^1.4.3",
+    "fairmont": "^1.0.0",
+    "handlebars": "^4.0.5",
+    "marked": "^0.3.5",
+    "panda-rw": "^1.0.0-beta-02",
+    "sprintf": "^0.1.5",
+    "swag": "^0.7.0"
   }
 }

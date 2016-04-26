@@ -1,0 +1,48 @@
+# Fairmont API Reference
+
+## Table of Contents
+
+{{#.}}
+#### [{{title}}](#{{name title}})
+{{#content}}
+- {{#title}}**[{{.}}](#{{name .}})**{{/title}}
+{{#content}}
+[{{title}}](#{{name title}})
+{{#unless @last}} | {{/unless}}{{/content}}
+{{/content}}
+
+{{/.}}
+
+{{#.}}
+## {{title}}
+
+[{{module}}](https://github.com/pandastrike/{{module}})
+
+{{description}}
+
+{{#content}}
+
+### {{title}}
+
+{{description}}
+
+{{#content}}
+
+#### {{title}}
+
+{{#taking}}**Takes** {{.}} ⇒{{/taking}}
+{{#returning}}**Returns** {{.}}{{/returning}}
+
+{{description}}
+
+{{#example}}
+```coffee
+{{.}}
+```
+{{/example}}
+
+{{/content}}
+
+{{/content}}
+
+{{/.}}
