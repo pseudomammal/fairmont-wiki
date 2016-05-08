@@ -5,10 +5,13 @@
 {{#.}}
 #### [{{title}}](#{{name title}})
 {{#content}}
+<small>
 - {{#title}}**[{{.}}](#{{name .}})**{{/title}}
 {{#content}}
 [{{title}}](#{{name title}})
-{{#unless @last}} | {{/unless}}{{/content}}
+{{#unless @last}} | {{/unless}}
+{{/content}}
+</small>
 {{/content}}
 
 {{/.}}
@@ -30,16 +33,26 @@
 
 #### {{title}}
 
-{{#taking}}**Takes** {{.}} ⇒{{/taking}}
-{{#returning}}**Returns** {{.}}{{/returning}}
+{{#signature}}
+_{{taking}} ⇒ {{returning}}_
+{{/signature}}
 
 {{description}}
 
-{{#example}}
+{{#examples}}
+
+{{#title}}
+##### Example: {{.}}
+{{^}}
+##### Example
+{{/title}}
+
+{{description}}
+
 ```coffee
-{{.}}
+{{code}}
 ```
-{{/example}}
+{{/examples}}
 
 {{/content}}
 

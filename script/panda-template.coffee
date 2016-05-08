@@ -36,7 +36,7 @@ H.registerHelper
   name: (heading) ->
     heading
     .toLowerCase()
-    .replace /[^\w\s]/g, ""
+    .replace /[^\w\s\-]/g, ""
     .replace /\s/g, "-"
 
 
