@@ -29,9 +29,13 @@
  | 
 [spread](#spread)
  | 
-[unary, binary, and ternary](#unary-binary-and-ternary)
+[unary / binary / ternary](#unary--binary--ternary)
  | 
 [negate](#negate)
+ | 
+[once](#once)
+ | 
+[given](#given)
 
 </small>
 
@@ -43,6 +47,204 @@
 [define](#define)
  | 
 [lookup](#lookup)
+
+</small>
+
+#### [Helpers](#helpers)
+<small>
+- **[Array Helpers](#array-helpers)**
+[push](#push)
+ | 
+[cat](#cat)
+ | 
+[slice](#slice)
+ | 
+[first, second, third, fourth, fifth](#first-second-third-fourth-fifth)
+ | 
+[nth](#nth)
+ | 
+[last](#last)
+ | 
+[rest](#rest)
+ | 
+[includes](#includes)
+ | 
+[unique](#unique)
+ | 
+[uniqueBy](#uniqueby)
+ | 
+[dupes](#dupes)
+ | 
+[union](#union)
+ | 
+[intersection](#intersection)
+ | 
+[difference](#difference)
+ | 
+[complement](#complement)
+ | 
+[remove](#remove)
+ | 
+[shuffle](#shuffle)
+ | 
+[range](#range)
+
+</small>
+<small>
+- **[Hashing/Encoding Helpers](#hashingencoding-helpers)**
+[md5](#md5)
+ | 
+[base64](#base64)
+ | 
+[base64url](#base64url)
+
+</small>
+<small>
+- **[Promise Helpers](#promise-helpers)**
+[call](#call)
+ | 
+[async](#async)
+
+</small>
+<small>
+- **[Math Helpers](#math-helpers)**
+[eq / neq](#eq--neq)
+ | 
+[gt / lt / gte / lte](#gt--lt--gte--lte)
+ | 
+[add / sub / mul / div / mod](#add--sub--mul--div--mod)
+ | 
+[abs](#abs)
+ | 
+[min / max](#min--max)
+ | 
+[odd / even](#odd--even)
+
+</small>
+<small>
+- **[Object Functions](#object-functions)**
+[include, extend](#include-extend)
+ | 
+[merge](#merge)
+ | 
+[clone](#clone)
+ | 
+[property](#property)
+ | 
+[delegate](#delegate)
+ | 
+[bind](#bind)
+ | 
+[detach](#detach)
+ | 
+[properties](#properties)
+ | 
+[has](#has)
+ | 
+[keys](#keys)
+ | 
+[values](#values)
+ | 
+[pairs](#pairs)
+ | 
+[pick](#pick)
+ | 
+[omit](#omit)
+ | 
+[query](#query)
+ | 
+[toJSON, fromJSON](#tojson-fromjson)
+
+</small>
+<small>
+- **[String Functions](#string-functions)**
+[toString](#tostring)
+ | 
+[toUpper](#toupper)
+ | 
+[toLower](#tolower)
+ | 
+[plainText](#plaintext)
+ | 
+[capitalize](#capitalize)
+ | 
+[titleCase](#titlecase)
+ | 
+[camelCase](#camelcase)
+ | 
+[underscored](#underscored)
+ | 
+[dashed](#dashed)
+ | 
+[htmlEscape](#htmlescape)
+ | 
+[w](#w)
+ | 
+[blank](#blank)
+
+</small>
+<small>
+- **[Type Functions](#type-functions)**
+[prototype](#prototype)
+ | 
+[isPrototype](#isprototype)
+ | 
+[isType](#istype)
+ | 
+[isTransitivePrototype](#istransitiveprototype)
+ | 
+[isKind](#iskind)
+ | 
+[instanceOf](#instanceof)
+ | 
+[isNumber](#isnumber)
+ | 
+[isNaN](#isnan)
+ | 
+[isFinite](#isfinite)
+ | 
+[isInteger](#isinteger)
+ | 
+[isFloat](#isfloat)
+ | 
+[isBoolean](#isboolean)
+ | 
+[isDate](#isdate)
+ | 
+[isRegExp](#isregexp)
+ | 
+[isString](#isstring)
+ | 
+[isFunction](#isfunction)
+ | 
+[isObject](#isobject)
+ | 
+[isArray](#isarray)
+ | 
+[isDefined](#isdefined)
+ | 
+[isGeneratorFunction](#isgeneratorfunction)
+ | 
+[isPromise](#ispromise)
+
+</small>
+<small>
+- **[Utility Functions](#utility-functions)**
+[memoize](#memoize)
+ | 
+[timer](#timer)
+ | 
+[sleep](#sleep)
+ | 
+[times](#times)
+ | 
+[benchmark](#benchmark)
+ | 
+[empty](#empty)
+ | 
+[length](#length)
+ | 
+[deepEqual](#deepequal)
 
 </small>
 
@@ -153,198 +355,6 @@
 [join](#join)
  | 
 [delimit](#delimit)
-
-</small>
-
-#### [Helpers](#helpers)
-<small>
-- **[Array Helpers](#array-helpers)**
-[push](#push)
- | 
-[cat](#cat)
- | 
-[slice](#slice)
- | 
-[first, second, third, fourth, fifth](#first-second-third-fourth-fifth)
- | 
-[nth](#nth)
- | 
-[last](#last)
- | 
-[rest](#rest)
- | 
-[includes](#includes)
- | 
-[unique](#unique)
- | 
-[uniqueBy](#uniqueby)
- | 
-[dupes](#dupes)
- | 
-[union](#union)
- | 
-[intersection](#intersection)
- | 
-[difference](#difference)
- | 
-[complement](#complement)
- | 
-[remove](#remove)
- | 
-[shuffle](#shuffle)
- | 
-[range](#range)
-
-</small>
-<small>
-- **[Hashing/Encoding Functions](#hashingencoding-functions)**
-[md5](#md5)
- | 
-[base64](#base64)
- | 
-[base64url](#base64url)
-
-</small>
-<small>
-- **[Generators](#generators)**
-[call](#call)
- | 
-[async](#async)
-
-</small>
-<small>
-- **[Numeric Functions](#numeric-functions)**
-[gt, lt, gte, lte](#gt-lt-gte-lte)
- | 
-[odd, even](#odd-even)
- | 
-[Functions exported from Math](#functions-exported-from-math)
-
-</small>
-<small>
-- **[Object Functions](#object-functions)**
-[include, extend](#include-extend)
- | 
-[merge](#merge)
- | 
-[clone](#clone)
- | 
-[property](#property)
- | 
-[delegate](#delegate)
- | 
-[bind](#bind)
- | 
-[detach](#detach)
- | 
-[properties](#properties)
- | 
-[has](#has)
- | 
-[keys](#keys)
- | 
-[values](#values)
- | 
-[pairs](#pairs)
- | 
-[pick](#pick)
- | 
-[omit](#omit)
- | 
-[query](#query)
- | 
-[toJSON, fromJSON](#tojson-fromjson)
-
-</small>
-<small>
-- **[String Functions](#string-functions)**
-[toString](#tostring)
- | 
-[toUpper](#toupper)
- | 
-[toLower](#tolower)
- | 
-[plainText](#plaintext)
- | 
-[capitalize](#capitalize)
- | 
-[titleCase](#titlecase)
- | 
-[camelCase](#camelcase)
- | 
-[underscored](#underscored)
- | 
-[dashed](#dashed)
- | 
-[htmlEscape](#htmlescape)
- | 
-[w](#w)
- | 
-[blank](#blank)
-
-</small>
-<small>
-- **[Type Functions](#type-functions)**
-[prototype](#prototype)
- | 
-[isPrototype](#isprototype)
- | 
-[isType](#istype)
- | 
-[isTransitivePrototype](#istransitiveprototype)
- | 
-[isKind](#iskind)
- | 
-[instanceOf](#instanceof)
- | 
-[isNumber](#isnumber)
- | 
-[isNaN](#isnan)
- | 
-[isFinite](#isfinite)
- | 
-[isInteger](#isinteger)
- | 
-[isFloat](#isfloat)
- | 
-[isBoolean](#isboolean)
- | 
-[isDate](#isdate)
- | 
-[isRegExp](#isregexp)
- | 
-[isString](#isstring)
- | 
-[isFunction](#isfunction)
- | 
-[isObject](#isobject)
- | 
-[isArray](#isarray)
- | 
-[isDefined](#isdefined)
- | 
-[isGenerator](#isgenerator)
- | 
-[isPromise](#ispromise)
-
-</small>
-<small>
-- **[Utility Functions](#utility-functions)**
-[memoize](#memoize)
- | 
-[timer](#timer)
- | 
-[sleep](#sleep)
- | 
-[times](#times)
- | 
-[benchmark](#benchmark)
- | 
-[empty](#empty)
- | 
-[length](#length)
- | 
-[deepEqual](#deepequal)
 
 </small>
 
@@ -624,7 +634,7 @@ assert.equal 120, product [1..5]
 ```
 
 
-#### unary, binary, and ternary
+#### unary / binary / ternary
 
 
 Take a given function taking a variable number of arguments and return one taking 1, 2, or 3 arguments. Useful in conjuction with `curry`.
@@ -657,6 +667,24 @@ _false = -> false
 _true = negate _false
 assert _true()
 ```
+
+
+#### once
+
+
+Ensure a function is run only once,
+after which time it will always return the same value.
+
+
+
+
+#### given
+
+
+Convenience function for lexical scoping.
+Mostly useful in CoffeeScript to avoid scope-related errors.
+
+
 
 
 
@@ -740,838 +768,6 @@ The 'lookup' function calls the 'dispatch' function, which is described above. T
 ```coffee
 f = Method.lookup multiply, [7, 5]
 assert (f 7, 5) == 35
-```
-
-
-
-## Reactive
-
-[fairmont-reactive](https://github.com/pandastrike/fairmont-reactive)
-
-Reactive programming functions provide support for reactive programming based on JavaScript iterators, generators, and promises.
-
-
-### Iterators
-
-Iterators are [defined in ES6][]:
-> An object is an iterator when it knows how to access items from a collection one at a time, while keeping track of its current position within that sequence. In JavaScript an iterator is an object that provides a next() method which returns the next item in the sequence. This method returns an object with two properties: done and value.
-In Fairmont, we refer to such an object, in general, as a _product_.
-[defined in ES6]:https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Iterators_and_Generators
-
-
-#### isIterable
-
-
-Predicate that returns true if the argument is iterable. That is, if it has a `Symbol.iterator` property or is a generator function.
-
-
-##### Example
-
-
-
-```coffee
-
-```
-
-
-#### isIterator
-
-
-A predicate that returns true if the argument is an iterator.
-Iterators are iterable (that is, they have a `Symbol.iterator` property) and also have a `next` property whose value is a function.
-
-
-##### Example
-
-
-
-```coffee
-assert isIterator iterator [1..5]
-```
-
-
-#### iterator
-
-
-The `iterator` function takes a given value and attempts to return an iterator using the value.
-If the value is an iterable, we simply call the function returned by the `Symbol.iterator` property.
-If the value is a already an iterator, we simply return it.
-If the value is a generator, we call the generator.
-If the value is a function, we assign it's `Symbol.iterator` and `next` properties to itself, and return it. (This makes it possible to convert arbitrary functions into iterators, too.)
-
-
-##### Example
-
-
-
-```coffee
-i = iterator [1..5]
-assert 1 == value next i
-assert 2 == value next i
-assert 3 == value next i
-assert 4 == value next i
-assert 5 == value next i
-assert isDone next i
-```
-
-
-#### next
-
-
-Given an iterator or reactor, return a product. Equivalent to calling `i.next()` for a given iterator `i`.
-
-
-
-#### value
-
-
-Returns the `value` property from a product. Equivalent to calling `x.value` for a given object `x`.
-
-
-
-#### isDone
-
-
-Returns the `done` property from a product. Equivalent to calling `x.done` for a given object `x`.
-
-
-
-
-### Reactors
-
-Reactors are Fairmont's term for asynchronous iterators.
-Asynchronous iterators are an ES7 proposal.
-Instead of returning products, asynchronous iterators (reactors) return Promises that resolve to products (objects with `done` and `value` properties).
-
-
-#### isReagent
-
-
-Analogous to `isIterable`.
-A predicate that returns true if its operand is an asynchronous iterator.
-Specifically, returns true if the `Symbol.asyncIterator` property is defined and is a function.
-Since reactors are based on an ES7 proposal, there are no built-in types that are asynchronous iterables. Fairmont provides a variety of functions for adapting values to reactors. See `reactor`.
-
-
-##### Example
-
-In this example, `events` is a function that takes an event producer and returns a reactor whose products are the given event. See [`events`](#events).
-
-```coffee
-button[Symbol.asyncIterator] = -> events "click", button
-assert isReagent button
-```
-
-
-#### isReactor
-
-
-Analogous to `isIterator`.
-A predicate that returns true if its operand is a reactor.
-Reactors are reagents (that is, they have a `Symbol.asyncIterator` property) and also have a `next` property whose value is a function.
-
-
-##### Example
-
-In this example, `events` is a function that takes an event producer and returns a reactor whose products are the given event. See [`events`](#events).
-
-```coffee
-r = (events "click", button)
-assert isReactor r
-```
-
-
-#### reactor
-
-
-Analogous to `iterator`. The `reactor` function takes a given value and attempts to return an reactor using the value.
-If the value is a reagent, we simply call the function returned by the `Symbol.asyncIterator` property.
-If the value is already a reactor, we simply return it.
-If the value is a function, we assign its `Symbol.asyncIterator` and `next` properties to itself, and return it. (This makes it possible to convert arbitrary functions into reactors, too.)
-If you want to use a generator function as an semi-coroutine, simply pass it in via the [`async`](#async) helper function to convert it into a promise-returning function, and then call `reactor` with the resulting function.
-
-
-##### Example
-
-In this example, `events` is a function that takes an event producer and returns a reactor whose products are the given event. See [`events`](#events).
-
-```coffee
-button[Symbol.asyncIterator] = -> events "click", button
-r = reactor button
-assert isReactor r
-```
-
-
-
-### Observers
-
-Observer functions provide a way to asynchronously observe changes to values. The observer receives a temporally ordered sequence of notifications based on changes to the observed value.
-
-
-#### observe
-
-
-Given an object or an array value, returns an event emitter that generates events when the value is changed.
-
-
-##### Example
-
-
-
-```coffee
-x = value: 7
-events = observe x
-events.on "change", (x) -> y = x.value
-x.value = 3
-assert y == 3
-```
-
-
-
-### Adapters
-
-Adapters are functions that create iterators or reactors (aka, producers) from an existing value, like an Array or an event emitter.
-
-
-#### producer
-
-
-Given a producible (that is, an iterable or reagent), or a Promise that resolves into a producible, returns a corresponding producer. Idempotent: if the operand is a already producer, it is simply returned.
-
-
-##### Example
-
-
-
-```coffee
-i = producer [1..5]
-assert (value next i) == 1
-```
-
-
-#### pull
-
-
-Given an iterator whose product values are Promises, returns a reactor. This is useful if an iterator is used in combination with an asynchronous function.
-
-
-##### Example
-
-Let's suppose we want a function that will convert an iterator that produces pathnames into a reactor producing hashes for the contents of the corresponding files. We might implement it like this.
-
-```coffee
-hashFiles = (pathnames) ->
-  flow [
-    pathnames
-    map (pathname) -> read pathname
-    map (promise) ->
-      promise.then (content) -> md5 content
-  ]
-```
-
-
-#### combine
-
-
-Given two or more producers, combines them into a single producer whose products are those of the given producers in aggregate.
-
-
-##### Example
-
-In the example below, `updates` is an array of reactors producing update functions, perhaps in response to `change` events for fields of a form.
-
-```coffee
-go [
-  combine updates...
-  map (update) -> update data
-]
-```
-
-
-#### repeat
-
-
-Given a value, returns an iterator that always produces that value. Analogous to `wrap`for an iterator.
-
-
-##### Example
-
-
-
-```coffee
-alwaysTrue = repeat true
-assert alwaysTrue.next()
-```
-
-
-#### events
-
-
-Given an event name and an event emitter, returns a reactor whose products are the events corresponding to the given event name. You can also pass in a dictionary of event names, which makes it possible to specify error and end event names. Otherwise, these default to `error` and `end`.
-
-
-##### Example
-
-
-
-```coffee
-clickStream = events "click", button
-```
-
-
-#### stream
-
-
-Given a stream object, returns a reactor whose products correspond to those of the stream. This is useful for treating a stream as a reactor.
-
-
-##### Example
-
-
-
-```coffee
-tokens = fold cat, [], [
-  stream fs.createReadStream path
-  map (chunk) -> chunk.split /\s+/
-]
-```
-
-
-#### flow
-
-
-Given an producer and a list of functions, composes the functions (via [`pipe`](#pipe)) and then invokes the resulting function with the producer, returning another producer.
-
-
-##### Example
-
-
-
-```coffee
-squares = (numbers) ->
-  flow [
-    numbers
-    map (n) -> n * n
-  ]
-
-i = squares [1..5]
-assert (value next i) == 1
-assert (value next i) == 4
-assert (value next i) == 9
-assert (value next i) == 16
-assert (value next i) == 25
-assert isDone i
-```
-
-
-
-### Filters
-
-Filters transform producers into other producers.
-
-
-#### map
-
-
-Given a unary function and a producer, returns a new producer whose products are obtained by applying the function to the products of the original producer.
-
-
-##### Example
-
-
-
-```coffee
-i = map Math.sqrt, [1,4,9,16,25]
-assert (value next i) == 1
-assert (value next i) == 2
-assert (value next i) == 3
-assert (value next i) == 4
-assert (value next i) == 5
-assert isDone i
-```
-
-
-#### accumulate
-
-
-Given a binary function, an initial value, and a producer, returns a new producer whose products are obtained by applying the function to a running (accumulated) value and the products of the original producer.
-This works like [`reduce`](#reduce) except it produces the values returned by the reduce function instead of just the final value.
-
-
-##### Example
-
-
-
-```coffee
-i = accumulate add, 0, [1..5]
-assert (value next i) == 1
-assert (value next i) == 3
-assert (value next i) == 6
-assert (value next i) == 10
-assert (value next i) == 15
-assert isDone i
-```
-
-
-#### select/filter
-
-
-Given a function and a producer, return a producer whose products are obtained by applying the function to the products of the original producer until it finds one for which the function return true.
-
-
-##### Example
-
-
-
-```coffee
-i = select odd, [1..5]
-assert (value next i) == 1
-assert (value next i) == 3
-assert (value next i) == 5
-assert isDone i
-```
-
-
-#### reject
-
-
-Given a function and a producer, return a producer whose products are obtained by applying the function to the products of the original producer until it finds one for which the function return false. This is the complement to [`select`](#select).
-
-
-##### Example
-
-
-
-```coffee
-i = reject odd, [1..5]
-assert (value next i) == 2
-assert (value next i) == 4
-assert isDone i
-```
-
-
-#### project
-
-
-Given a property specifier (see [`property`](#property)) and a producer, return a producer whose products are obtained by taking the given property from the product values of the original producer. Equalent to `map (property specifier)`.
-
-
-##### Example
-
-
-
-```coffee
-i = project ["name", "first"], people
-assert (value next i) == "Jack"
-assert (value next i) == "Jill"
-```
-
-
-#### compact
-
-
-Given a producer, returns a producer whose products are the products from the original producer with defined values. Equivalent to `select isDefined`.
-
-
-##### Example
-
-
-
-```coffee
-i = compact [1, undefined, 2, undefined, 3]
-assert (value next i) == 1
-assert (value next i) == 2
-assert (value next i) == 3
-assert isDone i
-```
-
-
-#### partition
-
-
-Given an integer and a producer, returns a producers whose products are arrays of products from the original producer, whose length is equal to (or less than, for the last product) the given integer.
-
-
-##### Example
-
-
-
-```coffee
-i = partition 2, [1..10]
-assert (first value next i) == 1
-assert (first value next i) == 3
-assert (first value next i) == 5
-assert (first value next i) == 7
-assert (first value next i) == 9
-assert isDone i
-```
-
-
-#### take
-
-
-Given a function and a producer, return a producer whose products are those of the original producer, until the given function returns false when applied to the products.
-
-
-##### Example
-
-
-
-```coffee
-i = take ((n) -> n <= 5), [1..10]
-assert (value next i) == 1
-assert (value next i) == 2
-assert (value next i) == 3
-assert (value next i) == 4
-assert (value next i) == 5
-assert isDone i
-```
-
-
-#### takeN
-
-
-Given an integer _n_ and a producer, returns a producer whose products are the first _n_ products of the original producer.
-
-
-##### Example
-
-
-
-```coffee
-i = takeN 5, [1..10]
-assert (value next i) == 1
-assert (value next i) == 2
-assert (value next i) == 3
-assert (value next i) == 4
-assert (value next i) == 5
-assert isDone i
-```
-
-
-#### where
-
-
-Given a query _q_ and a producer _p_, equivalent to `select query q, p`. See also: [`query`](#query).
-
-
-##### Example
-
-
-
-```coffee
-i = where length: 3, ["one", "two", "three"]
-assert (value next i) == "one"
-assert (value next i) == "two"
-assert isDone i
-```
-
-
-#### lines
-
-
-Given a producer whose products are strings, returns a producer whose products are the strings of the original producer, delimited by newlines.
-
-
-##### Example
-
-Define a functon that computes the average line length of a given file.
-
-```coffee
-averageLineLength = (path) ->
-  average [
-    stream create fs.createReadStream path
-    lines
-    project "length"
-  ]
-```
-
-
-#### tee
-
-
-Given a function and a producer, returns a producer whose products are those of the original producers. The given function is also applied to the original products. This function is like `map` except that it doesn't return the result of applying the function to the original product, it just returns the product. This is useful if you want to use the product more than once within a flow.
-
-
-##### Example
-
-Here's an HTTP server that passes a request context to a handler and then logs it in a fashion similar to Express/Connect middleware.
-
-```coffee
-go [
-  events "request", server
-  map spread (request, response) -> {request, response}
-  tee (context) -> handler context
-  map spread logger
-]
-```
-
-
-#### throttle
-
-
-Given a integer specifying an interval in milliseconds and reactor, returns a reactor whose product are those of the original reactor, provided that the interval between any consecutive products is greater than the given interval. Products are discarded until the interval is reached or exceeded.
-
-
-##### Example
-
-Here is a file update watcher that ignores updates that occur close together.
-
-```coffee
-watch = (path, interval=3000) ->
-  go [
-    events "change", fs.watch path
-    throttle interval
-  ]
-```
-
-
-#### pump
-
-
-Given a stream and a producer, returns a producer whose products are the stream after writing the product of the original producer to the stream.
-
-
-##### Example
-
-Here is a simple echo server.
-
-```coffee
-go [
-  events name: "connection", end: "close",
-    net.createServer().listen(1337)
-  map (s) ->
-    go [
-      stream s
-      pump s
-    ]
-]
-```
-
-
-#### zip
-
-
-Given a function and two producers, return a producer whose products are obtained by applying the given function to the products of the original producer.
-
-
-
-
-### Reducers
-
-Some functions _reduce_ an iterator into another value. Once a reduce function is introduced, the associated iterator functions will run.
-
-
-#### fold/reduce
-
-
-Given a function, an initial value, and a producer, reduce the producer to a single value, ex: sum a list of integers.
-
-
-##### Example
-
-
-
-```coffee
-assert (reduce add, 0, [1..5]) == 15
-```
-
-
-#### foldr/reduceRight
-
-
-Given an initial value, a function, and a producer, reduce the producer to a single value, ex: sum a list of integers, starting from the last (or rightmost) value.
-
-
-##### Example
-
-
-
-```coffee
-assert (foldr add, "", "panama") == "amanap"
-```
-
-
-#### collect
-
-
-Given a producer, collect its product values into an array.
-
-
-##### Example
-
-
-
-```coffee
-results = collect accumulate add, 0, [1..5]
-assert results[0] == 1
-assert results[0] == 3
-assert results[0] == 6
-assert results[0] == 10
-assert results[0] == 15
-assert results.length == 5
-```
-
-
-#### each
-
-
-Given a function _f_ and a producer _p_, equivalent to `start map f, p`. Useful for applying a function to a producer without collecting the results.
-
-
-##### Example
-
-
-
-```coffee
-each ((value) -> console.log value), [1..5]
-```
-
-
-#### start
-
-
-Given a reactor, calls `next` until the reactor is exhausted. (That is, it's products' `done` property returns true.) Does not return a value.
-
-
-##### Example
-
-
-
-```coffee
-start map log, events
-```
-
-
-#### any
-
-
-Given a function and a producer, return true if the given function returns true for any product value.
-
-
-##### Example
-
-
-
-```coffee
-assert any odd, [1..5]
-```
-
-
-#### all
-
-
-Given a function and a producer, return true if the given function returns true for all the product values.
-
-
-##### Example
-
-
-
-```coffee
-assert all ((n) -> n <= 5), [1..5]
-```
-
-
-#### assoc
-
-
-Given an producer whose products are associative pairs, return an object whose keys are the first element of the pair and whose values are the second element of the pair.
-
-
-##### Example
-
-
-
-```coffee
-person = assoc [["name", "Long John Silver"], ["occupation"], "Pirate"]]
-assert person.name == "Long John Silver" &&
-  person.occupation == "Pirate"
-```
-
-
-#### flatten
-
-
-Given a producer whose product values may themselves be producers, return an array whose elements are the products of a depth-first traversal of the resulting producer tree.
-
-
-##### Example
-
-
-
-```coffee
-values = (flatten [1, [2, 3], 4, [5, [6, 7]]])
-assert values[0] == 1
-assert values[0] == 2
-assert values[0] == 3
-assert values[0] == 4
-assert values[0] == 5
-assert values[0] == 6
-assert values[0] == 7
-assert (length values) == 7
-```
-
-
-#### sum
-
-
-Given a producer _p_ whose products are numbers, return their sum. Equivalent to `fold add, 0`.
-
-
-##### Example
-
-
-
-```coffee
-assert (sum [1..5]) == 15
-```
-
-
-#### average
-
-
-Given a producer _p_ whose products are numbers, return their average.
-
-
-##### Example
-
-
-
-```coffee
-assert (average [1..5]) == 3
-```
-
-
-#### join
-
-
-Given a producer whose products are strings, concatenate the strings. Unlike `Array::join`, this function does not delimit the strings. See also: `delimit`.
-This is here instead of in [String Functions](./string.litcoffee) to avoid forward declaring `fold`.
-
-
-##### Example
-
-
-
-```coffee
-assert (join w "one two three") == "onetwothree"
-```
-
-
-#### delimit
-
-
-Given a delimiter and a producer whose products are strings, concatenate the strings using the delimiter.
-Like `join`, except that it each string is separated with the delimiter. Similar to `Array::join`, except there's no default delimiter and the function is curried. Calling `delimit ' '` is the same as calling `Array::join` with no delimiter argument.
-
-
-##### Example
-
-
-
-```coffee
-assert (delimit ", ", w "one two three") == "one, two, three"
 ```
 
 
@@ -2027,7 +1223,7 @@ assert.deepEqual output, []
 
 
 
-### Hashing/Encoding Functions
+### Hashing/Encoding Helpers
 
 
 
@@ -2095,7 +1291,7 @@ assert output == "YWJjMTIzIT8kKiYoKSctPUB-fg"
 
 
 
-### Generators
+### Promise Helpers
 
 
 
@@ -2173,28 +1369,55 @@ call ->
 
 
 
-### Numeric Functions
+### Math Helpers
 
 
-
-
-#### gt, lt, gte, lte
-
-
-Curries a value to allow future evaluation of relative value.
-
-
-##### Example
-
-
+Math helpers are useful with combinators.
+For example, we might derive Euler's number like this:
 
 ```coffee
-recruits = add 5
-assert recruits 1 == 6
+# derive Euler's number
+E = reduce sum, 0, map (compose inverse, factorial), [1..100]
 ```
 
 
-#### odd, even
+
+#### eq / neq
+
+
+
+
+
+
+#### gt / lt / gte / lte
+
+
+
+
+
+
+#### add / sub / mul / div / mod
+
+
+
+
+
+
+#### abs
+
+
+
+
+
+
+#### min / max
+
+
+Gives the lowest or highest value in a set of numbers.
+
+
+
+#### odd / even
 
 
 Evaluates whether a value is odd or even.
@@ -2206,22 +1429,6 @@ Evaluates whether a value is odd or even.
 
 ```coffee
 assert odd 5
-```
-
-
-#### Functions exported from Math
-
-
-#####min, max
-Gives the lowest or highest value in a set of numbers.
-
-
-##### Example
-
-
-
-```coffee
-assert pow(3, 3) == 27
 ```
 
 
@@ -3124,11 +2331,10 @@ assert isDefined String
 ```
 
 
-#### isGenerator
+#### isGeneratorFunction
 
 
-Verifies that a variable is a generator. A generator can be used to systematically create iterators, with the subsequent steps built in ahead of time.
-Generators facilitate automation and simplify the task of creating iterators.
+Verifies that a variable is a generator. A generator can be used to create iterators from functions, using `yield` to control the iteration.
 
 
 ##### Example
@@ -3136,10 +2342,7 @@ Generators facilitate automation and simplify the task of creating iterators.
 
 
 ```coffee
-count = () ->
-  yield 1
-  yield 2
-  yield 3
+count = -> yield 1
 assert isGenerator count
 ```
 
@@ -3147,19 +2350,8 @@ assert isGenerator count
 #### isPromise
 
 
-Verifies that a variable is a promise. A promise is essentially a link in a chain of operations, that checks to see whether a given condition has been met. If the condition is fulfilled, it moves on to another designated process (generally another promise). If an unexpected result occurs, the promise is rejected and it moves on to a different designated outcome. Otherwise, a promise is in its pending state. In other words, promises have "then" functionality built in.
-Among other things, promises allow easier step by step error checking and an ordered series of events in asynchronous programming.
+Verifies that a variable is a promise.
 
-
-##### Example
-
-
-
-```coffee
-promise () ->
-
-assert isPromise promise
-```
 
 
 
@@ -3398,6 +2590,838 @@ b =
 
 assert (a == b) == false  # The comparison operator failed us.
 assert deepEqual a, b     # Again, deepEqual saves the day.
+```
+
+
+
+## Reactive
+
+[fairmont-reactive](https://github.com/pandastrike/fairmont-reactive)
+
+Reactive programming functions provide support for reactive programming based on JavaScript iterators, generators, and promises.
+
+
+### Iterators
+
+Iterators are [defined in ES6][]:
+> An object is an iterator when it knows how to access items from a collection one at a time, while keeping track of its current position within that sequence. In JavaScript an iterator is an object that provides a next() method which returns the next item in the sequence. This method returns an object with two properties: done and value.
+In Fairmont, we refer to such an object, in general, as a _product_.
+[defined in ES6]:https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Iterators_and_Generators
+
+
+#### isIterable
+
+
+Predicate that returns true if the argument is iterable. That is, if it has a `Symbol.iterator` property or is a generator function.
+
+
+##### Example
+
+
+
+```coffee
+
+```
+
+
+#### isIterator
+
+
+A predicate that returns true if the argument is an iterator.
+Iterators are iterable (that is, they have a `Symbol.iterator` property) and also have a `next` property whose value is a function.
+
+
+##### Example
+
+
+
+```coffee
+assert isIterator iterator [1..5]
+```
+
+
+#### iterator
+
+
+The `iterator` function takes a given value and attempts to return an iterator using the value.
+If the value is an iterable, we simply call the function returned by the `Symbol.iterator` property.
+If the value is a already an iterator, we simply return it.
+If the value is a generator, we call the generator.
+If the value is a function, we assign it's `Symbol.iterator` and `next` properties to itself, and return it. (This makes it possible to convert arbitrary functions into iterators, too.)
+
+
+##### Example
+
+
+
+```coffee
+i = iterator [1..5]
+assert 1 == value next i
+assert 2 == value next i
+assert 3 == value next i
+assert 4 == value next i
+assert 5 == value next i
+assert isDone next i
+```
+
+
+#### next
+
+
+Given an iterator or reactor, return a product. Equivalent to calling `i.next()` for a given iterator `i`.
+
+
+
+#### value
+
+
+Returns the `value` property from a product. Equivalent to calling `x.value` for a given object `x`.
+
+
+
+#### isDone
+
+
+Returns the `done` property from a product. Equivalent to calling `x.done` for a given object `x`.
+
+
+
+
+### Reactors
+
+Reactors are Fairmont's term for asynchronous iterators.
+Asynchronous iterators are an ES7 proposal.
+Instead of returning products, asynchronous iterators (reactors) return Promises that resolve to products (objects with `done` and `value` properties).
+
+
+#### isReagent
+
+
+Analogous to `isIterable`.
+A predicate that returns true if its operand is an asynchronous iterator.
+Specifically, returns true if the `Symbol.asyncIterator` property is defined and is a function.
+Since reactors are based on an ES7 proposal, there are no built-in types that are asynchronous iterables. Fairmont provides a variety of functions for adapting values to reactors. See `reactor`.
+
+
+##### Example
+
+In this example, `events` is a function that takes an event producer and returns a reactor whose products are the given event. See [`events`](#events).
+
+```coffee
+button[Symbol.asyncIterator] = -> events "click", button
+assert isReagent button
+```
+
+
+#### isReactor
+
+
+Analogous to `isIterator`.
+A predicate that returns true if its operand is a reactor.
+Reactors are reagents (that is, they have a `Symbol.asyncIterator` property) and also have a `next` property whose value is a function.
+
+
+##### Example
+
+In this example, `events` is a function that takes an event producer and returns a reactor whose products are the given event. See [`events`](#events).
+
+```coffee
+r = (events "click", button)
+assert isReactor r
+```
+
+
+#### reactor
+
+
+Analogous to `iterator`. The `reactor` function takes a given value and attempts to return an reactor using the value.
+If the value is a reagent, we simply call the function returned by the `Symbol.asyncIterator` property.
+If the value is already a reactor, we simply return it.
+If the value is a function, we assign its `Symbol.asyncIterator` and `next` properties to itself, and return it. (This makes it possible to convert arbitrary functions into reactors, too.)
+If you want to use a generator function as an semi-coroutine, simply pass it in via the [`async`](#async) helper function to convert it into a promise-returning function, and then call `reactor` with the resulting function.
+
+
+##### Example
+
+In this example, `events` is a function that takes an event producer and returns a reactor whose products are the given event. See [`events`](#events).
+
+```coffee
+button[Symbol.asyncIterator] = -> events "click", button
+r = reactor button
+assert isReactor r
+```
+
+
+
+### Observers
+
+Observer functions provide a way to asynchronously observe changes to values. The observer receives a temporally ordered sequence of notifications based on changes to the observed value.
+
+
+#### observe
+
+
+Given an object or an array value, returns an event emitter that generates events when the value is changed.
+
+
+##### Example
+
+
+
+```coffee
+x = value: 7
+events = observe x
+events.on "change", (x) -> y = x.value
+x.value = 3
+assert y == 3
+```
+
+
+
+### Adapters
+
+Adapters are functions that create iterators or reactors (aka, producers) from an existing value, like an Array or an event emitter.
+
+
+#### producer
+
+
+Given a producible (that is, an iterable or reagent), or a Promise that resolves into a producible, returns a corresponding producer. Idempotent: if the operand is a already producer, it is simply returned.
+
+
+##### Example
+
+
+
+```coffee
+i = producer [1..5]
+assert (value next i) == 1
+```
+
+
+#### pull
+
+
+Given an iterator whose product values are Promises, returns a reactor. This is useful if an iterator is used in combination with an asynchronous function.
+
+
+##### Example
+
+Let's suppose we want a function that will convert an iterator that produces pathnames into a reactor producing hashes for the contents of the corresponding files. We might implement it like this.
+
+```coffee
+hashFiles = (pathnames) ->
+  flow [
+    pathnames
+    map (pathname) -> read pathname
+    map (promise) ->
+      promise.then (content) -> md5 content
+  ]
+```
+
+
+#### combine
+
+
+Given two or more producers, combines them into a single producer whose products are those of the given producers in aggregate.
+
+
+##### Example
+
+In the example below, `updates` is an array of reactors producing update functions, perhaps in response to `change` events for fields of a form.
+
+```coffee
+go [
+  combine updates...
+  map (update) -> update data
+]
+```
+
+
+#### repeat
+
+
+Given a value, returns an iterator that always produces that value. Analogous to `wrap`for an iterator.
+
+
+##### Example
+
+
+
+```coffee
+alwaysTrue = repeat true
+assert alwaysTrue.next()
+```
+
+
+#### events
+
+
+Given an event name and an event emitter, returns a reactor whose products are the events corresponding to the given event name. You can also pass in a dictionary of event names, which makes it possible to specify error and end event names. Otherwise, these default to `error` and `end`.
+
+
+##### Example
+
+
+
+```coffee
+clickStream = events "click", button
+```
+
+
+#### stream
+
+
+Given a stream object, returns a reactor whose products correspond to those of the stream. This is useful for treating a stream as a reactor.
+
+
+##### Example
+
+
+
+```coffee
+tokens = fold cat, [], [
+  stream fs.createReadStream path
+  map (chunk) -> chunk.split /\s+/
+]
+```
+
+
+#### flow
+
+
+Given an producer and a list of functions, composes the functions (via [`pipe`](#pipe)) and then invokes the resulting function with the producer, returning another producer.
+
+
+##### Example
+
+
+
+```coffee
+squares = (numbers) ->
+  flow [
+    numbers
+    map (n) -> n * n
+  ]
+
+i = squares [1..5]
+assert (value next i) == 1
+assert (value next i) == 4
+assert (value next i) == 9
+assert (value next i) == 16
+assert (value next i) == 25
+assert isDone i
+```
+
+
+
+### Filters
+
+Filters transform producers into other producers.
+
+
+#### map
+
+
+Given a unary function and a producer, returns a new producer whose products are obtained by applying the function to the products of the original producer.
+
+
+##### Example
+
+
+
+```coffee
+i = map Math.sqrt, [1,4,9,16,25]
+assert (value next i) == 1
+assert (value next i) == 2
+assert (value next i) == 3
+assert (value next i) == 4
+assert (value next i) == 5
+assert isDone i
+```
+
+
+#### accumulate
+
+
+Given a binary function, an initial value, and a producer, returns a new producer whose products are obtained by applying the function to a running (accumulated) value and the products of the original producer.
+This works like [`reduce`](#reduce) except it produces the values returned by the reduce function instead of just the final value.
+
+
+##### Example
+
+
+
+```coffee
+i = accumulate add, 0, [1..5]
+assert (value next i) == 1
+assert (value next i) == 3
+assert (value next i) == 6
+assert (value next i) == 10
+assert (value next i) == 15
+assert isDone i
+```
+
+
+#### select/filter
+
+
+Given a function and a producer, return a producer whose products are obtained by applying the function to the products of the original producer until it finds one for which the function return true.
+
+
+##### Example
+
+
+
+```coffee
+i = select odd, [1..5]
+assert (value next i) == 1
+assert (value next i) == 3
+assert (value next i) == 5
+assert isDone i
+```
+
+
+#### reject
+
+
+Given a function and a producer, return a producer whose products are obtained by applying the function to the products of the original producer until it finds one for which the function return false. This is the complement to [`select`](#select).
+
+
+##### Example
+
+
+
+```coffee
+i = reject odd, [1..5]
+assert (value next i) == 2
+assert (value next i) == 4
+assert isDone i
+```
+
+
+#### project
+
+
+Given a property specifier (see [`property`](#property)) and a producer, return a producer whose products are obtained by taking the given property from the product values of the original producer. Equalent to `map (property specifier)`.
+
+
+##### Example
+
+
+
+```coffee
+i = project ["name", "first"], people
+assert (value next i) == "Jack"
+assert (value next i) == "Jill"
+```
+
+
+#### compact
+
+
+Given a producer, returns a producer whose products are the products from the original producer with defined values. Equivalent to `select isDefined`.
+
+
+##### Example
+
+
+
+```coffee
+i = compact [1, undefined, 2, undefined, 3]
+assert (value next i) == 1
+assert (value next i) == 2
+assert (value next i) == 3
+assert isDone i
+```
+
+
+#### partition
+
+
+Given an integer and a producer, returns a producers whose products are arrays of products from the original producer, whose length is equal to (or less than, for the last product) the given integer.
+
+
+##### Example
+
+
+
+```coffee
+i = partition 2, [1..10]
+assert (first value next i) == 1
+assert (first value next i) == 3
+assert (first value next i) == 5
+assert (first value next i) == 7
+assert (first value next i) == 9
+assert isDone i
+```
+
+
+#### take
+
+
+Given a function and a producer, return a producer whose products are those of the original producer, until the given function returns false when applied to the products.
+
+
+##### Example
+
+
+
+```coffee
+i = take ((n) -> n <= 5), [1..10]
+assert (value next i) == 1
+assert (value next i) == 2
+assert (value next i) == 3
+assert (value next i) == 4
+assert (value next i) == 5
+assert isDone i
+```
+
+
+#### takeN
+
+
+Given an integer _n_ and a producer, returns a producer whose products are the first _n_ products of the original producer.
+
+
+##### Example
+
+
+
+```coffee
+i = takeN 5, [1..10]
+assert (value next i) == 1
+assert (value next i) == 2
+assert (value next i) == 3
+assert (value next i) == 4
+assert (value next i) == 5
+assert isDone i
+```
+
+
+#### where
+
+
+Given a query _q_ and a producer _p_, equivalent to `select query q, p`. See also: [`query`](#query).
+
+
+##### Example
+
+
+
+```coffee
+i = where length: 3, ["one", "two", "three"]
+assert (value next i) == "one"
+assert (value next i) == "two"
+assert isDone i
+```
+
+
+#### lines
+
+
+Given a producer whose products are strings, returns a producer whose products are the strings of the original producer, delimited by newlines.
+
+
+##### Example
+
+Define a functon that computes the average line length of a given file.
+
+```coffee
+averageLineLength = (path) ->
+  average [
+    stream create fs.createReadStream path
+    lines
+    project "length"
+  ]
+```
+
+
+#### tee
+
+
+Given a function and a producer, returns a producer whose products are those of the original producers. The given function is also applied to the original products. This function is like `map` except that it doesn't return the result of applying the function to the original product, it just returns the product. This is useful if you want to use the product more than once within a flow.
+
+
+##### Example
+
+Here's an HTTP server that passes a request context to a handler and then logs it in a fashion similar to Express/Connect middleware.
+
+```coffee
+go [
+  events "request", server
+  map spread (request, response) -> {request, response}
+  tee (context) -> handler context
+  map spread logger
+]
+```
+
+
+#### throttle
+
+
+Given a integer specifying an interval in milliseconds and reactor, returns a reactor whose product are those of the original reactor, provided that the interval between any consecutive products is greater than the given interval. Products are discarded until the interval is reached or exceeded.
+
+
+##### Example
+
+Here is a file update watcher that ignores updates that occur close together.
+
+```coffee
+watch = (path, interval=3000) ->
+  go [
+    events "change", fs.watch path
+    throttle interval
+  ]
+```
+
+
+#### pump
+
+
+Given a stream and a producer, returns a producer whose products are the stream after writing the product of the original producer to the stream.
+
+
+##### Example
+
+Here is a simple echo server.
+
+```coffee
+go [
+  events name: "connection", end: "close",
+    net.createServer().listen(1337)
+  map (s) ->
+    go [
+      stream s
+      pump s
+    ]
+]
+```
+
+
+#### zip
+
+
+Given a function and two producers, return a producer whose products are obtained by applying the given function to the products of the original producer.
+
+
+
+
+### Reducers
+
+Some functions _reduce_ an iterator into another value. Once a reduce function is introduced, the associated iterator functions will run.
+
+
+#### fold/reduce
+
+
+Given a function, an initial value, and a producer, reduce the producer to a single value, ex: sum a list of integers.
+
+
+##### Example
+
+
+
+```coffee
+assert (reduce add, 0, [1..5]) == 15
+```
+
+
+#### foldr/reduceRight
+
+
+Given an initial value, a function, and a producer, reduce the producer to a single value, ex: sum a list of integers, starting from the last (or rightmost) value.
+
+
+##### Example
+
+
+
+```coffee
+assert (foldr add, "", "panama") == "amanap"
+```
+
+
+#### collect
+
+
+Given a producer, collect its product values into an array.
+
+
+##### Example
+
+
+
+```coffee
+results = collect accumulate add, 0, [1..5]
+assert results[0] == 1
+assert results[0] == 3
+assert results[0] == 6
+assert results[0] == 10
+assert results[0] == 15
+assert results.length == 5
+```
+
+
+#### each
+
+
+Given a function _f_ and a producer _p_, equivalent to `start map f, p`. Useful for applying a function to a producer without collecting the results.
+
+
+##### Example
+
+
+
+```coffee
+each ((value) -> console.log value), [1..5]
+```
+
+
+#### start
+
+
+Given a reactor, calls `next` until the reactor is exhausted. (That is, it's products' `done` property returns true.) Does not return a value.
+
+
+##### Example
+
+
+
+```coffee
+start map log, events
+```
+
+
+#### any
+
+
+Given a function and a producer, return true if the given function returns true for any product value.
+
+
+##### Example
+
+
+
+```coffee
+assert any odd, [1..5]
+```
+
+
+#### all
+
+
+Given a function and a producer, return true if the given function returns true for all the product values.
+
+
+##### Example
+
+
+
+```coffee
+assert all ((n) -> n <= 5), [1..5]
+```
+
+
+#### assoc
+
+
+Given an producer whose products are associative pairs, return an object whose keys are the first element of the pair and whose values are the second element of the pair.
+
+
+##### Example
+
+
+
+```coffee
+person = assoc [["name", "Long John Silver"], ["occupation"], "Pirate"]]
+assert person.name == "Long John Silver" &&
+  person.occupation == "Pirate"
+```
+
+
+#### flatten
+
+
+Given a producer whose product values may themselves be producers, return an array whose elements are the products of a depth-first traversal of the resulting producer tree.
+
+
+##### Example
+
+
+
+```coffee
+values = (flatten [1, [2, 3], 4, [5, [6, 7]]])
+assert values[0] == 1
+assert values[0] == 2
+assert values[0] == 3
+assert values[0] == 4
+assert values[0] == 5
+assert values[0] == 6
+assert values[0] == 7
+assert (length values) == 7
+```
+
+
+#### sum
+
+
+Given a producer _p_ whose products are numbers, return their sum. Equivalent to `fold add, 0`.
+
+
+##### Example
+
+
+
+```coffee
+assert (sum [1..5]) == 15
+```
+
+
+#### average
+
+
+Given a producer _p_ whose products are numbers, return their average.
+
+
+##### Example
+
+
+
+```coffee
+assert (average [1..5]) == 3
+```
+
+
+#### join
+
+
+Given a producer whose products are strings, concatenate the strings. Unlike `Array::join`, this function does not delimit the strings. See also: `delimit`.
+This is here instead of in [String Functions](./string.litcoffee) to avoid forward declaring `fold`.
+
+
+##### Example
+
+
+
+```coffee
+assert (join w "one two three") == "onetwothree"
+```
+
+
+#### delimit
+
+
+Given a delimiter and a producer whose products are strings, concatenate the strings using the delimiter.
+Like `join`, except that it each string is separated with the delimiter. Similar to `Array::join`, except there's no default delimiter and the function is curried. Calling `delimit ' '` is the same as calling `Array::join` with no delimiter argument.
+
+
+##### Example
+
+
+
+```coffee
+assert (delimit ", ", w "one two three") == "one, two, three"
 ```
 
 
