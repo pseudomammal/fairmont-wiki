@@ -53,19 +53,19 @@
 #### [Helpers](#helpers)
 <small>
 - **[Array Helpers](#array-helpers)**
+[nth](#nth)
+ | 
+[first, second, third, fourth, fifth](#first-second-third-fourth-fifth)
+ | 
+[last](#last)
+ | 
+[rest](#rest)
+ | 
 [push](#push)
  | 
 [cat](#cat)
  | 
 [slice](#slice)
- | 
-[first, second, third, fourth, fifth](#first-second-third-fourth-fifth)
- | 
-[nth](#nth)
- | 
-[last](#last)
- | 
-[rest](#rest)
  | 
 [includes](#includes)
  | 
@@ -610,7 +610,9 @@ Call a function with the given arguments.
 
 
 ```coffee
+# a list of functions that return the integers 1 through 5
 arrayOfFunctions = map wrap, [1..5]
+# call each function and check the results
 assert.deepEqual [1..5],
   map apply, arrayOfFunctions
 ```
@@ -674,6 +676,7 @@ assert _true()
 
 Ensure a function is run only once,
 after which time it will always return the same value.
+Useful for initialization functions.
 
 
 
@@ -690,21 +693,25 @@ Mostly useful in CoffeeScript to avoid scope-related errors.
 
 ## Multi-Methods
 
-[](https://github.com/pandastrike/)
+[fairmont-multimethods](https://github.com/pandastrike/fairmont-multimethods)
 
 
-[Multi-methods][mm-1] are polymorphic functions on their arguments.
-Methods in JavaScript objects dispatch based only on the
-(implicit first argument, which is the) object itself.
-Multi-methods provide a more functional and flexible approach.
+[Multi-methods][mm-1] are functions which dispatch based on
+one or more of their arguments.
+Built-in JavaScript methods dispatch based on the type of the object
+to which they're bound.
+Thus, multi-methods are both more flexible and
+more supportive of a functional style.
 
-Fairmont's multi-method dispatch is based on a predicate provided
-for each argument.
-The first implementation for which each of the predicates
-returns true, when given the corresponding argument, is chosen.
+Fairmont's multi-methods consist of a list of definitions.
+Each definition has a list of predicates and a function.
+When the method is invoked, its arguments are tested
+against the list of predicates associated with definition.
+The first definition for which all the predicates match
+is selected and the associated function invoked with the arguments.
 
-Variadic functions can be handled by passing a variadic predicate
-(that is, a function whose length is 0),
+Variadic functions are handled with a variadic predicate
+(that is, a function, taking no arguments, whose length is 0),
 which will be passed the remaining arguments.
 Any predicates following a variadic predicate will fail.
 
@@ -727,7 +734,7 @@ and specializations later.
 #### create
 
 
-The `create` function defines a new multimethod, taking an optional description of the method. This can be accessed via the `description` property of the method.
+Define an initially empty multimethod, taking an optional description of the method.
 
 
 ##### Example
@@ -735,14 +742,15 @@ The `create` function defines a new multimethod, taking an optional description 
 
 
 ```coffee
-Method.create multiply, description: "Multiply two values together"
+Method.create multiply,
+  description: "Multiply two values together"
 ```
 
 
 #### define
 
 
-The `define` function adds an entry into the dispatch table. It takes the method, the signature, and the definition (implementation) as arguments.
+Adds a definition for the method. Takes the method object, a list of predicates as arguments, and the function to be invoked if the predicates match.
 
 
 ##### Example
@@ -750,15 +758,18 @@ The `define` function adds an entry into the dispatch table. It takes the method
 
 
 ```coffee
-Method.define multiply, isNumber, isNumber, (x,y) -> x * y
-Method.define multiply, isArray, isNumber, (v, n) -> n * v for x in v
+Method.define multiply, isNumber, isNumber,
+  (x,y) -> x * y
+
+# Notice we can dispatch on the second argument Method.define multiply, isNumber, isArray,
+  (n, v) -> n * v for x in v
 ```
 
 
 #### lookup
 
 
-The 'lookup' function calls the 'dispatch' function, which is described above. This allows you to select a function without invoking it.
+Select a function without invoking it. Takes an array representing a list of arguments.
 
 
 ##### Example
@@ -782,6 +793,64 @@ Helper functions for working with JavaScript's built-in types, including Arrays,
 ### Array Helpers
 
 
+
+
+#### nth
+
+_integer, indexable ⇒ value_
+
+`nth` takes an integer index and returns the value of the property accessed via that index, minus one. (This means that `nth 0` refers to the property `-1`.) Curryable.
+
+
+##### Example
+
+
+
+```coffee
+ax = [1..5]
+third = nth 3
+assert.equal 3, third ax
+```
+
+
+#### first, second, third, fourth, fifth
+
+
+Curried versions of `nth` for indices 1 through 5.
+
+
+
+#### last
+
+_indexable ⇒ value_
+
+Returns the last value of an indexable value.
+
+
+##### Example
+
+
+
+```coffee
+assert.equal 5, last [1..5]
+assert.equal "d", last "hello"
+```
+
+
+#### rest
+
+_indexable ⇒ indexable_
+
+Returns all but the first element of an indexable value.
+
+
+##### Example
+
+
+
+```coffee
+assert.equal 2, first rest [1..5]
+```
 
 
 #### push
@@ -883,103 +952,6 @@ a = snip ax
 b = snip bx
 assert.deepEqual a, [ 3, 4, 5 ]
 assert.deepEqual b, [13, 14, 15]
-```
-
-
-#### first, second, third, fourth, fifth
-
-
-Takes an array or string.  For arrays, returns the first, second, third, fourth, and fifth element, respectively.  For strings, returns the first, second, third, fourth, and fifth character, respectively.  Returns `undefined` for objects and numbers.
-
-
-##### Example
-
-
-
-```coffee
-fruits = ["apple", "blueberry", "lemon", "lime", "orange", "strawberry", "cherry"]
-string = "supercalifragilisticexpialidocious"
-
-fruit = first fruits
-assert.deepEqual fruit, "apple"
-
-char = second string
-assert.deepEqual char, "u"
-
-fruit = third fruits
-assert.deepEqual fruit, "lemon"
-
-char = fourth string
-assert.deepEqual char, "e"
-
-fruit = fifth fruits
-assert.deepEqual fruit, "orange"
-```
-
-
-#### nth
-
-
-A generalization of `first`, `second`, etc, from above.  `nth` takes an index and either an array or string.    Returns the element (or character) at the specified index, however the index is one-based. This stands in contrast to the usual, zero-based index in JavaScript.  `nth` returns `undefined` for objects and numbers.
-
-
-##### Example
-
-
-
-```coffee
-fruits = ["apple", "blueberry", "lemon", "lime", "orange", "strawberry", "cherry"]
-string = "supercalifragilisticexpialidocious"
-
-fruit = nth 3, fruits
-assert.deepEqual fruit, "lemon"
-
-char = nth 22, string
-assert.deepEqual char, "x"
-```
-
-
-#### last
-
-
-Takes an array or string.  For arrays, `last` returns the last element.  For strings, `last` returns the last character.  `last` returns `undefined` for objects and numbers.
-
-
-##### Example
-
-
-
-```coffee
-fruits = ["apple", "blueberry", "lemon", "lime", "orange", "strawberry", "cherry"]
-string = "supercalifragilisticexpialidocious"
-
-fruit = last fruits
-assert.deepEqual fruit, "cherry"
-
-char = last string
-assert.deepEqual char, "s"
-```
-
-
-#### rest
-
-
-Takes an array or string.  For arrays, `rest` returns a sub-array containing all elements *except* the first.  For strings, `rest` returns a sub-string containing all characters *except* the first. `rest` returns `undefined` for objects and numbers.
-
-
-##### Example
-
-
-
-```coffee
-fruits = ["apple", "blueberry", "lemon", "lime", "orange", "strawberry", "cherry"]
-string = "supercalifragilisticexpialidocious"
-
-bunch = rest fruits
-assert.deepEqual bunch, ["blueberry", "lemon", "lime", "orange", "strawberry", "cherry"]
-
-char = rest string
-assert.deepEqual char, "upercalifragilisticexpialidocious"
 ```
 
 
