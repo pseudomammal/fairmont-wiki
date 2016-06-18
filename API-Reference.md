@@ -4,7 +4,7 @@
 
 #### [Core](#core)
 <small>
-- 
+- **[Core Functions](#core-functions)**
 [noOp](#noop)
  | 
 [identity](#identity)
@@ -53,6 +53,10 @@
 #### [Helpers](#helpers)
 <small>
 - **[Array Helpers](#array-helpers)**
+[length](#length)
+ | 
+[empty](#empty)
+ | 
 [nth](#nth)
  | 
 [first, second, third, fourth, fifth](#first-second-third-fourth-fifth)
@@ -414,7 +418,7 @@
 The core functions provide the functional programming glue for JavaScript. Includes support for currying, partial application, and composition of functions.
 
 
-### 
+### Core Functions
 
 
 
@@ -795,11 +799,28 @@ Helper functions for working with JavaScript's built-in types, including Arrays,
 
 
 
+#### length
+
+_has length property ⇒ boolean_
+
+Returns the length of a value with a length property.
+
+
+
+#### empty
+
+_has length property ⇒ boolean_
+
+Returns true if the argument has a length of zero, false otherwise.
+
+
+
 #### nth
 
 _integer, indexable ⇒ value_
 
-`nth` takes an integer index and returns the value of the property accessed via that index, minus one. (This means that `nth 0` refers to the property `-1`.) Curryable.
+`nth` takes an integer index and an indexable value, such as an array or string, and returns the value of the property accessed via that index, minus one. (This means that `nth 0` refers to the property `-1`.)
+Curryable.
 
 
 ##### Example

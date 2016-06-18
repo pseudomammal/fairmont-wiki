@@ -5,7 +5,7 @@
 
   content:
 
-    - title: ~
+    - title: Core Functions
       description: ~
       content:
 
@@ -282,14 +282,29 @@
   - title: Array Helpers
     description: ''
     content:
+    - title: length
+      signature:
+        taking: has length property
+        returning: boolean
+      description: >-
+        Returns the length of a value with a length property.
+    - title: empty
+      signature:
+        taking: has length property
+        returning: boolean
+      description: >-
+        Returns true if the argument has a length of zero,
+        false otherwise.
     - title: nth
       signature:
         taking: integer, indexable
         returning: value
       description: >-
-        `nth` takes an integer index and returns the value of
+        `nth` takes an integer index and an indexable value,
+        such as an array or string, and returns the value of
         the property accessed via that index, minus one.
         (This means that `nth 0` refers to the property `-1`.)
+
         Curryable.
       examples:
         code: |-
@@ -319,6 +334,8 @@
       examples:
         code: |-
           assert.equal 2, first rest [1..5]
+
+
     - title: push
       description: >-
         Attach one or more elements to the right side of the given array.
