@@ -65,13 +65,31 @@
  | 
 [rest](#rest)
  | 
+[includes](#includes)
+ | 
+[findIndexOf](#findindexof)
+ | 
+[findLastIndexOf](#findlastindexof)
+ | 
+[some](#some)
+ | 
 [push](#push)
+ | 
+[pop, dequeue](#pop-dequeue)
+ | 
+[shift](#shift)
+ | 
+[unshift, enqueue](#unshift-enqueue)
+ | 
+[splice](#splice)
+ | 
+[insert](#insert)
+ | 
+[remove](#remove)
  | 
 [cat](#cat)
  | 
 [slice](#slice)
- | 
-[includes](#includes)
  | 
 [unique](#unique)
  | 
@@ -669,9 +687,9 @@ Take a given function and return a new function that passes its arguments to the
 
 
 ```coffee
-_false = -> false
-_true = negate _false
-assert _true()
+nope = wrap false
+yup = negate nope
+assert yup()
 ```
 
 
@@ -820,7 +838,6 @@ Returns true if the argument has a length of zero, false otherwise.
 _integer, indexable ⇒ value_
 
 `nth` takes an integer index and an indexable value, such as an array or string, and returns the value of the property accessed via that index, minus one. (This means that `nth 0` refers to the property `-1`.)
-Curryable.
 
 
 ##### Example
@@ -874,11 +891,11 @@ assert.equal 2, first rest [1..5]
 ```
 
 
-#### push
+#### includes
 
+_value, array ⇒ boolean_
 
-Attach one or more elements to the right side of the given array. `push` takes a target array and N elements to attach.  `push` directly affects the target array as a side effect, while also returning the augmented array.
-Note that pushing an array onto an array results in a nested array. For ***joining*** arrays, you may use `cat` or CoffeeScript's splat operator.
+Return true if the value is in the array, false otherwise.
 
 
 ##### Example
@@ -886,31 +903,179 @@ Note that pushing an array onto an array results in a nested array. For ***joini
 
 
 ```coffee
-# Directly affects "fruits" without storing return value.
-fruits = ["apple", "blueberry"]
-push fruits, "strawberry"
-assert.deepEqual fruits, ["apple", "blueberry", "strawberry"]
+assert.equal true, includes 3, [1..5] assert.equal false, includes 6, [1..5]
+```
 
-citrus = ["lemon", "lime"]
-push fruits, citrus
-assert.deepEqual fruits, ["apple", "blueberry", "strawberry", ["lemon", "lime"]]
 
-# push accepts more than one element.
-fruits = ["apple", "blueberry"]
-push fruits, "strawberry", citrus
-assert.deepEqual fruits, ["apple", "blueberry", "strawberry", ["lemon", "lime"]]
+#### findIndexOf
 
-# With CoffeeScript's splat operator, we may achieve array concatenation.
-fruits = ["apple", "blueberry"]
-push fruits, "strawberry", citrus...
-assert.deepEqual fruits, ["apple", "blueberry", "strawberry", "lemon", "lime"]
+_value, array ⇒ index or undefined_
+
+Curryable version of `Array::indexOf` that also works with “truthy” tests. Returns the first index for the given value in the array or undefined if the array does not contain the value.
+
+
+##### Example
+
+
+
+```coffee
+assert.equal 2, findIndexOf 3, [1..5]
+assert.equal false,
+  (i = findIndexOf 6, [1..5])?
+```
+
+
+#### findLastIndexOf
+
+_value, array ⇒ index or undefined_
+
+Curryable version of `Array::lastIndexOf` that also works with “truthy” tests. Returns the last index for the given value in the array or undefined if the array does not contain the value.
+
+
+##### Example
+
+
+
+```coffee
+assert.equal 3, findLastIndexOf 2, [1,2,3,2,1]
+assert.equal false,
+  (i = findLastIndexOf 3, [1,2,3,2,1])?
+```
+
+
+#### some
+
+_array, predicate ⇒ boolean_
+
+Curryable version of `Array::some`. Returns true if some value in the array satisfies the predicate, false otherwise. In general, prefer [`any`](#any), but `some` is faster if you know you are working with an array.
+
+
+##### Example
+
+
+
+```coffee
+assert some [1..5], odd
+```
+
+
+#### push
+
+
+Destructively append elements to the end of an array.
+
+
+##### Example
+
+
+
+```coffee
+[object Object],[object Object],[object Object]
+```
+
+
+#### pop, dequeue
+
+_array ⇒ any_
+
+Removes last element of an array and returns it.
+
+
+##### Example
+
+
+
+```coffee
+assert.equal 5, pop [1..5]
+```
+
+
+#### shift
+
+_array ⇒ any_
+
+Removes first element of an array and returns it.
+
+
+##### Example
+
+
+
+```coffee
+assert.equal 1, shift [1..5]
+```
+
+
+#### unshift, enqueue
+
+_value, array ⇒ array_
+
+Inserts value as first element of the array.
+
+
+##### Example
+
+
+
+```coffee
+assert.deepEqual [1..5], unshift [1..4], 5
+```
+
+
+#### splice
+
+_index, count, array ⇒ array_
+
+Destructively removes `count` elements from `array`, starting at `index`, and returns the updated array. Based on `Array::splice` but does not allow for insertion and does not return the removed elements. (Returning the modified array allows for composition with other functions taking arrays.) See `insert` for inserting elements into an array.
+
+
+##### Example
+
+
+
+```coffee
+assert.deepEqual [1,2,5], splice 2, 2, [1..5]
+```
+
+
+#### insert
+
+_array, value, index ⇒ array_
+
+Destructively inserts `value` into `array`, at `index`, and returns the updated array. Based on `Array::splice` but does not allow for removal. (Returning the modified array allows for composition with other functions taking arrays.) See `splice` and `remove` for removing elements from an array.
+
+
+##### Example
+
+
+
+```coffee
+assert.deepEqual [1..5], insert [1,2,4,5], 3, 2
+assert.deepEqual [1..5], insert [2..5], 1
+```
+
+
+#### remove
+
+_array, value ⇒ array_
+
+Destructively removes the first occurrance of `value` from `array`,
+
+
+##### Example
+
+
+
+```coffee
+assert.deepEqual [1,2,4,5], remove [1..5], 3
 ```
 
 
 #### cat
 
+_array, array ⇒ array_
 
-Takes two arrays and concatenates (joins) them.  Returns the new, single array.  The input arrays remain unchanged.
+Takes two arrays and (non-destructively) concatenates them. Returns the concatenated array. Detached version of `Array::concat`.
 
 
 ##### Example
@@ -918,82 +1083,32 @@ Takes two arrays and concatenates (joins) them.  Returns the new, single array. 
 
 
 ```coffee
-fruits = ["apple", "blueberry"]
-citrus = ["lemon", "lime"]
-fruits = cat fruits, citrus
-assert.deepEqual fruits, ["apple", "blueberry", "lemon", "lime"]
+assert.deepEqual [1..10], cat [1..5], [6..10]
 ```
 
 
 #### slice
 
+_index, index, array ⇒ indexable_
 
-Extract a subset of an array.  `slice` takes two numbers and an array.  The two numbers specify a start and end index for the desired sub-array within the input array.  Both indices are zero-based, inclusive on the start index, and exclusive on the end index.  `slice` returns a sub-array, as specified, while leaving the original array unchanged.
-`slice` may also be used with strings where it treats characters like members of an array.  `slice` returns a sub-string when working with strings.
-When specifying an end index in excess of the array's length, the sub-array will only extend to the end of the original array.  The end index is allowed to be negative, where it counts to the left from the end of the target array.  The start index must be smaller than the end index, except when the end index is negative.  Invalid indices cause `slice` to return an empty array.
-`slice` is curried, meaning that it returns a function when given an insufficient number of arguments.  This new function accepts the remaining arguments, see the "snip" example below.
+Returns elements in `indexable` from first index up to (but not including) second index, in the form of a new array. Negative indices can be used to index from the back of `indexable`.
 
 
-##### Example
+##### Example: Simple Extraction
 
 
 
 ```coffee
-fruits = ["apple", "blueberry", "lemon", "lime", "orange", "strawberry", "cherry"]
-citrus = slice 2, 5, fruits
-assert.deepEqual citrus, ["lemon", "lime", "orange"]
-
-# Works on strings too.
-string = "supercalifragilisticexpialidocious"
-sub_string = slice 9, 20, string
-assert.deepEqual sub_string, "fragilistic"
-
-# Even if the end index is large, slice can only go as far the original array.
-long = slice 2, 10, fruits
-assert.deepEqual long, ["lemon", "lime", "orange", "strawberry", "cherry"]
-
-# The end index may be negative, counting from the right side of the original array.
-negative = slice 1, -2, fruits
-assert.deepEqual negative, ["blueberry", "lemon", "lime", "orange"]
-
-
-
-# Slice is curried, so it returns a function when you don't pass all three arguments.
-snip = slice 2, 5
-
-# And the new function takes only the remaining argument (or arguments).
-f = snip fruits
-assert.deepEqual f, ['lemon', 'lime', 'orange']
-
-# Just to be clear, snip is reusable as a function.
-ax = [1..10]
-bx = [11..20]
-
-a = snip ax
-b = snip bx
-assert.deepEqual a, [ 3, 4, 5 ]
-assert.deepEqual b, [13, 14, 15]
+assert.deepEqual [2..4], slice 1, 4, [1..5]
 ```
 
+##### Example: Negative Indices, With Currying
 
-#### includes
-
-
-Check if an element is a member of an array.  Takes a candidate element and the array to test.  Returns `true` or `false`.
-
-
-##### Example
-
-
+In this example, we define a helper function `leave`, which returns all but the last element of an array.
 
 ```coffee
-fruits = ["apple", "blueberry", "lemon", "lime", "orange", "strawberry", "cherry"]
-
-is_present = includes "lemon", fruits
-assert.deepEqual fruit, true
-
-is_present = includes "pear", fruits
-assert.deepEqual fruit, false
+leave = slice 0, -1
+assert.deepEqual [1..4], leave [1..5]
 ```
 
 
