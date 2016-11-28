@@ -772,7 +772,7 @@ Define an initially empty multimethod, taking an optional description of the met
 
 
 ```coffee
-Method.create multiply,
+multiply = Method.create
   description: "Multiply two values together"
 ```
 
@@ -791,7 +791,8 @@ Adds a definition for the method. Takes the method object, a list of predicates 
 Method.define multiply, isNumber, isNumber,
   (x,y) -> x * y
 
-# Notice we can dispatch on the second argument Method.define multiply, isNumber, isArray,
+# Notice we can dispatch on the second argument
+Method.define multiply, isNumber, isArray,
   (n, v) -> n * v for x in v
 ```
 
@@ -879,7 +880,7 @@ Returns the last value of an indexable value.
 
 ```coffee
 assert.equal 5, last [1..5]
-assert.equal "d", last "hello"
+assert.equal "o", last "hello"
 ```
 
 
@@ -911,7 +912,8 @@ Return true if the value is in the array, false otherwise.
 
 
 ```coffee
-assert.equal true, includes 3, [1..5] assert.equal false, includes 6, [1..5]
+assert.equal true, includes 3, [1..5]
+assert.equal false, includes 6, [1..5]
 ```
 
 

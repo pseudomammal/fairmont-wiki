@@ -246,7 +246,7 @@
         taking an optional description of the method.
       examples:
         code: >-
-          Method.create multiply,
+          multiply = Method.create
             description: "Multiply two values together"
 
     - title: define
@@ -255,7 +255,7 @@
         Takes the method object, a list of predicates as arguments,
         and the function to be invoked if the predicates match.
       examples:
-        code: >-
+        code: |-
           Method.define multiply, isNumber, isNumber,
             (x,y) -> x * y
 
@@ -326,7 +326,7 @@
       examples:
         code: |-
           assert.equal 5, last [1..5]
-          assert.equal "d", last "hello"
+          assert.equal "o", last "hello"
 
     - title: rest
       signature:
@@ -345,7 +345,7 @@
       description: >-
         Return true if the value is in the array, false otherwise.
       examples:
-        code: >-
+        code: |-
           assert.equal true, includes 3, [1..5]
           assert.equal false, includes 6, [1..5]
 
