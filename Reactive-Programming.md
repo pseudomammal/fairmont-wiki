@@ -13,7 +13,7 @@ For example, in Fairmont, `map` returns another producer instead of, say, an arr
 
 ## Composing Reactive Flows
 
-Fairmont provides a special `flow` function to help compose producer functions, like `map` and `select`. THe `flow` function takes a producer and a list of these producer functions. The values from the producer (we call these _products_) are passed into the pipeline formed by composing the functions.
+Fairmont provides a special `flow` function to help compose producer functions, like `map` and `select`. The `flow` function takes a producer and a list of these producer functions. The values from the producer (we call these _products_) are passed into the pipeline formed by composing the functions.
 
 For example, here's a simple flow that increments a counter when a button is clicked. In this case, the producer is the click events and there's only one function in our pipeline, `map`.
 
