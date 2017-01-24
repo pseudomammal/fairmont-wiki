@@ -61,8 +61,6 @@
 #### [Helpers](#helpers)
 <small>
 - **[Array Helpers](#array-helpers)**
-[length](#length)
- | 
 [empty](#empty)
  | 
 [nth](#nth)
@@ -301,11 +299,6 @@
 [isReactor](#isreactor)
  | 
 [reactor](#reactor)
-
-</small>
-<small>
-- **[Observers](#observers)**
-[observe](#observe)
 
 </small>
 <small>
@@ -677,7 +670,7 @@ Take a given function taking a variable number of arguments and return one takin
 
 
 ```coffee
-f = -> a + b
+f = -> (a, b) a + b
 g = curry binary f
 a = g "a"
 assert (a "b") == "ab"
@@ -826,14 +819,6 @@ Helper functions for working with JavaScript's built-in types, including Arrays,
 
 
 
-#### length
-
-_has length property ⇒ boolean_
-
-Returns the length of a value with a length property.
-
-
-
 #### empty
 
 _has length property ⇒ boolean_
@@ -975,12 +960,35 @@ assert some [1..5], odd
 Destructively append elements to the end of an array.
 
 
-##### Example
+##### Example: Push an element
 
 
 
 ```coffee
-[object Object],[object Object],[object Object]
+ax = [1..5]
+push ax, 6
+assert.deepEqual [1..6], ax
+```
+
+##### Example: Push multiple elements
+
+
+
+```coffee
+ax = [1..5]
+push ax, 6, 7
+assert.deepEqual [1..7], ax
+```
+
+##### Example: Destructively concatenate two arrays
+
+
+
+```coffee
+ax = [1..5]
+bx = [6..10]
+push ax, bx...
+assert.deepEqual [1..10], ax
 ```
 
 
@@ -1028,7 +1036,9 @@ Inserts value as first element of the array.
 
 
 ```coffee
-assert.deepEqual [1..5], unshift [1..4], 5
+ax = [2..5]
+unshift ax, 1
+assert.deepEqual [1..5], ax
 ```
 
 
@@ -1147,7 +1157,7 @@ assert.deepEqual letters, ['s', 'u', 'p', 'e', 'r', 'c', 'a', 'l', 'i', 'f', 'g'
 #### uniqueBy
 
 
-A generalized version of [`unique`](#unique).  `uniqueBy` takes an input function, `f()`, and an array, `a`.  `f()` is mapped on the members of `a`, transforming them, ie `f()` should be designed to act upon one element at a time.   `uniqueBy` returns a new array containing only the unique members ***after*** being transfomred by `f()`.
+A generalized version of [`unique`](#unique).  `uniqueBy` takes an input function, `f()`, and an array, `a`.  `f()` is mapped on the members of `a`, transforming them, ie `f()` should be designed to act upon one element at a time.   `uniqueBy` returns a new array containing only the unique members ***after*** being transformed by `f()`.
 
 
 ##### Example
@@ -1191,6 +1201,9 @@ assert.deepEqual letters, ['u', 'p', 'e', 'r', 'a', 'l', 's', 'c', 'i', 'o']
 Generate the [set union][set-union] of two arrays.  `union` takes two arrays and returns a new, concatenated array with any duplicate elements removed.  The original arrays remain unchanged.
 
 
+[set-union]:https://en.wikipedia.org/wiki/Union_(set_theory)
+
+
 ##### Example
 
 
@@ -1201,9 +1214,6 @@ fruits2 = ["pear", "apple", "mango", "kiwi", "lemon", "lime", "apple", "cherry"]
 
 output = union fruits1, fruits2
 assert.deepEqual output, ['apple', 'lemon', 'lime', 'orange', 'cherry', 'pear', 'mango', 'kiwi']
-
-letters = dupes string
-assert.deepEqual letters, ['u', 'p', 'e', 'r', 'a', 'l', 's', 'c', 'i', 'o']
 ```
 
 
@@ -1211,6 +1221,8 @@ assert.deepEqual letters, ['u', 'p', 'e', 'r', 'a', 'l', 's', 'c', 'i', 'o']
 
 
 Generate the [set intersection][set-intersection] of two arrays. `intersection` takes two arrays and returns a new, single array of elements present in both arrays.  This includes repeated elements if and only if they are repeated in both inputs.  The original arrays remain unchanged.
+
+[set-intersection]:https://en.wikipedia.org/wiki/Intersection_(set_theory)
 
 
 ##### Example
@@ -1231,6 +1243,8 @@ assert.deepEqual output, ["apple", "lemon", "lime", "apple", "cherry"]
 
 Generate the [symmetric difference][symmetric-difference] of two arrays.  `difference` takes two arrays and returns a new, single array of elements that are not shared between the inputs. Additionally, the output array presents only ***unique*** elements, removing duplicates.  The original arrays remain unchanged.
 
+[symmetric-difference]:https://en.wikipedia.org/wiki/Symmetric_difference
+
 
 ##### Example
 
@@ -1249,6 +1263,7 @@ assert.deepEqual output, ["orange", "pear", "mango", "kiwi"]
 
 
 Generate the [relative complement][relative-complement] of an array with respect to another.  `complement` takes two arrays, `a` and `b`, and returns a new array of elements that are present in `a` but not `b`.  This includes repeated elements if `a` has duplicates. The original arrays remain unchanged.
+[relative-complement]:https://en.wikipedia.org/wiki/Complement_(set_theory)#Relative_complement
 
 
 ##### Example
@@ -1299,7 +1314,11 @@ assert.deepEqual fruits, ["lemon", "apple", "lime", "apple"]
 #### shuffle
 
 
-Randomize the order of elements within an array.  `shuffle` takes an array and returns a new array where all values have been ordered pseudorandomly.  Please note that `shuffle` is ***guaranteed*** to produce a different ordering (which is a non-random behavoir). Specifically, `shuffle` uses the [Fisher-Yates algorithm][shuffle-1] as adapted from [this CoffeeScript Cookbook recipe][shuffle-2].
+Randomize the order of elements within an array.  `shuffle` takes an array and returns a new array where all values have been ordered pseudorandomly.  Please note that `shuffle` is ***guaranteed*** to produce a different ordering (which is a non-random behavior). Specifically, `shuffle` uses the [Fisher-Yates algorithm][shuffle-1] as adapted from [this CoffeeScript Cookbook recipe][shuffle-2].
+
+
+[shuffle-1]:https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
+[shuffle-2]:https://coffeescript-cookbook.github.io/chapters/arrays/shuffling-array-elements
 
 
 ##### Example
@@ -1396,6 +1415,9 @@ assert output == "YWJjMTIzIT8kKiYoKSctPUB+fg"
 
 
 Convert a string to a URL-safe variant of Base64 encoding. `base64url` takes an UTF-8 encoded string.  Returns a string of the same content, but encoded in a URL-safe variant of Base64, based on [RFC 4648's][base64url-1] "base64url" mapping.  The URL-safe variant avoids outputting `+`, `/`, or `=`, but is otherwise very similar to `base64`.
+
+
+[base64url-1]:http://tools.ietf.org/html/rfc4648#section-5
 
 
 ##### Example
@@ -1601,7 +1623,12 @@ assert.deepEqual Object.keys(stats), ["hp", "mp", "stamina", "strength", "intell
 
 
 Perform a deep clone on an object. Takes an object and returns a new object copy.
-The algorithm for copying the object is taken from [The CoffeeScript Cookboox][clone-1].  `clone` uses a recursive process to copy nested properties, providing a *deep* clone.  When passed a non-object, `clone` will still return a copy of what it is passed.
+
+
+The algorithm for copying the object is taken from [The CoffeeScript Cookbook][clone-1].  `clone` uses a recursive process to copy nested properties, providing a *deep* clone.  When passed a non-object, `clone` will still return a copy of what it is passed.
+
+
+[clone-1]:https://coffeescript-cookbook.github.io/chapters/classes_and_objects/cloning
 
 
 ##### Example
@@ -1619,7 +1646,7 @@ person =
   regex: /foo.*/igm
 
 
-assert.notEqual  (clone person), person  # Because birthdate == Date.getTime()
+assert.notEqual  (clone person), person  # shallow equality is by reference
 assert.deepEqual (clone person), person
 
 assert (clone 1) == 1
@@ -2113,7 +2140,7 @@ Convert a sequence of words into a camel-cased string.
 
 
 ```coffee
-assert camelCase ("tostring") == "toString"
+assert camelCase ("to string") == "toString"
 ```
 
 
@@ -2317,6 +2344,8 @@ assert !isNaN 7
 Verifies that is an argument is a number of a specific type.
 Adapted from [StackOverflow][isFloat].
 
+[isFloat]:http://stackoverflow.com/questions/3885817/how-to-check-if-a-number-is-float-or-integer/3885844#3885844
+
 
 ##### Example
 
@@ -2481,14 +2510,44 @@ Verifies that a variable is a promise.
 #### memoize
 
 
-Cache the results of functions that take a single argument.  Takes a function, an optional hash scheme, and an optional cache. (See more below.)  Returns the input function, but imbues it with a cache object.  Memoization is a powerful optimization technique to avoiding making computationally expensive calls needlessly. `memoize` provides a no-fuss cache in memory without requring you to setup anything cumbersome, like a lookup table.
+Cache the results of functions that take a single argument.  Takes a
+function, an optional hash scheme, and an optional cache. (See more
+below.)  Returns the input function, but imbues it with a cache
+object.  Memoization is a powerful optimization technique to
+avoiding making computationally expensive calls needlessly.
+`memoize` provides a no-fuss cache in memory without requring you to
+setup anything cumbersome, like a lookup table.
+
 **Arguments**
 
+Input Function (required) - This function must accept only a single
+argument.  `memoize` returns this function, but gives it a cache to
+remember past results.
 
-Input Function (required) - This function must accept only a single argument.  `memoize` returns this function, but gives it a cache to remember past results.
+Hashing Scheme (optional) - The cache is a JavaScript object, where
+the results are stored as values... but we need a name to give the
+corresponding keys.  `memoize` needs a hash scheme so it can always
+lookup a result.  By default, `memoize` is unimaginiative and merely
+stringifies the function's input as the key.  In most cases, this
+should be good enough, but you can substitute a scheme of your
+choosing.  For example, if you wanted the keys to be rendered as
+hexidecimal strings:
 
+```coffee
+f = (x) -> x * 2
+hash = (x) = x.toString(16)
+double = memoize f, hash
+```
 
-Hashing Scheme (optional) - The cache is a JavaScript object, where the results are stored as values... but we need a name to give the corresponding keys.  `memoize` needs a hash scheme so it can always lookup a result.  By default, `memoize` is unimaginiative and merely stringifies the function's input as the key.  In most cases, this should be good enough, but you can substitute a scheme of your choosing.  For example, if you wanted the keys to be rendered as hexidecimal strings:
+The choice is yours.  But if you need to pass in a cache (see below),
+it is probably sufficient to just set this argument to `null`.
+
+Cache (optional) - It is possible to pass `memoize` a "pre-heated"
+cache if you already have values available.  This is simply a
+JavaScript object, but be careful to not input incorrect values,
+because the returned function will not run if there is a cached
+result already available.
+
 
 
 ##### Example
@@ -2738,7 +2797,8 @@ Predicate that returns true if the argument is iterable. That is, if it has a `S
 
 
 ```coffee
-
+assert isIterable [1..5]
+assert !(isIterable 7)
 ```
 
 
@@ -2871,31 +2931,6 @@ assert isReactor r
 
 
 
-### Observers
-
-Observer functions provide a way to asynchronously observe changes to values. The observer receives a temporally ordered sequence of notifications based on changes to the observed value.
-
-
-#### observe
-
-
-Given an object or an array value, returns an event emitter that generates events when the value is changed.
-
-
-##### Example
-
-
-
-```coffee
-x = value: 7
-events = observe x
-events.on "change", (x) -> y = x.value
-x.value = 3
-assert y == 3
-```
-
-
-
 ### Adapters
 
 Adapters are functions that create iterators or reactors (aka, producers) from an existing value, like an Array or an event emitter.
@@ -2925,9 +2960,11 @@ Given an iterator whose product values are Promises, returns a reactor. This is 
 
 ##### Example
 
-Let's suppose we want a function that will convert an iterator that produces pathnames into a reactor producing hashes for the contents of the corresponding files. We might implement it like this.
+Let's suppose we want a function that will convert an iterator that produces pathnames into a reactor producing hashes for the contents of the corresponding files.
 
 ```coffee
+# We might implement it like this.
+
 hashFiles = (pathnames) ->
   flow [
     pathnames
@@ -2935,6 +2972,24 @@ hashFiles = (pathnames) ->
     map (promise) ->
       promise.then (content) -> md5 content
   ]
+
+# The appearance of the promise is due to the fact that "read"
+# returns a promise that resolves when the read operation completes.
+# In turn, that means our product "value" is going to be a promise,
+# too. We basically have a reactor in the form of an iterator.
+
+# We can use "pull" to avoid this problem.
+
+hashFiles = (pathnames) ->
+  flow [
+    pathnames
+    map (pathname) -> read pathname
+    pull
+    map (content) -> md5 content
+  ]
+
+# Our "hashFiles" function now returns a reactor instead of an
+# iterator whose prouct values are promises.
 ```
 
 
@@ -2968,7 +3023,7 @@ Given a value, returns an iterator that always produces that value. Analogous to
 
 ```coffee
 alwaysTrue = repeat true
-assert alwaysTrue.next()
+assert value alwaysTrue.next()
 ```
 
 
@@ -3028,7 +3083,7 @@ assert (value next i) == 4
 assert (value next i) == 9
 assert (value next i) == 16
 assert (value next i) == 25
-assert isDone i
+assert isDone next i
 ```
 
 
@@ -3055,7 +3110,7 @@ assert (value next i) == 2
 assert (value next i) == 3
 assert (value next i) == 4
 assert (value next i) == 5
-assert isDone i
+assert isDone next i
 ```
 
 
@@ -3077,7 +3132,7 @@ assert (value next i) == 3
 assert (value next i) == 6
 assert (value next i) == 10
 assert (value next i) == 15
-assert isDone i
+assert isDone next i
 ```
 
 
@@ -3096,7 +3151,7 @@ i = select odd, [1..5]
 assert (value next i) == 1
 assert (value next i) == 3
 assert (value next i) == 5
-assert isDone i
+assert isDone next i
 ```
 
 
@@ -3114,7 +3169,7 @@ Given a function and a producer, return a producer whose products are obtained b
 i = reject odd, [1..5]
 assert (value next i) == 2
 assert (value next i) == 4
-assert isDone i
+assert isDone next i
 ```
 
 
@@ -3129,7 +3184,7 @@ Given a property specifier (see [`property`](#property)) and a producer, return 
 
 
 ```coffee
-i = project ["name", "first"], people
+i = project "first", (project "name", people)
 assert (value next i) == "Jack"
 assert (value next i) == "Jill"
 ```
@@ -3150,7 +3205,7 @@ i = compact [1, undefined, 2, undefined, 3]
 assert (value next i) == 1
 assert (value next i) == 2
 assert (value next i) == 3
-assert isDone i
+assert isDone next i
 ```
 
 
@@ -3171,7 +3226,7 @@ assert (first value next i) == 3
 assert (first value next i) == 5
 assert (first value next i) == 7
 assert (first value next i) == 9
-assert isDone i
+assert isDone next i
 ```
 
 
@@ -3192,7 +3247,7 @@ assert (value next i) == 2
 assert (value next i) == 3
 assert (value next i) == 4
 assert (value next i) == 5
-assert isDone i
+assert isDone next i
 ```
 
 
@@ -3213,7 +3268,7 @@ assert (value next i) == 2
 assert (value next i) == 3
 assert (value next i) == 4
 assert (value next i) == 5
-assert isDone i
+assert isDone next i
 ```
 
 
@@ -3231,7 +3286,7 @@ Given a query _q_ and a producer _p_, equivalent to `select query q, p`. See als
 i = where length: 3, ["one", "two", "three"]
 assert (value next i) == "one"
 assert (value next i) == "two"
-assert isDone i
+assert isDone next i
 ```
 
 
@@ -3348,7 +3403,7 @@ assert (reduce add, 0, [1..5]) == 15
 #### foldr/reduceRight
 
 
-Given an initial value, a function, and a producer, reduce the producer to a single value, ex: sum a list of integers, starting from the last (or rightmost) value.
+Given a function, an initial value, and a producer, reduce the producer to a single value, ex: sum a list of integers, starting from the last (or rightmost) value.
 
 
 ##### Example
@@ -3594,6 +3649,9 @@ amount of data it could trigger a maxBuffer exceeded error.  For
 these reasons, `shell` should only be used for short-lived processes
 that don't return much data.
 
+[shell-0]:https://nodejs.org/api/child_process.html
+[shell-1]:https://nodejs.org/api/child_process.html#child_process_child_process_exec_command_options_callback
+
 
 
 ##### Example
@@ -3653,6 +3711,8 @@ By default, `read` uses UTF-8 encoding on the binary data it finds.
 Additionally, you may retrieve a raw `Buffer` of a file's contents
 by passing `null`, `undefined`, `binary`, or  `buffer` as the second
 argument.
+
+[read-0]:https://nodejs.org/api/buffer.html#buffer_buffer
 
 
 
